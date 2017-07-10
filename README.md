@@ -24,7 +24,7 @@ Header is made of the following fields:
 ```
 |       Field        | byte size | valid byte range |              Observations                |
 |:------------------:|:---------:|:----------------:|:----------------------------------------:|
-|`<Starting_Bytes>`  | 3         | 255-255          |                                          |
+|`<Starting_Bytes>`  | 3         | 255-255          | just a sequence of hexadecimal "FF FF FF"|
 |`<Device_ID>`       | 1         | 1-254            | 1-127 is gimbal, 128-254 is camera       |
 |`<Counter>`         | 1         | 1-254            |                                          |
 
@@ -34,14 +34,14 @@ Header is made of the following fields:
 
 
 ### Data
-Data is between the header and the end of the message.
+Data is between the header and the end of the message. Any data field has 2 bytes and is preceeded by its ID byte. these data fields can come in any order and number (max 254).
 ```
-<Data_ID_0> <Data_0> Data_ID_1> <Data_1> ... <Data_ID_n> <Data_n>
+... <Data_ID> <Low_Byte High_Byte> ...
 ```
 |       Field        | byte size | valid byte range |              Observations                |
 |:------------------:|:---------:|:----------------:|:----------------------------------------:|
 |`<Data_ID>`         | 1         | 1-254            |                                          |
-|`<Data>`            | 2         | 0-255            | data order `<Low_byte High_byte>`    |
+|`<Data>`            | 2         | 0-255            | data order `<Low_byte High_byte>`        |
 
 
  * Data_ID: every piece of data has its own id.
