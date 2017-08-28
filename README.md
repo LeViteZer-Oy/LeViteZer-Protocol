@@ -9,6 +9,7 @@
     + [Parameter Descriptions](#parameter-descriptions)
     + [End of Message](#end-of-message)
     + [Checksum](#checksum)
+  * [Devices](#devices)
   * [Command Descriptions](#command-descriptions)
     + [Gimbal Data](#gimbal-data)
     + [Camera Data](#camera-data)
@@ -26,8 +27,8 @@ Header is made of the following fields:
 ```
 |       Field        | byte size | valid byte range |              Observations                |
 |:------------------:|:---------:|:----------------:|:----------------------------------------:|
-|`<Starting_Bytes>`  | 3         | 255-255          | just a sequence of hexadecimal "FF FF FF"|
-|`<Device_ID>`       | 1         | 1-254            | 1-127 is gimbal, 128-254 is camera       |
+|`<Starting_Bytes>`  | 3         | 255-255          | Just a sequence of hexadecimal "FF FF FF"|
+|`<Device_ID>`       | 1         | 1-254            |       |
 |`<Counter>`         | 1         | 1-254            |                                          |
 
  * Starting_Bytes: this is a sequence of 3 bytes which values are always `255` or `FF` in hexadecimal. This identifies the beggining of the message.
@@ -56,6 +57,15 @@ The last byte before the Checksum and after the last command is just a zero `0` 
 
 ### Checksum
 Optional checking method: Sum of all bytes on the message but the `<Starting_Bytes>`
+
+
+## Devices
+On the device id field it is specified the device for the message, this field identifies the device and based on the id range the type of device is specified as well.
+ * Cameras 1-99
+ * Gimbals 100-149
+ * Controllers 224-254
+ 
+Every type of device has its own set of parameters which a limit of 254 parameters per device type.
 
 ## Parameter Descriptions
 
@@ -151,4 +161,5 @@ FFFFFF0156207211210CF22200002306F900.
 |:------------------:|:---------:|:-----:|:-------------------------------------:|:--------------:|
 |  FFFFFF            |   01      |   01  |   20 7211, 21 0CF2, 22 0000, 23 06F9  |   00  |
 
-In this message we can see parameters 20, 21, 22, 23, and their respective values. Device Id is 01 which indicates that this message is meant for a camera.
+In this message we can see parameters 20, 21, 22, 23, and their respective 2-Byte values.
+Device Id is 01 which indicates that this message is meant for a camera.
