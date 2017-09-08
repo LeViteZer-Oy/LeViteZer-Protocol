@@ -10,7 +10,8 @@
     + [End of Message](#end-of-message)
     + [Checksum](#checksum)
   * [Devices](#devices)
-  * [Command Descriptions](#command-descriptions)
+  * [Parameter Descriptions](#parameter-descriptions)
+    + [Controller Data](#controller-data)  
     + [Gimbal Data](#gimbal-data)
     + [Camera Data](#camera-data)
   * [Examples](#examples)
@@ -68,6 +69,44 @@ On the device id field it is specified the device for the message, this field id
 Every type of device has its own set of parameters which a limit of 254 parameters per device type.
 
 ## Parameter Descriptions
+### Controller Data
+ * Mouse Left Button 1
+ * Mouse Middle Button 2
+ * Mouse Right Button 3
+ * MouseX 4
+ * MouseY 5
+ * MouseZ 6
+ * wheel 7
+> reserved till 10
+ * Joystick0X 10
+ * Joystick0Y 11
+ * Joystick1X 12
+ * Joystick1Y 13
+ * Joystick2X 14
+ * Joystick2Y 15
+ * Joystick3X 16
+ * Joystick3Y 17
+ * Joystick4X 18
+ * Joystick4Y 19
+> reserverd till 20
+ * Potentiometer0 20
+ * Potentiometer1 21
+ * Potentiometer2 22
+ * Potentiometer3 23
+ * Potentiometer4 24
+ * Potentiometer5 25
+>reserved till 30
+ * Button0 30
+ * Button1 31
+ * Button2 32
+ * Button3 33
+ * Button4 34
+ * Button5 35
+ * Button6 36
+>reserved till 40
+ * Led0 40
+ * Led1 41
+ * Led2 42
 
 ### Gimbal Data
 parameters received from gimbal
