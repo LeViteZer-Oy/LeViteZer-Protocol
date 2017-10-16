@@ -57,7 +57,7 @@ Data is between the header and the end of the message. Any data field has 2 byte
 The last byte before the Checksum and after the last command is just a zero `0` byte value.
 
 ### Checksum
-Optional checking method: Sum of all bytes on the message but the `<Starting_Bytes>`
+Optional checking method: Sum of all bytes on the message but the `<Starting_Bytes>` using modulo 256 operation. The result is one byte after the end of message.
 
 
 ## Devices
