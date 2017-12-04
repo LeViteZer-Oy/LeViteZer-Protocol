@@ -66,71 +66,86 @@ On the device id field it is specified the device for the message, this field id
  * Gimbals 100-149
  * Controllers 224-254
  
-Every type of device has its own set of parameters which a limit of 254 parameters per device type.
+Every type of device has its own set of parameters which is 254 parameters per device type.
 
 ## Parameter Descriptions
 ### Controller Data
- * Mouse Left Button 1
- * Mouse Middle Button 2
- * Mouse Right Button 3
- * MouseX 4
- * MouseY 5
- * MouseZ 6
- * wheel 7
-> reserved till 10
- * Joystick0X 10
- * Joystick0Y 11
- * Joystick1X 12
- * Joystick1Y 13
- * Joystick2X 14
- * Joystick2Y 15
- * Joystick3X 16
- * Joystick3Y 17
- * Joystick4X 18
- * Joystick4Y 19
-> reserverd till 20
- * Potentiometer0 20
- * Potentiometer1 21
- * Potentiometer2 22
- * Potentiometer3 23
- * Potentiometer4 24
- * Potentiometer5 25
->reserved till 30
- * Button0 30
- * Button1 31
- * Button2 32
- * Button3 33
- * Button4 34
- * Button5 35
- * Button6 36
->reserved till 40
- * Led0 40
- * Led1 41
- * Led2 42
+| Id  |                 name                   |  min   | max    |                                  Observations                          |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
+| 1   | CONTROL_TYPE                           |        |        |                                                                        |
+| 2   | JOYSTICK0_X                            | 0      | 2048   | X coordinate of joystick 0. Central value is 1024                      |
+| 3   | JOYSTICK0_Y                            | 0      | 2048   | Y coordinate of joystick 0. Central value is 1024                      |
+| 4   | JOYSTICK1_X                            | 0      | 2048   | Same as 2 and 3 ids.                                                   |
+| 5   | JOYSTICK1_Y                            | 0      | 2048   | Same as 2 and 3 ids.                                                   |
+| 6   | JOYSTICK2_X                            | 0      | 2048   | Same as 2 and 3 ids.                                                   |
+| 7   | JOYSTICK2_Y                            | 0      | 2048   | Same as 2 and 3 ids.                                                   |
+| 8   | JOYSTICK3_X                            | 0      | 2048   | Same as 2 and 3 ids.                                                   |
+| 9   | JOYSTICK3_Y                            | 0      | 2048   | Same as 2 and 3 ids.                                                   |
+| 10  | CENTRAL_POTENTIOMETER                  | 0      | 2048   |                                                                        |
+| 11  | RIGHT_POTENTIOMETER                    | 0      | 2048   |                                                                        |
+| 12  | LEFT_POTENTIOMETER                     | 0      | 2048   |                                                                        |
+| 13  | BUTON1_BANK1                           |        |        | values   {400, 720, 1024, 1350, 1680}                                  |
+| 14  | BUTON1_BANK2                           |        |        | values   {400, 720, 1024, 1350, 1680}                                  |
+| 15  | BUTON2_BANK1                           |        |        | values   {400, 720, 1024, 1350, 1680}                                  |
+| 16  | BUTON2_BANK2                           |        |        | values   {400, 720, 1024, 1350, 1680}                                  |
+| 17  | TRIGGER                                |        |        | values   {400, 720, 1024, 1350, 1680}                                  |
+| 18  | BUTTON1                                |0       |1       | will send 1 when press and 0 when released                             |
+| 19  | BUTTON2                                |0       |1       | will send 1 when press and 0 when released                             |
+| 20  | BUTTON3                                |0       |1       | will send 1 when press and 0 when released                             |
+| 21  | BUTTON4                                |0       |1       | will send 1 when press and 0 when released                             |
 
-### Gimbal Data
-parameters received from gimbal
- * IMU Roll angle 1
- * IMU Pitch angle 2
- * IMU Yaw angle 3
- * Roll angle 4
- * Pitch angle 5
- * Yaw angle 6
 
-### Camera Data
-These control camera owns parameters, below the parameter name and the id.
+### Gimbal. Incoming Data
+
+| Id  |                 name                   |  min   | max    |                                  Observations                          |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
+| 1   | IMU_ROLL                               | -720   | 720    | Imu angles are related to motors themselves. Current value. Unit: 0.02197265625 degrees |
+| 2   | IMU_PITCH                              | -720   | 720    | //                                                                     |
+| 3   | IMU_YAW                                | -720   | 720    | //                                                                     |
+| 4   | ROLL                                   | -720   | 720    | Relative angles are related to the position of the gimbal in the world. Current value. Unit: 0.1220740379  degrees/sec |
+| 5   | PITCH                                  | -720   | 720    | //                                                                     |
+| 6   | YAW                                    | -720   | 720    | //                                                                     |
+| 7   | TIMESTAMP                              |        |        | Timestamp of the received angles                                       |
+| 13  | ACCEL_ROLL                             | 1      | 1275   | Current acceleration value                                             |
+| 14  | ACCEL_PITCH                            | 1      | 1275   | //                                                                     |
+| 15  | ACCEL_YAW                              | 1      | 1275   | //                                                                     |
+| 18  | ANGLE_COMPLETED                        |        |        |  Notification to confirm that a new angle was set                      |
+| 19  | REQUEST_REAL_TIME_DATA                 | 0      | 65536  |  Last Real Time interval that was set                                  |
+| 20  | FRAME_HEADING_ANGLE                    | -180   | 180    |  Last initial angle that was set                                       |
+| 21  | BOARD_VERSION                          |        |        |  Board version multiplied by 10                                        |
+| 22  | FIRMWARE_VERSION                       |        |        |  Split into decimal  digits X.XX.X, e.g. 2305 means 2.30b5             |
+### Gimbal. Outgoing Data
+| Id  |                 name                   |  min   | max    |                                  Observations                          |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
+| 4   | ROLL                                   | -720   | 720    | Set this axe angle .Unit: 0.02197265625 degrees                        |
+| 5   | PITCH                                  | -720   | 720    | //                                                                     |
+| 6   | YAW                                    | -720   | 720    | //                                                                     |
+| 10  | SPEED_ROLL                             | 0      | 2000   | Set this axe speed. Unit: 0.1220740379  degrees/sec                    |
+| 11  | SPEED_PITCH                            | 0      | 2000   | //                                                                     |
+| 12  | SPEED_YAW                              | 0      | 2000   | //                                                                     |
+| 13  | ACCEL_ROLL                             | 1      | 1275   | Set this axe aceleration limit. Unit: 1 degree/sec^2                   |
+| 14  | ACCEL_PITCH                            | 1      | 1275   | //                                                                     |
+| 15  | ACCEL_YAW                              | 1      | 1275   | //                                                                     |
+| 16  | COMNTROL_MODE                          |        |        | values can be: 0 - Mode no control: gimbal ignores angle and speed data</br> 1 - Mode speed: gimbal moves to speed sent</br> 2 - mode angle: gimbal goes to specified angle using specified speed (will slow down near target speed) |
+| 17  | LEVEL_ROLL                             |        |        |  Sets IMU_ROLL angle to 0                                              |
+| 18  | ANGLE_COMPLETED                        |        |        |  Notification to confirm that a new angle was set                      |
+| 19  | REQUEST_REAL_TIME_DATA                 | 0      | 65536  |  Sets the frequency which Real time data is received in milliseconds   |
+| 20  | FRAME_HEADING_ANGLE                    | -180   | 180    |  Sets the initial angle                                                |
+| 21  | BOARD_VERSION                          |        |        |  Request board information. Will return board and firmware version     |
+### Black Magic Camera Data (only outgoing)
+Camera parameters can be set but there is no feedback of what are the current values.
 
 #### Lens
- * Focus 2
- * Instantaneous Autofocus 3
- * Aperture (F-stop) 4
- * Aperture (Normalised) 5
- * Aperture (Ordinal) 6
- * Instantaneous Auto Aperture 7
- * Optical Image Stabilisation 8
- * Set Absolute Zoom (mm) 9
- * Set Absolute Zoom (Normalised) 10
- * Set Continuous Zoom (Speed) 11
+| Id  |                 name                   |  min   | max    |                                  Observations                          |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
+| 2   | Focus                                  | 0      | 2047   | 0=near, 2047=far                                                       |
+| 3   | Autofocus                              |        |        |                                                                        |
+| 5   | Aperture (Normalised)                  | 0      | 2047   | 0=smallest, 2047=largest                                               |
+| 7   | Autoaperture                           |        |        |                                                                        |
+| 8   | Optical image Stabilisation            | 0      | 1      | 0=disabled, 1 or greater=enabled                                       |
+| 9   | Absolute Zoom (mm)                     | 0      | 2047   | Move to specified focal in mm, from 0mm to maximum of the lens         |   
+| 10  | Absolute Zoom (Normalized)             | 0      | 2047   | Move to specified normalised focal lenght: 0=wide, 2047=tele           |
+| 11  | Continous Zoom (Speed)                 | -2047  | 2047   | Start/stop zooming at specified rate: -2047=zoom wider fast, 0.0=stop, +2047=zoom tele fast|
 
 #### Color Correction
  * Lift Adjust Red 20
