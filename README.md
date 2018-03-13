@@ -12,8 +12,10 @@
   * [Devices](#devices)
   * [Parameter Descriptions](#parameter-descriptions)
     + [Controller Data](#controller-data)  
-    + [Gimbal Data](#gimbal-data)
-    + [Camera Data](#camera-data)
+    + [Gimbal Incoming Data](#gimbal-incoming-data)
+    + [Gimbal Outgoing Data](#gimbal-outgoing-data)
+    + [Black Magic Camera Data](#black-magic-camera-data)
+  * [Future parameters](#future-parameters)
   * [Examples](#examples)
   
 ## Sckeleton
@@ -101,7 +103,7 @@ Every type of device has its own set of parameters which is 254 parameters per d
 | 21  | BUTTON4                                |0       |1       | will send 1 when press and 0 when released                             |
 
 
-### Gimbal. Incoming Data
+### Gimbal Incoming Data
 
 | Id  |                 name                   |  min   | max    |                                  Observations                          |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
@@ -120,7 +122,7 @@ Every type of device has its own set of parameters which is 254 parameters per d
 | 20  | FRAME_HEADING_ANGLE                    | -180   | 180    |  Last initial angle that was set                                       |
 | 21  | BOARD_VERSION                          |        |        |  Board version multiplied by 10                                        |
 | 22  | FIRMWARE_VERSION                       |        |        |  Split into decimal  digits X.XX.X, e.g. 2305 means 2.30b5             |
-### Gimbal. Outgoing Data
+### Gimbal Outgoing Data
 | Id  |                 name                   |  min   | max    |                                  Observations                          |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
 | 4   | ROLL                                   | -720   | 720    | Set this axe angle .Unit: 0.02197265625 degrees                        |
@@ -220,12 +222,36 @@ Camera parameters can be set but there is no feedback of what are the current va
 | 109  | Tally Brightness                      | 0      | 2047   |                                                                        |
 | 110  | Tally Front Brightness                | 0      | 2047   |                                                                        |
 | 111  | Tally Rear Brightness                 | 0      | 2047   |                                                                        |
-| 112  | Output Overlays 112
-| 113  | Reference Source 113
-| 114  | Reference Offset 114
-| 115  | Real Time Clock_0 115
-| 116  | Real Time Clock_1 116
+
  
+ 
+## Future parameters
+There are some parameters that are not implemented yet. There are plans to add them as well.
+
+### Black magic cameras
+ #### Video
+ * Set auto White Balance
+ * Restore auto White Balance
+ * Recording format
+ * Set auto exposure mode (manual, iris, shutter, iris + shutter, ... etc)
+ #### Output
+ * Frame overlays
+ * Frame guides style (Camera 3.x)
+ * Frame guides opacity (Camera 3.x)
+ #### Display
+ * Focus Assit
+ #### Reference
+ * Souce
+ * Offset in pixels
+ #### Configuration
+ * Real Time Clock
+ * System languague
+ * Timezone
+ * Location
+
+### Gimbal
+ * Set angle 0: define where the angle 0 in the yaw axis (pan)
+
 ## Examples
 Let's analyze a message like the next one. Note that numbers are in hexadecimal format
 FFFFFF0156207211210CF22200002306F900.
