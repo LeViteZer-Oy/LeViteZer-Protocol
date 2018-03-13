@@ -28,7 +28,7 @@ Header is made of the following fields:
 ```
 |       Field        | byte size | valid byte range |              Observations                |
 |:------------------:|:---------:|:----------------:|:----------------------------------------:|
-|`<Starting_Bytes>`  | 3         | 255-255          | Just a sequence of hexadecimal "FF FF FF"|
+|`<Starting_Bytes>`  | 3         | 255-255          | Just a sequence of 3 decimal "255" or hexadecimal "FF"|
 |`<Device_ID>`       | 1         | 1-254            |       |
 |`<Counter>`         | 1         | 1-254            |                                          |
 
@@ -38,20 +38,26 @@ Header is made of the following fields:
 
 
 ### Data
-Data is between the header and the end of the message. Any data field has 2 bytes and is preceeded by its ID byte. these data fields can come in any order and number (max 254).
+Data is between the header and the end of the message. Here are the parameters of the device. Each parameter value is always 16 bits preceded by an 8 bit id. Therefore every data field is 3 bytes. All the parameters must be for the same device and it cannot be more than 254 parameters.
+
 ```
-... <Data_ID> <Low_Byte High_Byte> ...
+... <Parameter_ID0> <Parameter_value0>, <Parameter_ID1> <Parameter_value1> ... <Parameter_IDx> <Parameter_valuex> ...
 ```
 |       Field        | byte size | valid byte range |              Observations                |
 |:------------------:|:---------:|:----------------:|:----------------------------------------:|
-|`<Data_ID>`         | 1         | 1-254            |                                          |
-|`<Data>`            | 2         | 0-255            | data order `<Low_byte High_byte>`        |
+|`<Parameter_ID>`    | 1         | 1-254            |                                          |
+|`<Parameter_value>` | 2         | 0-255            | data order `<Low_byte High_byte>`        |
 
 
  * Data_ID: every piece of data has its own id.
  * Data: Value of Data itself.
 
->Note: Data fields are always optional
+Example: send the farthest focus. The id is '2'. and the max value is '2047' ('0800' in hexadecimal).
+Then the data field are the three bytes following bytes (note the low byte is first):
+
+|   id    |    low   |  high   |
+|:-------:|:--------:|:-------:|
+|   02    |   00     |   08    |
 
 ### End of Message
 The last byte before the Checksum and after the last command is just a zero `0` byte value.
@@ -148,64 +154,77 @@ Camera parameters can be set but there is no feedback of what are the current va
 | 11  | Continous Zoom (Speed)                 | -2047  | 2047   | Start/stop zooming at specified rate: -2047=zoom wider fast, 0.0=stop, +2047=zoom tele fast|
 
 #### Color Correction
- * Lift Adjust Red 20
- * Lift Adjust Green 21
- * Lift Adjust Blue 22
- * Lift Adjust Luma 23
- * Gamma Adjust Red  24
- * Gamma Adjust Green 25
- * Gamma Adjust Blue 26
- * Gamma Adjust Luma 27
- * Gain Adjust Red 28
- * Gain Adjust Green 29
- * Gain Adjust Blue 30
- * Gain Adjust Luma 31
- * Offset Adjust Red 32
- * Offset Adjust Green 33
- * Offset Adjust Blue 34
- * Offset Adjust Luma 35
- * Contrast Adjust pivot 36
- * Contrast Adjust adj 37
- * Luma Mix 38
- * Colour Adjust Hue 39
- * Colour Adjust Sat 40
- * Correction Reset Default 41
+| Id  |                 name                   |  min   | max    |                                  Observations                          |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
+| 20  | Lift Adjust Red                        | -4096  | 4096   |   Default value: 0                                                     | 
+| 21  | Lift Adjust Green                      | -4096  | 4096   |   Default value: 0                                                     |                                                                      |
+| 22  | Lift Adjust Blue                       | -4096  | 4096   |   Default value: 0                                                     |                                                                      |
+| 23  | Lift Adjust Luma                       | -4096  | 4096   |   Default value: 0                                                     |                                                                      |
+| 24  | Gamma Adjust Red                       | -4096  | 4096   |   Default value: 0                                                     |                                                                      |
+| 25  | Gamma Adjust Green                     | -8192  | 8102   |   Default value: 0                                                     |                                                                      |
+| 26  | Gamma Adjust Blue                      | -8192  | 8102   |   Default value: 0                                                     |                                                                      |
+| 27  | Gamma Adjust Luma                      | -8192  | 8102   |   Default value: 0                                                     |                                                                      |
+| 28  | Gain Adjust Red                        |  0     | 32768  |   Default value: 2047                                                  | 
+| 29  | Gain Adjust Green                      |  0     | 32768  |   Default value: 2047                                                  |
+| 30  | Gain Adjust Blue                       |  0     | 32768  |   Default value: 2047                                                  |
+| 31  | Gain Adjust Luma                       |  0     | 32768  |   Default value: 2047                                                  |
+| 32  | Offset Adjust Red                      | -10240 | 10240  |   Default value: 0                                                     |
+| 33  | Offset Adjust Green                    | -10240 | 10240  |   Default value: 0                                                     |
+| 34  | Offset Adjust Blue                     | -10240 | 10240  |   Default value: 0                                                     |
+| 35  | Offset Adjust Luma                     | -10240 | 10240  |   Default value: 0                                                     |
+| 36  | Contrast Adjust pivot                  | 0      | 2047   |   Default value: 0                                                     |
+| 37  | Contrast Adjust adj                    | 0      | 4096   |   Default value: 2047                                                  |
+| 38  | Luma Mix                               | 0      | 2047   |   Default value: 0                                                     |
+| 39  | Colour Adjust Hue                      | -2047  | 2047   |   Default value: 0                                                     |
+| 40  | Colour Adjust Sat                      | 0      | 4096   |   Default value: 2047                                                  |
+| 41  | Correction Reset Default               | 0      | 0      |   void command                                                         |
 
 #### Video
- * Video Mode 50
- * Sensor Gain 51
- * Manual White Balance 52
- * Exposure (us) 53
- * Exposure (ordinal) 54
- * Dynamic Range Mode 55
- * Video Sharpening Level 56
+| Id  |                 name                   |  min   | max    |                                  Observations                          |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
+| 50  | Video Mode                             | -      | -      |   See video mode explanation                                           |
+| 51  | Sensor Gain                            | 1      | 16     |   values: 1(12dB), 2(-6dB), 4(0dB), 8(6dB), 16(12dB)                   |
+| 52  | Manual White Balance                   | 2500   | 8000   |   Corresponds to color temperature in kelvins                          |
+| 53  | Exposure (us)                          | 1      | 42000  |   time in us                                                           |
+| 54  | Exposure (ordinal)                     | 0      | n      |   Steps through available exposure values from 0 to the maximum of the camera | 
+| 55  | Dynamic Range Mode                     | 0      | 1      |   0 = film, 1 = video                                                  |
+| 56  | Video Sharpening Level                 | 0      | 3      |   0=Off, 1=Low, 2=Medium, 3=High                                       |
+
+ * Video Mode
+ 
 
 #### Audio
- * Mic Level 69
- * Headphone Level 70
- * Headphone Program Mix 71
- * Speaker Level 72
- * Input Type 73
- * Input Levels ch0 74
- * Input Levels ch1 75
- * Phantom Power 76
+| Id  |                 name                   |  min   | max    |                                  Observations                          |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
+| 69  | Mic Level                              | 0      | 2047   |                                                                        |
+| 70  | Headphone Level                        | 0      | 2047   |                                                                        |
+| 71  | Headphone Program Mix                  | 0      | 2047   |                                                                        |
+| 72  | Speaker Level                          | 0      | 2047   |                                                                        |
+| 73  | Input Type                             | 0      | 3      |   0=internal mic, 1=line level input,  2=low mic level input,  3=high mic level input |
+| 74  | Input Levels ch0                       | 0      | 2047   |                                                                        |
+| 75  | Input Levels ch1                       | 0      | 2047   |                                                                        |
+| 76  | Phantom Power                          | 0      | 1      |   Boolean value                                                        |
 
 #### Display
- * Brightness 89
- * Overlays 90
- * Zebra Level 91
- * Peaking Level 92
- * Colour Bars Display Time (seconds) 93
+| Id  |                 name                   |  min   | max    |                                  Observations                          |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
+| 89  | Brightness                             | 0      | 2047   |                                                                        |
+| 90  | Overlays                               | -      | -      |   0=disable, 4=zebra, 8=peaking, 61=both                               |
+| 91  | Zebra Level                            | 0      | 2047   |                                                                        |
+| 92  | Peaking Level                          | 0      | 2047   |                                                                        |
+| 93  | Colour Bars Display Time (seconds)     | 0      | 30     |   0=disable bars, -30=enable bars with timeout (s)                     |
 
 #### Configuration
- * Tally Brightness 109
- * Tally Front Brightness 110
- * Tally Rear Brightness 111
- * Output Overlays 112
- * Reference Source 113
- * Reference Offset 114
- * Real Time Clock_0 115
- * Real Time Clock_1 116
+| Id  |                 name                   |  min   | max    |                                  Observations                          |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
+| 109  | Tally Brightness                      | 0      | 2047   |                                                                        |
+| 110  | Tally Front Brightness                | 0      | 2047   |                                                                        |
+| 111  | Tally Rear Brightness                 | 0      | 2047   |                                                                        |
+| 112  | Output Overlays 112
+| 113  | Reference Source 113
+| 114  | Reference Offset 114
+| 115  | Real Time Clock_0 115
+| 116  | Real Time Clock_1 116
  
 ## Examples
 Let's analyze a message like the next one. Note that numbers are in hexadecimal format
