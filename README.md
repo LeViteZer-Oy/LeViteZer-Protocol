@@ -69,10 +69,14 @@ Optional checking method: Sum of all bytes on the message but the `<Starting_Byt
 
 
 ## Devices
+#### Levitezer Control Box
+The protocol messages can control devices connected to the Levitezer Control Box. The Box can receive and send these messages through its serial/USB port or through Ethernet (UDP packets).
+
+#### Available devices
 On the device id field it is specified the device for the message, this field identifies the device and based on the id range the type of device is specified as well.
  * Cameras 1-99
  * Gimbals 100-149
- * Controllers 224-254
+ * Controllers (such as joysticks) 224-254
  
 Every type of device has its own set of parameters which is 254 parameters per device type.
 
@@ -140,7 +144,8 @@ Every type of device has its own set of parameters which is 254 parameters per d
 | 19  | REQUEST_REAL_TIME_DATA                 | 0      | 65536  |  Sets the frequency which Real time data is received in milliseconds   |
 | 20  | FRAME_HEADING_ANGLE                    | -180   | 180    |  Sets the initial angle                                                |
 | 21  | BOARD_VERSION                          |        |        |  Request board information. Will return board and firmware version     |
-### Black Magic Camera Data (only outgoing)
+### Black Magic Camera Data
+
 Camera parameters can be set but there is no feedback of what are the current values.
 
 #### Lens
