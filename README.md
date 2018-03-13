@@ -65,7 +65,7 @@ Then the data field are the three bytes following bytes (note the low byte is fi
 The last byte before the Checksum and after the last command is just a zero `0` byte value.
 
 ### Checksum
-Optional checking method: Sum of all bytes on the message but the `<Starting_Bytes>` using modulo 256 operation. The result is one byte after the end of message.
+Sum of all bytes on the message but the `<Starting_Bytes>` using modulo 256 operation. The result is one byte after the end of message.
 
 
 ## Devices
@@ -109,44 +109,55 @@ Every type of device has its own set of parameters which is 254 parameters per d
 
 ### Gimbal Incoming Data
 
+Data from the gimbal.
+
 | Id  |                 name                   |  min   | max    |                                  Observations                          |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
-| 1   | IMU_ROLL                               | -720   | 720    | Imu angles are related to motors themselves. Current value. Unit: 0.02197265625 degrees |
-| 2   | IMU_PITCH                              | -720   | 720    | //                                                                     |
-| 3   | IMU_YAW                                | -720   | 720    | //                                                                     |
-| 4   | ROLL                                   | -720   | 720    | Relative angles are related to the position of the gimbal in the world. Current value. Unit: 0.1220740379  degrees/sec |
-| 5   | PITCH                                  | -720   | 720    | //                                                                     |
-| 6   | YAW                                    | -720   | 720    | //                                                                     |
+| 1   | IMU_ROLL                               | -32768 |   32768| Current IMU angles (relative to motors themselves). Unit: 0.02197265625 degrees, which gives ±720 degree range |
+| 2   | IMU_PITCH                              | -32768 |   32768| //                                                                     |
+| 3   | IMU_YAW                                | -32768 |   32768| //                                                                     |
+| 4   | ROLL                                   | -32768 |   32768| Current relative angles (relative to the the gimbal frame) Unit: 0.02197265625 degrees, which gives ±720 degree range |
+| 5   | PITCH                                  | -32768 |   32768| //                                                                     |
+| 6   | YAW                                    | -32768 |   32768| //                                                                     |
 | 7   | TIMESTAMP                              |        |        | Timestamp of the received angles                                       |
 | 13  | ACCEL_ROLL                             | 1      | 1275   | Current acceleration value                                             |
 | 14  | ACCEL_PITCH                            | 1      | 1275   | //                                                                     |
 | 15  | ACCEL_YAW                              | 1      | 1275   | //                                                                     |
 | 18  | ANGLE_COMPLETED                        |        |        |  Notification to confirm that a new angle was set                      |
 | 19  | REQUEST_REAL_TIME_DATA                 | 0      | 65536  |  Last Real Time interval that was set                                  |
-| 20  | FRAME_HEADING_ANGLE                    | -180   | 180    |  Last initial angle that was set                                       |
 | 21  | BOARD_VERSION                          |        |        |  Board version multiplied by 10                                        |
 | 22  | FIRMWARE_VERSION                       |        |        |  Split into decimal  digits X.XX.X, e.g. 2305 means 2.30b5             |
+
 ### Gimbal Outgoing Data
+
+Commands to send to gimbal.
+
 | Id  |                 name                   |  min   | max    |                                  Observations                          |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
-| 4   | ROLL                                   | -720   | 720    | Set this axe angle .Unit: 0.02197265625 degrees                        |
-| 5   | PITCH                                  | -720   | 720    | //                                                                     |
-| 6   | YAW                                    | -720   | 720    | //                                                                     |
-| 10  | SPEED_ROLL                             | 0      | 2000   | Set this axe speed. Unit: 0.1220740379  degrees/sec                    |
-| 11  | SPEED_PITCH                            | 0      | 2000   | //                                                                     |
-| 12  | SPEED_YAW                              | 0      | 2000   | //                                                                     |
-| 13  | ACCEL_ROLL                             | 1      | 1275   | Set this axe aceleration limit. Unit: 1 degree/sec^2                   |
+| 4   | ROLL                                   | -32768 | 32768  | Set this axis angle .Unit: 0.02197265625 degrees, which gives ±720 degree range  |
+| 5   | PITCH                                  | -32768 | 32768  | //                                                                     |
+| 6   | YAW                                    | -32768 | 32768  | //                                                                     |
+| 10  | SPEED_ROLL                             | 0      | 32768  | Set this axis speed. Unit: 0.1220740379  degrees/sec                   |
+| 11  | SPEED_PITCH                            | 0      | 32768  | //                                                                     |
+| 12  | SPEED_YAW                              | 0      | 32768  | //                                                                     |
+| 13  | ACCEL_ROLL                             | 1      | 1275   | Set this axis aceleration limit. Unit: 1 degree/sec^2. Note: optimal rate of sending is 1 Hz. So it should not sent which the same frequency than others.  |
 | 14  | ACCEL_PITCH                            | 1      | 1275   | //                                                                     |
 | 15  | ACCEL_YAW                              | 1      | 1275   | //                                                                     |
-| 16  | COMNTROL_MODE                          |        |        | values can be: 0 - Mode no control: gimbal ignores angle and speed data</br> 1 - Mode speed: gimbal moves to speed sent</br> 2 - mode angle: gimbal goes to specified angle using specified speed (will slow down near target speed) |
+| 16  | CONTROL_MODE                           |        |        | values can be: 0 - Mode no control: gimbal ignores angle and speed data</br> 1 - Mode speed: gimbal moves to speed sent. Note: Optimal rate of sending speed is 50-100Hz</br> 2 - mode angle: gimbal goes to specified angle using specified speed (will slow down near target speed) |
 | 17  | LEVEL_ROLL                             |        |        |  Sets IMU_ROLL angle to 0                                              |
 | 18  | ANGLE_COMPLETED                        |        |        |  Notification to confirm that a new angle was set                      |
 | 19  | REQUEST_REAL_TIME_DATA                 | 0      | 65536  |  Sets the frequency which Real time data is received in milliseconds   |
-| 20  | FRAME_HEADING_ANGLE                    | -180   | 180    |  Sets the initial angle                                                |
 | 21  | BOARD_VERSION                          |        |        |  Request board information. Will return board and firmware version     |
+
+Notes:
+When controling the gimbal on speed mode you should send CONTROL_MODE=1 + speed axis. Also use a high rate send in the range of 50-100 Hz.
+
+When controling the gimbal on angle mode you should send CONTROL_MODE=2 + speed axis + angle axis. On this case the speed will use to reach the target angle.
+
 ### Black Magic Camera Data
 
 Camera parameters can be set but there is no feedback of what are the current values.
+Camera parameters must be send at rates below 24 Hz. If they are sent at higher frequency for short period, they will be enqueued and eventually sent to camera, but if the queue gets full then new data will be dropped. This is because a limitation on the SDI interface.
 
 #### Lens
 | Id  |                 name                   |  min   | max    |                                  Observations                          |
@@ -227,6 +238,8 @@ Camera parameters can be set but there is no feedback of what are the current va
 | 109  | Tally Brightness                      | 0      | 2047   |                                                                        |
 | 110  | Tally Front Brightness                | 0      | 2047   |                                                                        |
 | 111  | Tally Rear Brightness                 | 0      | 2047   |                                                                        |
+
+
 
  
  
