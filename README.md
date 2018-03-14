@@ -208,8 +208,29 @@ Camera parameters must be send at rates below 24 Hz. If they are sent at higher 
 | 55  | Dynamic Range Mode                     | 0      | 1      |   0 = film, 1 = video                                                  |
 | 56  | Video Sharpening Level                 | 0      | 3      |   0=Off, 1=Low, 2=Medium, 3=High                                       |
 
- * Video Mode
- 
+ #### Video mode
+ sets resolution and framerate. all the settings are in groups of bits as show from the smallest bit:
+  - 3 bits -> FPS: 0=24, 1=25, 2=30, 3=50, 4=60
+  - 1 bit  -> M-Rate: 0=regular, 1=M-rate
+  - 3 bits -> Dimension:  0=NTSC, 1=PAL, 2=720, 3=1080, 4=2k, 5=2k DCI, 6=4k, 7=4k DCI
+  - 1 bit  -> interlaced: 0=progressive, 1=interlaced
+  - 4 bits -> colourspace: 0=YUV
+```python
+     # if videomode is a variable that represents the parameter
+     videomode
+     
+     # to get the values from videomode parameter
+     fps =            videomode & 0b0000000000000111
+     mrate =         (videomode & 0b0000000000001000) >> 3
+     resolution =    (videomode & 0b0000000001110000) >> 4
+     interlased =    (videomode & 0b0000000010000000) >> 7
+     colorspace =    (videomode & 0b0000111100000000) >> 8
+     
+     # to set the values to videomode parameter
+     videomode = (fps | (mrate << 3) | (resolution << 4) | (interlased << 7) | (colorspace << 8)
+     
+ ```
+ FPS values are from first bit to the 3rd, M-rate is the 4th bit, resolution from the 5 fifth to the 7th and so.
 
 #### Audio
 | Id  |                 name                   |  min   | max    |                                  Observations                          |
