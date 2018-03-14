@@ -280,3 +280,74 @@ FFFFFF0156207211210CF22200002306F900.
 
 In this message we can see parameters 20, 21, 22, 23, and their respective 2-Byte values.
 Device Id is 01 which indicates that this message is meant for a camera.
+
+### Script example
+The following python 2.7 script moves the gimbal several times on the yaw axis, sending the control messages trough UDP using the following gimbal parameters:
+ * ROLL
+ * PICH
+ * YAW
+ * SPEED_ROLL
+ * SPEED_PICH
+ * SPEED_YAW
+ * CONTROL_MODE
+ 
+``` python
+import socket
+import array
+import time
+UDP_IP = "192.168.137.222"
+UDP_PORT = 50505
+
+global counter
+counter = 0
+
+def getAngleMessage(angle):
+    global counter
+    if angle > 720 or angle < -720:
+        print "no valid angle range"
+        return ""
+    
+    # convert angle to raw value
+    rawYaw = int(angle / 0.02197265625)
+    
+    gimbalId = 101
+    mode = 2
+    endOfMessage = 0
+    message = array.array('B', [0xff, 0xff, 0xff, gimbalId, counter, 4, 0, 0, 5, 0, 0, 6, rawYaw & 0xff, rawYaw >> 8, 10, 0, 0, 11, 0, 0, 12, 255, 3, 16, mode, 0, endOfMessage, 0])
+    
+    #calculate checksum starting in 3rd index
+    checksum = 0
+    for i in range(3, len(message)):
+        checksum += message[i]
+    #set checksum to the last element
+    message[len(message)-1] = checksum % 256
+    # add to the counter
+    if counter > 255:
+        counter = 0
+    else:
+        counter += 1
+        
+    return message.tostring()
+    
+
+# create socket
+print "UDP target IP:", UDP_IP
+print "UDP target port:", UDP_PORT
+sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+
+# move to 0
+sock.sendto(getAngleMessage(0), (UDP_IP, UDP_PORT))
+# move to 90
+time.sleep(3)
+sock.sendto(getAngleMessage(90), (UDP_IP, UDP_PORT))
+# move to 180
+time.sleep(2)
+sock.sendto(getAngleMessage(180), (UDP_IP, UDP_PORT))
+# move to 270
+time.sleep(2)
+sock.sendto(getAngleMessage(270), (UDP_IP, UDP_PORT))
+
+# receive data (it blocks)
+# data, addr = sock.recvfrom(1024)
+# print "received message:", data
+```
