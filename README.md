@@ -274,12 +274,23 @@ There are some parameters that are not implemented yet. There are plans to add t
 Let's analyze a message like the next one. Note that numbers are in hexadecimal format
 FFFFFF0156207211210CF22200002306F900.
 
-|       Start        | Device Id | Count |              Data                     | End Of Message |
-|:------------------:|:---------:|:-----:|:-------------------------------------:|:--------------:|
-|  FFFFFF            |   01      |   01  |   20 7211, 21 0CF2, 22 0000, 23 06F9  |   00  |
+|       Start        | Device Id | Count |              Data                     | End Of Message | Checksum |
+|:------------------:|:---------:|:-----:|:-------------------------------------:|:--------------:|:--------:|  
+|  FFFFFF            |   01      |   01  |   20 7211, 21 0CF2, 22 0000, 23 06F9  |   00           |    B2    |
 
 In this message we can see parameters 20, 21, 22, 23, and their respective 2-Byte values.
 Device Id is 01 which indicates that this message is meant for a camera.
+
+To calculate the checksum sum all the bytes of all fields but the starting bytes and apply modulo by 256 to the sum.
+ * `1+1+20+72+11+21+0c+f2+22+23+06+f9 = 308`
+ * `308 % 256 = B2`
+ 
+If your using a 8 bit variable for the checksum you don't need to use modulo 256, the variable overflows any time its value gets bigger than 255. For example in C language you may use any of the following data types:
+* unsigned char
+* uint8_t
+* byte
+
+Otherwise you will need to calculate modulo after summing. (see script example)
 
 ### Script example
 The following python 2.7 script moves the gimbal several times on the yaw axis, sending the control messages trough UDP using the following gimbal parameters:
