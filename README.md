@@ -12,8 +12,8 @@
   * [Devices](#devices)
   * [Parameter Descriptions](#parameter-descriptions)
     + [Controller Data](#controller-data)  
-    + [Gimbal Incoming Data](#gimbal-incoming-data)
-    + [Gimbal Outgoing Data](#gimbal-outgoing-data)
+    + [Data Provided by Gimbal](#data-provided-by-gimbal)
+    + [Gimbal Control Data](#gimbal-control-data)
     + [Black Magic Camera Data](#black-magic-camera-data)
   * [Future parameters](#future-parameters)
   * [Examples](#examples)
@@ -107,9 +107,8 @@ Every type of device has its own set of parameters which is 254 parameters per d
 | 21  | BUTTON4                                |0       |1       | will send 1 when press and 0 when released                             |
 
 
-### Gimbal Incoming Data
+### Data Provided by Gimbal
 
-Data from the gimbal.
 
 | Id  |                 name                   |  min   | max    |                                  Observations                          |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
@@ -128,9 +127,8 @@ Data from the gimbal.
 | 21  | BOARD_VERSION                          |        |        |  Board version multiplied by 10                                        |
 | 22  | FIRMWARE_VERSION                       |        |        |  Split into decimal  digits X.XX.X, e.g. 2305 means 2.30b5             |
 
-### Gimbal Outgoing Data
+### Gimbal Control Data
 
-Commands to send to gimbal.
 
 | Id  |                 name                   |  min   | max    |                                  Observations                          |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
