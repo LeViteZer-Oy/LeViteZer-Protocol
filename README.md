@@ -11,10 +11,10 @@
     + [Checksum](#checksum)
   * [Devices](#devices)
   * [Parameter Descriptions](#parameter-descriptions)
-    + [Controller Data](#controller-data)  
     + [Data Provided by Gimbal](#data-provided-by-gimbal)
     + [Gimbal Control Data](#gimbal-control-data)
     + [Black Magic Camera Data](#black-magic-camera-data)
+    + [Controller Data](#controller-data)  
   * [Future parameters](#future-parameters)
   * [Examples](#examples)
   
@@ -32,7 +32,7 @@ Header is made of the following fields:
 |:------------------:|:---------:|:----------------:|:----------------------------------------:|
 |`<Starting_Bytes>`  | 3         | 255-255          | Just a sequence of 3 decimal "255" or hexadecimal "FF"|
 |`<Device_ID>`       | 1         | 1-254            |       |
-|`<Counter>`         | 1         | 1-254            |                                          |
+|`<Counter>`         | 1         | 0-254            |                                          |
 
  * Starting_Bytes: this is a sequence of 3 bytes which values are always `255` or `FF` in hexadecimal. This identifies the beggining of the message.
  * Device_ID: Identifies the device which will receive the message (or from which the message came). 
@@ -81,31 +81,6 @@ On the device id field it is specified the device for the message, this field id
 Every type of device has its own set of parameters which is 254 parameters per device type.
 
 ## Parameter Descriptions
-### Controller Data
-| Id  |                 name                   |  min   | max    |                                  Observations                          |
-|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
-| 1   | CONTROL_TYPE                           |        |        |                                                                        |
-| 2   | JOYSTICK0_X                            | 0      | 2048   | X coordinate of joystick 0. Central value is 1024                      |
-| 3   | JOYSTICK0_Y                            | 0      | 2048   | Y coordinate of joystick 0. Central value is 1024                      |
-| 4   | JOYSTICK1_X                            | 0      | 2048   | Same as 2 and 3 ids.                                                   |
-| 5   | JOYSTICK1_Y                            | 0      | 2048   | Same as 2 and 3 ids.                                                   |
-| 6   | JOYSTICK2_X                            | 0      | 2048   | Same as 2 and 3 ids.                                                   |
-| 7   | JOYSTICK2_Y                            | 0      | 2048   | Same as 2 and 3 ids.                                                   |
-| 8   | JOYSTICK3_X                            | 0      | 2048   | Same as 2 and 3 ids.                                                   |
-| 9   | JOYSTICK3_Y                            | 0      | 2048   | Same as 2 and 3 ids.                                                   |
-| 10  | CENTRAL_POTENTIOMETER                  | 0      | 2048   |                                                                        |
-| 11  | RIGHT_POTENTIOMETER                    | 0      | 2048   |                                                                        |
-| 12  | LEFT_POTENTIOMETER                     | 0      | 2048   |                                                                        |
-| 13  | BUTON1_BANK1                           |        |        | values   {400, 720, 1024, 1350, 1680}                                  |
-| 14  | BUTON1_BANK2                           |        |        | values   {400, 720, 1024, 1350, 1680}                                  |
-| 15  | BUTON2_BANK1                           |        |        | values   {400, 720, 1024, 1350, 1680}                                  |
-| 16  | BUTON2_BANK2                           |        |        | values   {400, 720, 1024, 1350, 1680}                                  |
-| 17  | TRIGGER                                |        |        | values   {400, 720, 1024, 1350, 1680}                                  |
-| 18  | BUTTON1                                |0       |1       | will send 1 when press and 0 when released                             |
-| 19  | BUTTON2                                |0       |1       | will send 1 when press and 0 when released                             |
-| 20  | BUTTON3                                |0       |1       | will send 1 when press and 0 when released                             |
-| 21  | BUTTON4                                |0       |1       | will send 1 when press and 0 when released                             |
-
 
 ### Data Provided by Gimbal
 
@@ -119,9 +94,9 @@ Every type of device has its own set of parameters which is 254 parameters per d
 | 5   | PITCH                                  | -32768 |   32768| //                                                                     |
 | 6   | YAW                                    | -32768 |   32768| //                                                                     |
 | 7   | TIMESTAMP                              |        |        | Timestamp of the received angles                                       |
-| 13  | ACCEL_ROLL                             | 1      | 1275   | Current acceleration value                                             |
-| 14  | ACCEL_PITCH                            | 1      | 1275   | //                                                                     |
-| 15  | ACCEL_YAW                              | 1      | 1275   | //                                                                     |
+| 13  | ACCEL_ROLL                             | 0      | 1275   | Current acceleration value                                             |
+| 14  | ACCEL_PITCH                            | 0      | 1275   | //                                                                     |
+| 15  | ACCEL_YAW                              | 0      | 1275   | //                                                                     |
 | 18  | ANGLE_COMPLETED                        |        |        |  Notification to confirm that a new angle was set                      |
 | 19  | REQUEST_REAL_TIME_DATA                 | 0      | 65536  |  Last Real Time interval that was set                                  |
 | 21  | BOARD_VERSION                          |        |        |  Board version multiplied by 10                                        |
@@ -138,9 +113,9 @@ Every type of device has its own set of parameters which is 254 parameters per d
 | 10  | SPEED_ROLL                             | 0      | 32768  | Set this axis speed. Unit: 0.1220740379  degrees/sec                   |
 | 11  | SPEED_PITCH                            | 0      | 32768  | //                                                                     |
 | 12  | SPEED_YAW                              | 0      | 32768  | //                                                                     |
-| 13  | ACCEL_ROLL                             | 1      | 1275   | Set this axis aceleration limit. Unit: 1 degree/sec^2. Note: optimal rate of sending is 1 Hz. So it should not sent which the same frequency than others.  |
-| 14  | ACCEL_PITCH                            | 1      | 1275   | //                                                                     |
-| 15  | ACCEL_YAW                              | 1      | 1275   | //                                                                     |
+| 13  | ACCEL_ROLL                             | 0      | 1275   | Set this axis aceleration limit. Unit: 1 degree/sec^2. Note: optimal rate of sending is 1 Hz. So it should not sent which the same frequency than others. Note 2: 0 Acceleration will disable this axis movement altogether.  |
+| 14  | ACCEL_PITCH                            | 0      | 1275   | //                                                                     |
+| 15  | ACCEL_YAW                              | 0      | 1275   | //                                                                     |
 | 16  | CONTROL_MODE                           |        |        | values can be: 0 - Mode no control: gimbal ignores angle and speed data</br> 1 - Mode speed: gimbal moves to speed sent. Note: Optimal rate of sending speed is 50-100Hz</br> 2 - mode angle: gimbal goes to specified angle using specified speed (will slow down near target speed) |
 | 17  | LEVEL_ROLL                             |        |        |  Sets IMU_ROLL angle to 0                                              |
 | 18  | ANGLE_COMPLETED                        |        |        |  Notification to confirm that a new angle was set                      |
@@ -259,6 +234,30 @@ Camera parameters must be send at rates below 24 Hz. If they are sent at higher 
 | 111  | Tally Rear Brightness                 | 0      | 2047   |                                                                        |
 
 
+### Controller Data
+| Id  |                 name                   |  min   | max    |                                  Observations                          |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
+| 1   | CONTROL_TYPE                           |        |        |                                                                        |
+| 2   | JOYSTICK0_X                            | 0      | 2048   | X coordinate of joystick 0. Central value is 1024                      |
+| 3   | JOYSTICK0_Y                            | 0      | 2048   | Y coordinate of joystick 0. Central value is 1024                      |
+| 4   | JOYSTICK1_X                            | 0      | 2048   | Same as 2 and 3 ids.                                                   |
+| 5   | JOYSTICK1_Y                            | 0      | 2048   | Same as 2 and 3 ids.                                                   |
+| 6   | JOYSTICK2_X                            | 0      | 2048   | Same as 2 and 3 ids.                                                   |
+| 7   | JOYSTICK2_Y                            | 0      | 2048   | Same as 2 and 3 ids.                                                   |
+| 8   | JOYSTICK3_X                            | 0      | 2048   | Same as 2 and 3 ids.                                                   |
+| 9   | JOYSTICK3_Y                            | 0      | 2048   | Same as 2 and 3 ids.                                                   |
+| 10  | CENTRAL_POTENTIOMETER                  | 0      | 2048   |                                                                        |
+| 11  | RIGHT_POTENTIOMETER                    | 0      | 2048   |                                                                        |
+| 12  | LEFT_POTENTIOMETER                     | 0      | 2048   |                                                                        |
+| 13  | BUTON1_BANK1                           |        |        | values   {400, 720, 1024, 1350, 1680}                                  |
+| 14  | BUTON1_BANK2                           |        |        | values   {400, 720, 1024, 1350, 1680}                                  |
+| 15  | BUTON2_BANK1                           |        |        | values   {400, 720, 1024, 1350, 1680}                                  |
+| 16  | BUTON2_BANK2                           |        |        | values   {400, 720, 1024, 1350, 1680}                                  |
+| 17  | TRIGGER                                |        |        | values   {400, 720, 1024, 1350, 1680}                                  |
+| 18  | BUTTON1                                |0       |1       | will send 1 when press and 0 when released                             |
+| 19  | BUTTON2                                |0       |1       | will send 1 when press and 0 when released                             |
+| 20  | BUTTON3                                |0       |1       | will send 1 when press and 0 when released                             |
+| 21  | BUTTON4                                |0       |1       | will send 1 when press and 0 when released                             |
 
  
  
