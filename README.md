@@ -87,12 +87,12 @@ Every type of device has its own set of parameters which is 254 parameters per d
 
 | Id  |                 name                   |  min   | max    |                                  Observations                          |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
-| 1   | IMU_ROLL                               | -32768 |   32768| Current IMU angles (relative to motors themselves). Unit: 0.02197265625 degrees, which gives ±720 degree range |
-| 2   | IMU_PITCH                              | -32768 |   32768| //                                                                     |
-| 3   | IMU_YAW                                | -32768 |   32768| //                                                                     |
-| 4   | ROLL                                   | -32768 |   32768| Current relative angles (relative to the the gimbal frame) Unit: 0.02197265625 degrees, which gives ±720 degree range |
-| 5   | PITCH                                  | -32768 |   32768| //                                                                     |
-| 6   | YAW                                    | -32768 |   32768| //                                                                     |
+| 1   | IMU_ROLL                               | -32768 |   32767| Current IMU angles (relative to motors themselves). Unit: 0.02197265625 degrees, which gives ±720 degree range |
+| 2   | IMU_PITCH                              | -32768 |   32767| //                                                                     |
+| 3   | IMU_YAW                                | -32768 |   32767| //                                                                     |
+| 4   | ROLL                                   | -32768 |   32767| Current relative angles (relative to the the gimbal frame) Unit: 0.02197265625 degrees, which gives ±720 degree range |
+| 5   | PITCH                                  | -32768 |   32767| //                                                                     |
+| 6   | YAW                                    | -32768 |   32767| //                                                                     |
 | 7   | TIMESTAMP                              |        |        | Timestamp of the received angles                                       |
 | 13  | ACCEL_ROLL                             | 0      | 1275   | Current acceleration value                                             |
 | 14  | ACCEL_PITCH                            | 0      | 1275   | //                                                                     |
@@ -107,12 +107,12 @@ Every type of device has its own set of parameters which is 254 parameters per d
 
 | Id  |                 name                   |  min   | max    |                                  Observations                          |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
-| 4   | ROLL                                   | -32768 | 32768  | Set this axis angle .Unit: 0.02197265625 degrees, which gives ±720 degree range  |
-| 5   | PITCH                                  | -32768 | 32768  | //                                                                     |
-| 6   | YAW                                    | -32768 | 32768  | //                                                                     |
-| 10  | SPEED_ROLL                             | 0      | 32768  | Set this axis speed. Unit: 0.1220740379  degrees/sec                   |
-| 11  | SPEED_PITCH                            | 0      | 32768  | //                                                                     |
-| 12  | SPEED_YAW                              | 0      | 32768  | //                                                                     |
+| 4   | ROLL                                   | -32768 | 32767  | Set this axis angle .Unit: 0.02197265625 degrees, which gives ±720 degree range  |
+| 5   | PITCH                                  | -32768 | 32767  | //                                                                     |
+| 6   | YAW                                    | -32768 | 32767  | //                                                                     |
+| 10  | SPEED_ROLL                             | -32768 | 32767  | Set this axis speed. Unit: 0.1220740379  degrees/sec. Note, when using angle mode (Control Mode=2), the minimum speed is 0 |
+| 11  | SPEED_PITCH                            | -32768 | 32767  | //                                                                     |
+| 12  | SPEED_YAW                              | -32768 | 32767  | //                                                                     |
 | 13  | ACCEL_ROLL                             | 0      | 1275   | Set this axis aceleration limit. Unit: 1 degree/sec^2. Note: optimal rate of sending is 1 Hz. So it should not sent which the same frequency than others. Note 2: 0 Acceleration will disable this axis movement altogether.  |
 | 14  | ACCEL_PITCH                            | 0      | 1275   | //                                                                     |
 | 15  | ACCEL_YAW                              | 0      | 1275   | //                                                                     |
@@ -142,32 +142,32 @@ Camera parameters must be send at rates below 24 Hz. If they are sent at higher 
 | 8   | Optical image Stabilisation            | 0      | 1      | 0=disabled, 1 or greater=enabled                                       |
 | 9   | Absolute Zoom (mm)                     | 0      | 2047   | Move to specified focal in mm, from 0mm to maximum of the lens         |   
 | 10  | Absolute Zoom (Normalized)             | 0      | 2047   | Move to specified normalised focal lenght: 0=wide, 2047=tele           |
-| 11  | Continous Zoom (Speed)                 | -2047  | 2047   | Start/stop zooming at specified rate: -2047=zoom wider fast, 0.0=stop, +2047=zoom tele fast|
+| 11  | Continous Zoom (Speed)                 | -2048  | 2047   | Start/stop zooming at specified rate: -2047=zoom wider fast, 0.0=stop, +2047=zoom tele fast|
 
 #### Color Correction
 | Id  |                 name                   |  min   | max    |                                  Observations                          |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
-| 20  | Lift Adjust Red                        | -4096  | 4096   |   Default value: 0                                                     | 
-| 21  | Lift Adjust Green                      | -4096  | 4096   |   Default value: 0                                                     |                                                                      |
-| 22  | Lift Adjust Blue                       | -4096  | 4096   |   Default value: 0                                                     |                                                                      |
-| 23  | Lift Adjust Luma                       | -4096  | 4096   |   Default value: 0                                                     |                                                                      |
-| 24  | Gamma Adjust Red                       | -4096  | 4096   |   Default value: 0                                                     |                                                                      |
-| 25  | Gamma Adjust Green                     | -8192  | 8102   |   Default value: 0                                                     |                                                                      |
-| 26  | Gamma Adjust Blue                      | -8192  | 8102   |   Default value: 0                                                     |                                                                      |
-| 27  | Gamma Adjust Luma                      | -8192  | 8102   |   Default value: 0                                                     |                                                                      |
-| 28  | Gain Adjust Red                        |  0     | 32768  |   Default value: 2047                                                  | 
-| 29  | Gain Adjust Green                      |  0     | 32768  |   Default value: 2047                                                  |
-| 30  | Gain Adjust Blue                       |  0     | 32768  |   Default value: 2047                                                  |
-| 31  | Gain Adjust Luma                       |  0     | 32768  |   Default value: 2047                                                  |
+| 20  | Lift Adjust Red                        | -4096  | 4095   |   Default value: 0                                                     | 
+| 21  | Lift Adjust Green                      | -4096  | 4095   |   Default value: 0                                                     |                                                                      |
+| 22  | Lift Adjust Blue                       | -4096  | 4095   |   Default value: 0                                                     |                                                                      |
+| 23  | Lift Adjust Luma                       | -4096  | 4095   |   Default value: 0                                                     |                                                                      |
+| 24  | Gamma Adjust Red                       | -4096  | 4095   |   Default value: 0                                                     |                                                                      |
+| 25  | Gamma Adjust Green                     | -8192  | 8101   |   Default value: 0                                                     |                                                                      |
+| 26  | Gamma Adjust Blue                      | -8192  | 8101   |   Default value: 0                                                     |                                                                      |
+| 27  | Gamma Adjust Luma                      | -8192  | 8101   |   Default value: 0                                                     |                                                                      |
+| 28  | Gain Adjust Red                        |  0     | 32767  |   Default value: 2047                                                  | 
+| 29  | Gain Adjust Green                      |  0     | 32767  |   Default value: 2047                                                  |
+| 30  | Gain Adjust Blue                       |  0     | 32767  |   Default value: 2047                                                  |
+| 31  | Gain Adjust Luma                       |  0     | 32767  |   Default value: 2047                                                  |
 | 32  | Offset Adjust Red                      | -10240 | 10240  |   Default value: 0                                                     |
 | 33  | Offset Adjust Green                    | -10240 | 10240  |   Default value: 0                                                     |
 | 34  | Offset Adjust Blue                     | -10240 | 10240  |   Default value: 0                                                     |
 | 35  | Offset Adjust Luma                     | -10240 | 10240  |   Default value: 0                                                     |
 | 36  | Contrast Adjust pivot                  | 0      | 2047   |   Default value: 0                                                     |
-| 37  | Contrast Adjust adj                    | 0      | 4096   |   Default value: 2047                                                  |
+| 37  | Contrast Adjust adj                    | 0      | 4095   |   Default value: 2047                                                  |
 | 38  | Luma Mix                               | 0      | 2047   |   Default value: 0                                                     |
 | 39  | Colour Adjust Hue                      | -2047  | 2047   |   Default value: 0                                                     |
-| 40  | Colour Adjust Sat                      | 0      | 4096   |   Default value: 2047                                                  |
+| 40  | Colour Adjust Sat                      | 0      | 4095   |   Default value: 2047                                                  |
 | 41  | Correction Reset Default               | 0      | 0      |   void command                                                         |
 
 #### Video
