@@ -23,15 +23,24 @@ Any message between two systems is compound of
 
     |___Header___||___Data___||__End_of_message__||__Checksum__|
 
+
+ ### Message Example
+|   starting bytes   | device | type |    counter   |                     Data              |   Checksum     |
+|:------------------:|:------:|:----:|:------------:|:-------------------------------------:|:------------:|
+|0xFF 0xFF 0xFF      | 0x07   | 0x02 |  0xA1        | (0x02 0xAA 0x92) (0x33 0x41 0x00)     |   0x00 0x5C 0x02  |
+
+This message is for a Camera and contains 2 parameters in the data
+
 ### Header
-Header is made of the following fields:
+Header is made of the following 6 bit fields:
 ```
-<starting bytes> <Device_ID> <counter>
+<starting bytes> <Device_ID> <Device_Type_ID> <counter>
 ```
 |       Field        | byte size | valid byte range |              Observations                |
 |:------------------:|:---------:|:----------------:|:----------------------------------------:|
 |`<Starting_Bytes>`  | 3         | 255-255          | Just a sequence of 3 decimal "255" or hexadecimal "FF"|
-|`<Device_ID>`       | 1         | 1-254            |       |
+|`<Device_ID>`       | 1         | 0-254            |       |
+|`<Device_Type>`     | 1         | 0-254            |       |
 |`<Counter>`         | 1         | 0-254            |                                          |
 
  * Starting_Bytes: this is a sequence of 3 bytes which values are always `255` or `FF` in hexadecimal. This identifies the beggining of the message.
@@ -39,8 +48,10 @@ Header is made of the following fields:
  * Counter: a count is made to keep tracking every message and identify them.
 
 
+
+
 ### Data
-Data is between the header and the end of the message. Here are the parameters of the device. Each parameter value is always 16 bits preceded by an 8 bit id. Therefore every data field is 3 bytes. All the parameters must be for the same device and it cannot be more than 254 parameters.
+Data is between the header and the end of the message. Here are the parameters of the device. Each parameter value is always 16 bits (little endian order) preceded by an 8 bit id. Therefore every data field is 3 bytes. All the parameters must be for the same device and it cannot be more than 254 parameters.
 
 ```
 ... <Parameter_ID0> <Parameter_value0>, <Parameter_ID1> <Parameter_value1> ... <Parameter_IDx> <Parameter_valuex> ...
@@ -61,22 +72,22 @@ Then the data field are the three bytes following bytes (note the low byte is fi
 |:-------:|:--------:|:-------:|
 |   02    |   00     |   08    |
 
-### End of Message
+### End of Message (or Checksum Id)
 The last byte before the Checksum and after the last command is just a zero `0` byte value.
 
 ### Checksum
-Sum of all bytes on the message but the `<Starting_Bytes>` using modulo 256 operation. The result is one byte after the end of message.
-
+Sum of all bytes on the message but the `<Starting_Bytes>` using modulo 65536 operation (0x10000). The result is a 16 bit little endian.
 
 ## Devices
 #### Levitezer Control Box
 The protocol messages can control devices connected to the Levitezer Control Box. The Box can receive and send these messages through its serial/USB port or through Ethernet (UDP packets).
 
 #### Available devices
-On the device id field it is specified the device for the message, this field identifies the device and based on the id range the type of device is specified as well.
- * Cameras 1-99
- * Gimbals 100-149
- * Controllers (such as joysticks) 224-254
+Depending on the device type value in the header, the message is meant for one of the following groups:
+ * Gimbals                              1
+ * Cameras  (BM)                        2
+ * Controllers (i.g. Joysticks)         3
+ * General Purpose                      0xFE
  
 Every type of device has its own set of parameters which is 254 parameters per device type.
 
