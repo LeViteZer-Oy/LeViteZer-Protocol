@@ -322,6 +322,7 @@ If your using a 8 bit variable for the checksum you don't need to use modulo 256
 Otherwise you will need to calculate modulo after summing. (see script example)
 
 ### Script example
+#### This example is for the old version of the protocol. We will update this soon.
 The following python 2.7 script moves the gimbal several times on the yaw axis, sending the control messages trough UDP using the following gimbal parameters:
  * ROLL
  * PICH
