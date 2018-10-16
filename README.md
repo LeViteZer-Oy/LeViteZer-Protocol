@@ -347,29 +347,36 @@ def getAngleMessage(angle):
     if angle > 720 or angle < -720:
         print "no valid angle range"
         return ""
-    
+
     # convert angle to raw value
     rawYaw = int(angle / 0.02197265625)
-    
+
     gimbalId = 101
+    gimbalType = 1
     mode = 2
     endOfMessage = 0
-    message = array.array('B', [0xff, 0xff, 0xff, gimbalId, counter, 4, 0, 0, 5, 0, 0, 6, rawYaw & 0xff, rawYaw >> 8, 10, 0, 0, 11, 0, 0, 12, 255, 3, 16, mode, 0, endOfMessage, 0])
-    
+    message = array.array('B', [0xff, 0xff, 0xff, gimbalId, gimbalType, counter,
+            4, 0, 0, 5, 0, 0, 6, rawYaw & 0xff, rawYaw >> 8, 10, 0, 0, 11, 0, 0, 12, 255, 3, 16, mode, 0,
+            endOfMessage, 0, 0])
+
     #calculate checksum starting in 3rd index
     checksum = 0
+    aSum = 0
     for i in range(3, len(message)):
-        checksum += message[i]
-    #set checksum to the last element
-    message[len(message)-1] = checksum % 256
+        aSum += message[i]
+    #set the 16bit checksum at the end of the array
+    checksum = aSum % (2**16 -1)
+    message[-2] = checksum & 0xff
+    message[-1] = checksum >> 8
+
     # add to the counter
     if counter > 255:
         counter = 0
     else:
         counter += 1
-        
+
     return message.tostring()
-    
+
 
 # create socket
 print "UDP target IP:", UDP_IP
@@ -391,4 +398,5 @@ sock.sendto(getAngleMessage(270), (UDP_IP, UDP_PORT))
 # receive data (it blocks)
 # data, addr = sock.recvfrom(1024)
 # print "received message:", data
+
 ```
