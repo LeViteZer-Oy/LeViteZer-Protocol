@@ -89,7 +89,7 @@ Depending on the device type value in the header, the message is meant for one o
  * Controllers (i.g. Joysticks)         3
  * General Purpose                      0xFE
  
-Every type of device has its own set of parameters which is 254 parameters per device type.
+Every device has its own set of parameters which is up to 254 parameters.
 
 ## Parameter Descriptions
 
@@ -113,6 +113,8 @@ Every type of device has its own set of parameters which is 254 parameters per d
 | 21  | BOARD_VERSION                          |        |        |  Board version multiplied by 10                                        |
 | 22  | FIRMWARE_VERSION                       |        |        |  Split into decimal  digits X.XX.X, e.g. 2305 means 2.30b5             |
 
+
+
 ### Gimbal Control Data
 
 
@@ -132,11 +134,52 @@ Every type of device has its own set of parameters which is 254 parameters per d
 | 18  | ANGLE_COMPLETED                        |        |        |  Notification to confirm that a new angle was set                      |
 | 19  | REQUEST_REAL_TIME_DATA                 | 0      | 65536  |  Sets the frequency which Real time data is received in milliseconds   |
 | 21  | BOARD_VERSION                          |        |        |  Request board information. Will return board and firmware version     |
+| 23  | ROLL_OFFSET                            | -32768 |  32767 | Offsets the specified amount to the the axis                           |
+| 24  | PITCH_OFFSET                           | -32768 |  32767 | //                                                                       |
+| 25  | YAW_OFFSET                             | -32768 |  32767 | //                                                                       |
+| 60  | GIMBAL_LAT0                            | 0      | 65536  | See [Gimbal Geo Point control](#Gimbal-Geo-Point-control)              |
+| 61  | GIMBAL_LAT1                            | 0      | 65536  | //                                                                     |
+| 62  | GIMBAL_LON0                            | 0      | 65536  | //                                                                     |
+| 63  | GIMBAL_LON1                            | 0      | 65536  | //                                                                     |
+| 64  | GIMBAL_ALT0                            | 0      | 65536  | //                                                                     |
+| 65  | GIMBAL_ALT1                            | 0      | 65536  | //                                                                     |
+| 66  | TARGET_LAT0                            | 0      | 65536  | //                                                                     |
+| 67  | TARGET_LAT1                            | 0      | 65536  | //                                                                     |
+| 68  | TARGET_LON0                            | 0      | 65536  | //                                                                     |
+| 69  | TARGET_LON1                            | 0      | 65536  | //                                                                     |
+| 70  | TARGET_ALT0                            | 0      | 65536  | //                                                                     |
+| 71  | TARGET_ALT1                            | 0      | 65536  | //                                                                     |
 
 Notes:
 When controling the gimbal on speed mode you should send CONTROL_MODE=1 + speed axis. Also use a high rate send in the range of 50-100 Hz.
 
 When controling the gimbal on angle mode you should send CONTROL_MODE=2 + speed axis + angle axis. On this case the speed will use to reach the target angle.
+
+#### Gimbal Geo Point control
+One way of controling the gimbal is by pointing to a target geo coordinate (lat, lon, alt) relative to the own gimbal geo coordinate. It will move the gimbal yaw and pitch.
+
+![map](map.png)
+
+Latitudes and Longitudes are in decimal format multiplied by 10^7.
+Altitudes are in decimal format multiplied by 100.
+```python
+lat = 60.2241444 * 1e7 # = 602241444
+lon = 24.7578934 * 1e7 # = 247578934
+alt = 112.55 * 100     # = 11255
+```
+
+Since every parameter in LeViteZer protocol is 16 bits, there are two ids per coordinate component. To do this we split every component to 2 16 bit variables:
+```python
+lat_0 = lat & 0xFFFF
+lat_1 = lat >> 16
+lon_0 = alt & 0xFFFF
+lon_1 = alt >> 16
+alt_0 = alt & 0xFFFF
+alt_1 = alt >> 16
+```
+Latitude range is From -90 (south pole) to 90 degrees (north pole);
+Longitude range is From -180 to 180 degrees
+
 
 ### Black Magic Camera Data
 
