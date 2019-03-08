@@ -137,7 +137,7 @@ Every device has its own set of parameters which is up to 254 parameters.
 | 23  | ROLL_OFFSET                            | -32768 |  32767 | Offsets the specified amount to the the axis                           |
 | 24  | PITCH_OFFSET                           | -32768 |  32767 | //                                                                       |
 | 25  | YAW_OFFSET                             | -32768 |  32767 | //                                                                       |
-| 60  | GIMBAL_LAT0                            | 0      | 65536  | See [Gimbal Geo Point control](#Gimbal-Geo-Point-control)              |
+<!---| 60  | GIMBAL_LAT0                            | 0      | 65536  | See [Gimbal Geo Point control](#Gimbal-Geo-Point-control)              |
 | 61  | GIMBAL_LAT1                            | 0      | 65536  | //                                                                     |
 | 62  | GIMBAL_LON0                            | 0      | 65536  | //                                                                     |
 | 63  | GIMBAL_LON1                            | 0      | 65536  | //                                                                     |
@@ -149,12 +149,13 @@ Every device has its own set of parameters which is up to 254 parameters.
 | 69  | TARGET_LON1                            | 0      | 65536  | //                                                                     |
 | 70  | TARGET_ALT0                            | 0      | 65536  | //                                                                     |
 | 71  | TARGET_ALT1                            | 0      | 65536  | //                                                                     |
-
+-->
 Notes:
 When controling the gimbal on speed mode you should send CONTROL_MODE=1 + speed axis. Also use a high rate send in the range of 50-100 Hz.
 
 When controling the gimbal on angle mode you should send CONTROL_MODE=2 + speed axis + angle axis. On this case the speed will use to reach the target angle.
 
+<!---
 #### Gimbal Geo Point control
 One way of controling the gimbal is by pointing to a target geo coordinate (lat, lon, alt) relative to the own gimbal geo coordinate. It will move the gimbal yaw and pitch.
 
@@ -180,6 +181,7 @@ alt_1 = alt >> 16
 Latitude range is From -90 (south pole) to 90 degrees (north pole);
 Longitude range is From -180 to 180 degrees
 
+-->
 
 ### Black Magic Camera Data
 
@@ -286,7 +288,13 @@ Camera parameters must be send at rates below 24 Hz. If they are sent at higher 
 | 109  | Tally Brightness                      | 0      | 2047   |                                                                        |
 | 110  | Tally Front Brightness                | 0      | 2047   |                                                                        |
 | 111  | Tally Rear Brightness                 | 0      | 2047   |                                                                        |
-
+#### PTZ control
+| Id  |                 name                   |  min   | max    |                                  Observations                          |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
+| 120  | Pan                                   | -2047      | 2047   |   Pan speed                                                                     |
+| 121  | Tilt                                  | -2047      | 2047   |   Tilt speed                                                                     |
+| 121  | Operation                             | 0          | 2   |  0=reset, 1=save position, 2=recall position                                  |
+| 123  | Memory slot                           | 0          | 5   |    memory slot to use a operation                                   |
 
 ### Controller Data
 | Id  |                 name                   |  min   | max    |                                  Observations                          |
