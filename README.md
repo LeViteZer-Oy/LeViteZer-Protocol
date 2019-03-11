@@ -4,7 +4,7 @@
 
 ## Table of contents
 - [Levitezer Protocol](#levitezer-protocol)
-  * [Sckeleton](#sckeleton)
+  * [Message Structure](#message-overview)
     + [Header](#header)
     + [Parameter Descriptions](#parameter-descriptions)
     + [End of Message](#end-of-message)
@@ -17,11 +17,31 @@
     + [Controller Data](#controller-data)  
   * [Future parameters](#future-parameters)
   * [Examples](#examples)
-  
-## Sckeleton
+
+## Message Structure
 Any message between two systems is compound of 
 
     |___Header___||___Data___||__End_of_message__||__Checksum__|
+
+There is 2 Modes for the Messages:
+ * Standard Mode
+ * Binary Mode
+ 
+ 
+    
+The byte order is always "little endian". Meaning the least significant byte is always first in any parameter. For example a 16 bit integer must be transmitted like this
+ ```c
+     int16 n = 0xF137;
+     byte data[]{
+         n & 0xFF,  /* this is 0x37 */
+         n >> 8     /* this is 0xF1 */
+     }
+```
+Then on the other end it can be reassembled:
+```c
+int16 n = (data[0] | data[1] << 8);
+```
+
 
 
  ### Message Example
@@ -32,25 +52,26 @@ Any message between two systems is compound of
 This message is for a Camera and contains 2 parameters in the data
 
 ### Header
-Header is made of the following 6 bit fields:
-```
-<starting bytes> <Device_ID> <Device_Type_ID> <counter>
-```
-|       Field        | byte size | valid byte range |              Observations                |
+Header is the firs 6 bytes of the message and it tells "who" sent this message (or "who" should receive it) and how to read it.
+
+|       Field        | bit size | valid byte range |              Observations                |
 |:------------------:|:---------:|:----------------:|:----------------------------------------:|
-|`<Starting_Bytes>`  | 3         | 255-255          | Just a sequence of 3 decimal "255" or hexadecimal "FF"|
-|`<Device_ID>`       | 1         | 0-254            |       |
-|`<Device_Type>`     | 1         | 0-254            |       |
-|`<Counter>`         | 1         | 0-254            |                                          |
+|`<Starting_Bytes>`  | 8+8+8     | 255-255          | Just a sequence of 3 decimal "255" or hexadecimal "FF"|
+|`<Device_ID>`       | 8         | 0-254            |       |
+|`<Device_Type>`     | 8         | 0-254            |       |
+|`<Counter>`         | 7         | 0-127            |                                                      |
+|`<Mode>`            | 1         | 0-1              | 0: Standard Message, 1: Binary Message             |
+
 
  * Starting_Bytes: this is a sequence of 3 bytes which values are always `255` or `FF` in hexadecimal. This identifies the beggining of the message.
  * Device_ID: Identifies the device which will receive the message (or from which the message came). 
- * Counter: a count is made to keep tracking every message and identify them.
-
-
+ * Counter+Mode: Packed on the same byte is the counter and the mode
+     - counter:  a counter that overflows every 127 messages. This may be useful to keep track of the message order 
+     - mode: message uses standard or binary data.
 
 
 ### Data
+#### Standard Mode
 Data is between the header and the end of the message. Here are the parameters of the device. Each parameter value is always 16 bits (little endian order) preceded by an 8 bit id. Therefore every data field is 3 bytes. All the parameters must be for the same device and it cannot be more than 254 parameters.
 
 ```
@@ -72,6 +93,20 @@ Then the data field are the three bytes following bytes (note the low byte is fi
 |:-------:|:--------:|:-------:|
 |   02    |   00     |   08    |
 
+#### Binary Mode
+This mode is meant to transmit data that is not convinient on the standard 16 bit parameter mode. Such as big, grouped parameters and the ones that required conversion.
+The binary Mode uses the folling structure:
+```
+01 MM 02 DD DD 03 DD DD 04 DD DD 05 DD DD ....
+```
+There is a byte number followed by 2 bytes of data, for example "02 DD DD". Where "02" is the byte number and "DD" raw data.
+
+The data starts on "02" byte number, The first "01" identify what kind of binary message is this. After "02" these numbers don't really mean much they are only required to be in the range of [02, 254]
+
+Then the "MM" is a 16 bit number that tells how long is data and how to parse it
+
+The maximum data size is 500 bytes per message right now.
+
 ### End of Message (or Checksum Id)
 The last byte before the Checksum and after the last command is just a zero `0` byte value.
 
@@ -85,7 +120,7 @@ The protocol messages can control devices connected to the Levitezer Control Box
 #### Available devices
 Depending on the device type value in the header, the message is meant for one of the following groups:
  * Gimbals                              1
- * Cameras  (BM)                        2
+ * Cameras  (BMD)                       2
  * Controllers (i.g. Joysticks)         3
  * General Purpose                      0xFE
  
@@ -363,11 +398,10 @@ def getAngleMessage(angle):
 
     #calculate checksum starting in 3rd index
     checksum = 0
-    aSum = 0
     for i in range(3, len(message)):
-        aSum += message[i]
-    #set the 16bit checksum at the end of the array
-    checksum = aSum % (2**16 -1)
+        checksum = (checksum + message[i]) & 0xFFFF # 16 bit overflow 
+   
+   #set the 16bit checksum at the end of the array
     message[-2] = checksum & 0xff
     message[-1] = checksum >> 8
 
