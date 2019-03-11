@@ -1,3 +1,4 @@
+
 # Levitezer Protocol
 
 > Please note: Levitezer Protocol is under development, definitions are subjected to be changed
@@ -6,16 +7,14 @@
 - [Levitezer Protocol](#levitezer-protocol)
   * [Message Structure](#message-overview)
     + [Header](#header)
-    + [Parameter Descriptions](#parameter-descriptions)
+    + [Data](#data)
     + [End of Message](#end-of-message)
     + [Checksum](#checksum)
-  * [Devices](#devices)
   * [Parameter Descriptions](#parameter-descriptions)
     + [Data Provided by Gimbal](#data-provided-by-gimbal)
     + [Gimbal Control Data](#gimbal-control-data)
     + [Black Magic Camera Data](#black-magic-camera-data)
     + [Controller Data](#controller-data)  
-  * [Future parameters](#future-parameters)
   * [Examples](#examples)
 
 ## Message Structure
@@ -44,12 +43,12 @@ int16 n = (data[0] | data[1] << 8);
 
 
 
- ### Message Example
-|   starting bytes   | device | type |    counter   |                     Data              |   Checksum     |
-|:------------------:|:------:|:----:|:------------:|:-------------------------------------:|:------------:|
-|0xFF 0xFF 0xFF      | 0x07   | 0x02 |  0xA1        | (0x02 0xAA 0x92) (0x33 0x41 0x00)     |   0x00 0x5C 0x02  |
+ #### Message Example
+|   starting bytes   | device | type |    counter   | mode |               Data                    |   Checksum     |
+|:------------------:|:------:|:----:|:------------:|:----:|:-------------------------------------:|:---------------:|
+|0xFF 0xFF 0xFF      | 0x07   | 0x02 |  0x71        | 0x00 | 0x02 0xAA 0x92 0x33 0x41 0x00         |   0x00 0x2C 0x02  |
 
-This message is for a Camera and contains 2 parameters in the data
+This message is in standard mode, is meant for Camera id 7 and contains 2 parameters in the data payload
 
 ### Header
 Header is the firs 6 bytes of the message and it tells "who" sent this message (or "who" should receive it) and how to read it.
@@ -63,8 +62,21 @@ Header is the firs 6 bytes of the message and it tells "who" sent this message (
 |`<Mode>`            | 1         | 0-1              | 0: Standard Message, 1: Binary Message             |
 
 
- * Starting_Bytes: this is a sequence of 3 bytes which values are always `255` or `FF` in hexadecimal. This identifies the beggining of the message.
- * Device_ID: Identifies the device which will receive the message (or from which the message came). 
+ * Starting_Bytes: this is a sequence of 3 bytes which values are always `255` or `FF` in hexadecimal. This identifies the starting of the message.
+ * Device_ID: Identifies the device which will receive the message (or from which the message came). This id can be given by the user 
+
+ * Device_Type: it can be one of the following:
+ 
+|            Type Name               | Type|
+|:----------------------------------:|:---:| 
+| Gimbals                            |  1  |
+| Cameras  (BMD)                     |  2  |
+| Controllers (i.g. Joysticks)       |  3  |
+| Levitezer Lens Control             |  4  |
+| Box                                | 254 |
+ 
+Every device has its own set of parameters which is up to 254 parameters.
+
  * Counter+Mode: Packed on the same byte is the counter and the mode
      - counter:  a counter that overflows every 127 messages. This may be useful to keep track of the message order 
      - mode: message uses standard or binary data.
@@ -94,8 +106,8 @@ Then the data field are the three bytes following bytes (note the low byte is fi
 |   02    |   00     |   08    |
 
 #### Binary Mode
-This mode is meant to transmit data that is not convinient on the standard 16 bit parameter mode. Such as big, grouped parameters and the ones that required conversion.
-The binary Mode uses the folling structure:
+This mode is meant to transmit data that is not convenient on the standard 16 bit parameter mode. Such as big, grouped parameters and the ones that required conversion.
+The binary Mode uses the following structure:
 ```
 01 MM 02 DD DD 03 DD DD 04 DD DD 05 DD DD ....
 ```
@@ -113,18 +125,7 @@ The last byte before the Checksum and after the last command is just a zero `0` 
 ### Checksum
 Sum of all bytes on the message but the `<Starting_Bytes>` using modulo 65536 operation (0x10000). The result is a 16 bit little endian.
 
-## Devices
-#### Levitezer Control Box
-The protocol messages can control devices connected to the Levitezer Control Box. The Box can receive and send these messages through its serial/USB port or through Ethernet (UDP packets).
 
-#### Available devices
-Depending on the device type value in the header, the message is meant for one of the following groups:
- * Gimbals                              1
- * Cameras  (BMD)                       2
- * Controllers (i.g. Joysticks)         3
- * General Purpose                      0xFE
- 
-Every device has its own set of parameters which is up to 254 parameters.
 
 ## Parameter Descriptions
 
@@ -161,7 +162,7 @@ Every device has its own set of parameters which is up to 254 parameters.
 | 10  | SPEED_ROLL                             | -32768 | 32767  | Set this axis speed. Unit: 0.1220740379  degrees/sec. Note, when using angle mode (Control Mode=2), the minimum speed is 0 |
 | 11  | SPEED_PITCH                            | -32768 | 32767  | //                                                                     |
 | 12  | SPEED_YAW                              | -32768 | 32767  | //                                                                     |
-| 13  | ACCEL_ROLL                             | 0      | 1275   | Set this axis aceleration limit. Unit: 1 degree/sec^2. Note: optimal rate of sending is 1 Hz. So it should not sent which the same frequency than others. Note 2: 0 Acceleration will disable this axis movement altogether.  |
+| 13  | ACCEL_ROLL                             | 0      | 1275   | Set this axis acceleration limit. Unit: 1 degree/sec^2. Note: optimal rate of sending is 1 Hz. So it should not sent which the same frequency than others. Note 2: 0 Acceleration will disable this axis movement altogether.  |
 | 14  | ACCEL_PITCH                            | 0      | 1275   | //                                                                     |
 | 15  | ACCEL_YAW                              | 0      | 1275   | //                                                                     |
 | 16  | CONTROL_MODE                           |        |        | values can be: 0 - Mode no control: gimbal ignores angle and speed data</br> 1 - Mode speed: gimbal moves to speed sent. Note: Optimal rate of sending speed is 50-100Hz</br> 2 - mode angle: gimbal goes to specified angle using specified speed (will slow down near target speed) |
@@ -230,7 +231,7 @@ Camera parameters must be send at rates below 24 Hz. If they are sent at higher 
 | 3   | Autofocus                              |        |        |                                                                        |
 | 5   | Aperture (Normalised)                  | 0      | 2047   | 0=smallest, 2047=largest                                               |
 | 7   | Autoaperture                           |        |        |                                                                        |
-| 8   | Optical image Stabilisation            | 0      | 1      | 0=disabled, 1 or greater=enabled                                       |
+| 8   | Optical image Stabilization            | 0      | 1      | 0=disabled, 1 or greater=enabled                                       |
 | 9   | Absolute Zoom (mm)                     | 0      | 2047   | Move to specified focal in mm, from 0mm to maximum of the lens         |   
 | 10  | Absolute Zoom (Normalized)             | 0      | 2047   | Move to specified normalised focal lenght: 0=wide, 2047=tele           |
 | 11  | Continous Zoom (Speed)                 | -2048  | 2047   | Start/stop zooming at specified rate: -2047=zoom wider fast, 0.0=stop, +2047=zoom tele fast|
@@ -288,7 +289,7 @@ Camera parameters must be send at rates below 24 Hz. If they are sent at higher 
      mrate =         (videomode & 0b0000000000001000) >> 3
      resolution =    (videomode & 0b0000000001110000) >> 4
      interlased =    (videomode & 0b0000000010000000) >> 7
-     colorspace =    (videomode & 0b0000111100000000) >> 8
+     colorspace =    (videomode & 0b0000111100000000) >> 8
      
      # to set the values to videomode parameter
      videomode = (fps | (mrate << 3) | (resolution << 4) | (interlased << 7) | (colorspace << 8)
