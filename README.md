@@ -1,9 +1,10 @@
 
-# Levitezer Protocol
+Levitezer Protocol
+==================
 
 > Please note: Levitezer Protocol is under development, definitions are subjected to be changed
 
-## Table of contents
+# Table of contents
 - [Levitezer Protocol](#levitezer-protocol)
   * [Message Structure](#message-overview)
     + [Header](#header)
@@ -17,7 +18,7 @@
     + [Controller Data](#controller-data)  
   * [Examples](#examples)
 
-## Message Structure
+# Message Structure
 Any message between two systems is compound of 
 
     |___Header___||___Data___||__End_of_message__||__Checksum__|
@@ -50,7 +51,7 @@ int16 n = (data[0] | data[1] << 8);
 
 This message is in standard mode, is meant for Camera id 7 and contains 2 parameters in the data payload
 
-### Header
+## Header
 Header is the firs 6 bytes of the message and it tells "who" sent this message (or "who" should receive it) and how to read it.
 
 |       Field        | bit size | valid byte range |              Observations                |
@@ -82,21 +83,19 @@ Every device has its own set of parameters which is up to 254 parameters.
      - mode: message uses standard or binary data.
 
 
-### Data
-#### Standard Mode
+## Data
+### Standard Mode
 Data is between the header and the end of the message. Here are the parameters of the device. Each parameter value is always 16 bits (little endian order) preceded by an 8 bit id. Therefore every data field is 3 bytes. All the parameters must be for the same device and it cannot be more than 254 parameters.
 
-```
-... <Parameter_ID0> <Parameter_value0>, <Parameter_ID1> <Parameter_value1> ... <Parameter_IDx> <Parameter_valuex> ...
-```
-|       Field        | byte size | valid byte range |              Observations                |
-|:------------------:|:---------:|:----------------:|:----------------------------------------:|
-|`<Parameter_ID>`    | 1         | 1-254            |                                          |
-|`<Parameter_value>` | 2         | 0-255            | data order `<Low_byte High_byte>`        |
 
+|       Field        | byte size | valid byte range |              Observations                         |
+|:------------------:|:---------:|:----------------:|:-------------------------------------------------:|
+|`<ID>`              | 1         | 1-254            |                                                   |
+|`<VALUE>`           | 2         | 0-255            | data order is little endian `<Low_byte High_byte>`|
 
- * Data_ID: every piece of data has its own id.
- * Data: Value of Data itself.
+```
+... <ID_0> <VALUE_0>, <ID_1> <VALUE_1> ... <ID_x> <VALUE_X> ...
+```
 
 Example: send the farthest focus. The id is '2'. and the max value is '2047' ('0800' in hexadecimal).
 Then the data field are the three bytes following bytes (note the low byte is first):
@@ -105,7 +104,7 @@ Then the data field are the three bytes following bytes (note the low byte is fi
 |:-------:|:--------:|:-------:|
 |   02    |   00     |   08    |
 
-#### Binary Mode
+### Binary Mode
 This mode is meant to transmit data that is not convenient on the standard 16 bit parameter mode. Such as big, grouped parameters and the ones that required conversion.
 The binary Mode uses the following structure:
 ```
@@ -127,9 +126,88 @@ Sum of all bytes on the message but the `<Starting_Bytes>` using modulo 65536 op
 
 
 
-## Parameter Descriptions
+# Parameter Descriptions
 
-### Data Provided by Gimbal
+
+## Data Provided by Gimbal
+
+
+#### GPS Data Structure
+
+GPS data is sent on Binary mode
+
+| Binary Id  |  byte size  |             name          |                  Observations                          |
+|:----------:|:-----------:|:-------------------------:|:------------------------------------------------------ |
+|   502      |    40       | Gimbal GPS Coordinates    |  See Table                                             |
+|   503      |    40       | Target GPS Coordinates    |  See Table                                             |
+
+This GPS binary message is a structure of serveral parameters with diferent sizes. These parameters are based on C language types and they are packet on the same order as in the following table
+
+| name                     |                  Observations                          |
+|:------------------------:|:-------------------------------------------------------|
+|  Latitude                |  64 bit IEEE-754 Double float                          |
+|  Longitude               |  64 bit IEEE-754 Double float                          |
+|  Altitude                |  64 bit IEEE-754 Double float                          |
+|  Heading                 |  32 bit IEEE-754 Single float                          |
+|  Speed                   |  32 bit IEEE-754 Single float                          |
+|  Timestamp               |  32 bit Unsigned interger                              |
+|  day                     |  8 bit Unsigned interger                               |
+|  month                   |  8 bit Unsigned interger                               |
+|  year                    |  8 bit Unsigned interger                               |
+|  status                  |  8 bit Unsigned interger                               |
+
+
+Since datatypes are C language based. You can take advantage of C Unions to have the data without doing any conversions. you just need to copy the binary data to the `dataArray` field inside the Union, after that all parameters are available.
+```c
+union GpsDataUnion{
+    struct  GpsData{
+        double lat;
+        double lon;
+        double alt;
+        float heading;
+        float speed;
+        uint32_t timestamp;
+        uint8_t day;
+        uint8_t month;
+        uint8_t year;
+        uint8_t status;
+    } data;
+    uint8_t dataArray[sizeof(GpsData)];
+};
+```
+Also on python we also can use c unions through ctypes.
+```python
+from ctypes import (
+        Union, Array, Structure,
+        c_uint8, c_uint32, c_float, c_double
+)
+
+ARRAY_SIZE = 40
+
+class uint8_array(Array):
+        _type_ = c_uint8
+        _length_ = ARRAY_SIZE
+
+class gps_data(Structure):
+        _fields_ = (
+		("lat", c_double),
+		("lon", c_double),
+		("alt", c_double),
+		("heading", c_float),
+		("speed", c_float),
+		("timestamp", c_uint32),
+		("day", c_uint8),
+		("month", c_uint8),
+		("year", c_uint8),
+		("status", c_uint8)
+		)
+  
+class gps_data_union(Union):
+    _fields_ = (
+    ("data", gps_data),
+    ("byteArray", uint8_array)
+    )
+```
 
 
 | Id  |                 name                   |  min   | max    |                                  Observations                          |
@@ -147,11 +225,12 @@ Sum of all bytes on the message but the `<Starting_Bytes>` using modulo 65536 op
 | 18  | ANGLE_COMPLETED                        |        |        |  Notification to confirm that a new angle was set                      |
 | 19  | REQUEST_REAL_TIME_DATA                 | 0      | 65536  |  Last Real Time interval that was set                                  |
 | 21  | BOARD_VERSION                          |        |        |  Board version multiplied by 10                                        |
-| 22  | FIRMWARE_VERSION                       |        |        |  Split into decimal  digits X.XX.X, e.g. 2305 means 2.30b5             |
+| 22  | FIRMWARE_VERSION                       |        |        |  Split into decimal  digits X.XX.X, e.g. 2305 means 2.30b5            |
 
 
 
-### Gimbal Control Data
+
+## Gimbal Control Data
 
 
 | Id  |                 name                   |  min   | max    |                                  Observations                          |
@@ -219,12 +298,12 @@ Longitude range is From -180 to 180 degrees
 
 -->
 
-### Black Magic Camera Data
+## Black Magic Camera Data
 
 Camera parameters can be set but there is no feedback of what are the current values.
 Camera parameters must be send at rates below 24 Hz. If they are sent at higher frequency for short period, they will be enqueued and eventually sent to camera, but if the queue gets full then new data will be dropped. This is because a limitation on the SDI interface.
 
-#### Lens
+### Lens
 | Id  |                 name                   |  min   | max    |                                  Observations                          |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
 | 2   | Focus                                  | 0      | 2047   | 0=near, 2047=far                                                       |
@@ -236,7 +315,7 @@ Camera parameters must be send at rates below 24 Hz. If they are sent at higher 
 | 10  | Absolute Zoom (Normalized)             | 0      | 2047   | Move to specified normalised focal lenght: 0=wide, 2047=tele           |
 | 11  | Continous Zoom (Speed)                 | -2048  | 2047   | Start/stop zooming at specified rate: -2047=zoom wider fast, 0.0=stop, +2047=zoom tele fast|
 
-#### Color Correction
+### Color Correction
 | Id  |                 name                   |  min   | max    |                                  Observations                          |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
 | 20  | Lift Adjust Red                        | -4096  | 4095   |   Default value: 0                                                     | 
@@ -262,7 +341,7 @@ Camera parameters must be send at rates below 24 Hz. If they are sent at higher 
 | 40  | Colour Adjust Sat                      | 0      | 4095   |   Default value: 2047                                                  |
 | 41  | Correction Reset Default               | 0      | 0      |   void command                                                         |
 
-#### Video
+### Video
 | Id  |                 name                   |  min   | max    |                                  Observations                          |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
 | 50  | Video Mode                             | -      | -      |   See video mode explanation                                           |
@@ -273,7 +352,7 @@ Camera parameters must be send at rates below 24 Hz. If they are sent at higher 
 | 55  | Dynamic Range Mode                     | 0      | 1      |   0 = film, 1 = video                                                  |
 | 56  | Video Sharpening Level                 | 0      | 3      |   0=Off, 1=Low, 2=Medium, 3=High                                       |
 
- #### Video mode
+ ### Video mode
  sets resolution and framerate. all the settings are in groups of bits as show from the smallest bit:
   - 3 bits -> FPS: 0=24, 1=25, 2=30, 3=50, 4=60
   - 1 bit  -> M-Rate: 0=regular, 1=M-rate
@@ -297,7 +376,7 @@ Camera parameters must be send at rates below 24 Hz. If they are sent at higher 
  ```
  FPS values are from first bit to the 3rd, M-rate is the 4th bit, resolution from the 5 fifth to the 7th and so.
 
-#### Audio
+### Audio
 | Id  |                 name                   |  min   | max    |                                  Observations                          |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
 | 69  | Mic Level                              | 0      | 2047   |                                                                        |
@@ -309,7 +388,7 @@ Camera parameters must be send at rates below 24 Hz. If they are sent at higher 
 | 75  | Input Levels ch1                       | 0      | 2047   |                                                                        |
 | 76  | Phantom Power                          | 0      | 1      |   Boolean value                                                        |
 
-#### Display
+### Display
 | Id  |                 name                   |  min   | max    |                                  Observations                          |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
 | 89  | Brightness                             | 0      | 2047   |                                                                        |
@@ -318,13 +397,13 @@ Camera parameters must be send at rates below 24 Hz. If they are sent at higher 
 | 92  | Peaking Level                          | 0      | 2047   |                                                                        |
 | 93  | Colour Bars Display Time (seconds)     | 0      | 30     |   0=disable bars, -30=enable bars with timeout (s)                     |
 
-#### Configuration
+### Configuration
 | Id  |                 name                   |  min   | max    |                                  Observations                          |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
 | 109  | Tally Brightness                      | 0      | 2047   |                                                                        |
 | 110  | Tally Front Brightness                | 0      | 2047   |                                                                        |
 | 111  | Tally Rear Brightness                 | 0      | 2047   |                                                                        |
-#### PTZ control
+### PTZ control
 | Id  |                 name                   |  min   | max    |                                  Observations                          |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
 | 120  | Pan                                   | -2047      | 2047   |   Pan speed                                                                     |
@@ -332,7 +411,7 @@ Camera parameters must be send at rates below 24 Hz. If they are sent at higher 
 | 121  | Operation                             | 0          | 2   |  0=reset, 1=save position, 2=recall position                                  |
 | 123  | Memory slot                           | 0          | 5   |    memory slot to use a operation                                   |
 
-### Controller Data
+## Controller Data
 | Id  |                 name                   |  min   | max    |                                  Observations                          |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
 | 1   | CONTROL_TYPE                           |        |        |                                                                        |
@@ -360,7 +439,7 @@ Camera parameters must be send at rates below 24 Hz. If they are sent at higher 
  
 
 
-### Examples
+# Examples
 The following python 2.7 script moves the gimbal several times on the yaw axis, sending the control messages trough UDP using the following gimbal parameters:
  * ROLL
  * PICH
