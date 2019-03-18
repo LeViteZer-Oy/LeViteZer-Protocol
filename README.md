@@ -132,16 +132,79 @@ Sum of all bytes on the message but the `<Starting_Bytes>` using modulo 65536 op
 ## Data Provided by Gimbal
 
 
-#### GPS Data Structure
 
-GPS data is sent on Binary mode
+| Id  |                 name                   |  min   | max    |                                  Observations                          |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
+| 1   | IMU_ROLL                               | -32768 |   32767| Current IMU angles (relative to motors themselves). Unit: 0.02197265625 degrees, which gives ±720 degree range |
+| 2   | IMU_PITCH                              | -32768 |   32767| //                                                                     |
+| 3   | IMU_YAW                                | -32768 |   32767| //                                                                     |
+| 4   | ROLL                                   | -32768 |   32767| Current relative angles (relative to the the gimbal frame) Unit: 0.02197265625 degrees, which gives ±720 degree range |
+| 5   | PITCH                                  | -32768 |   32767| //                                                                     |
+| 6   | YAW                                    | -32768 |   32767| //                                                                     |
+| 7   | TIMESTAMP                              |        |        | Timestamp of the received angles                                       |
+| 13  | ACCEL_ROLL                             | 0      | 1275   | Current acceleration value                                             |
+| 14  | ACCEL_PITCH                            | 0      | 1275   | //                                                                     |
+| 15  | ACCEL_YAW                              | 0      | 1275   | //                                                                     |
+| 18  | ANGLE_COMPLETED                        |        |        |  Notification to confirm that a new angle was set                      |
+| 19  | REQUEST_REAL_TIME_DATA                 | 0      | 65536  |  Last Real Time interval that was set                                  |
+| 21  | BOARD_VERSION                          |        |        |  Board version multiplied by 10                                        |
+| 22  | FIRMWARE_VERSION                       |        |        |  Split into decimal  digits X.XX.X, e.g. 2305 means 2.30b5            |
+
+
+
+
+
+
+## Gimbal Control Data
+
+
+| Id  |                 name                   |  min   | max    |                                  Observations                          |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
+| 4   | ROLL                                   | -32768 | 32767  | Set this axis angle .Unit: 0.02197265625 degrees, which gives ±720 degree range  |
+| 5   | PITCH                                  | -32768 | 32767  | //                                                                     |
+| 6   | YAW                                    | -32768 | 32767  | //                                                                     |
+| 10  | SPEED_ROLL                             | -32768 | 32767  | Set this axis speed. Unit: 0.1220740379  degrees/sec. Note, when using angle mode (Control Mode=2), the minimum speed is 0 |
+| 11  | SPEED_PITCH                            | -32768 | 32767  | //                                                                     |
+| 12  | SPEED_YAW                              | -32768 | 32767  | //                                                                     |
+| 13  | ACCEL_ROLL                             | 0      | 1275   | Set this axis acceleration limit. Unit: 1 degree/sec^2. Note: optimal rate of sending is 1 Hz. So it should not sent which the same frequency than others. Note 2: 0 Acceleration will disable this axis movement altogether.  |
+| 14  | ACCEL_PITCH                            | 0      | 1275   | //                                                                     |
+| 15  | ACCEL_YAW                              | 0      | 1275   | //                                                                     |
+| 16  | CONTROL_MODE                           |        |        | values can be: 0 - Mode no control: gimbal ignores angle and speed data</br> 1 - Mode speed: gimbal moves to speed sent. Note: Optimal rate of sending speed is 50-100Hz</br> 2 - mode angle: gimbal goes to specified angle using specified speed (will slow down near target speed) |
+| 17  | LEVEL_ROLL                             |        |        |  Sets IMU_ROLL angle to 0                                              |
+| 18  | ANGLE_COMPLETED                        |        |        |  Notification to confirm that a new angle was set                      |
+| 19  | REQUEST_REAL_TIME_DATA                 | 0      | 65536  |  Sets the frequency which Real time data is received in milliseconds   |
+| 21  | BOARD_VERSION                          |        |        |  Request board information. Will return board and firmware version     |
+| 23  | ROLL_OFFSET                            | -32768 |  32767 | Offsets the specified amount to the the axis                           |
+| 24  | PITCH_OFFSET                           | -32768 |  32767 | //                                                                       |
+| 25  | YAW_OFFSET                             | -32768 |  32767 | //                                                                       |
+<!---| 60  | GIMBAL_LAT0                            | 0      | 65536  | See [Gimbal Geo Point control](#Gimbal-Geo-Point-control)              |
+| 61  | GIMBAL_LAT1                            | 0      | 65536  | //                                                                     |
+| 62  | GIMBAL_LON0                            | 0      | 65536  | //                                                                     |
+| 63  | GIMBAL_LON1                            | 0      | 65536  | //                                                                     |
+| 64  | GIMBAL_ALT0                            | 0      | 65536  | //                                                                     |
+| 65  | GIMBAL_ALT1                            | 0      | 65536  | //                                                                     |
+| 66  | TARGET_LAT0                            | 0      | 65536  | //                                                                     |
+| 67  | TARGET_LAT1                            | 0      | 65536  | //                                                                     |
+| 68  | TARGET_LON0                            | 0      | 65536  | //                                                                     |
+| 69  | TARGET_LON1                            | 0      | 65536  | //                                                                     |
+| 70  | TARGET_ALT0                            | 0      | 65536  | //                                                                     |
+| 71  | TARGET_ALT1                            | 0      | 65536  | //                                                                     |
+-->
+Notes:
+When controling the gimbal on speed mode you should send CONTROL_MODE=1 + speed axis. Also use a high rate send in the range of 50-100 Hz.
+
+When controling the gimbal on angle mode you should send CONTROL_MODE=2 + speed axis + angle axis. On this case the speed will use to reach the target angle.
+
+#### GPS Data Structure [Still on development]
+
+GPS data is sent on Binary mode. There is 2 Ids; one for the Gimbal coordinates and the other for target coordinates.
 
 | Binary Id  |  byte size  |             name          |                  Observations                          |
 |:----------:|:-----------:|:-------------------------:|:------------------------------------------------------ |
 |   502      |    40       | Gimbal GPS Coordinates    |  See Table                                             |
 |   503      |    40       | Target GPS Coordinates    |  See Table                                             |
 
-This GPS binary message is a structure of serveral parameters with diferent sizes. These parameters are based on C language types and they are packet on the same order as in the following table
+Both GPS binary message are the same structure. The parameters are based on C language types and they are packet on the same order as in the following table
 
 | name                     |                  Observations                          |
 |:------------------------:|:-------------------------------------------------------|
@@ -157,7 +220,7 @@ This GPS binary message is a structure of serveral parameters with diferent size
 |  status                  |  8 bit Unsigned interger                               |
 
 
-Since datatypes are C language based. You can take advantage of C Unions to have the data without doing any conversions. you just need to copy the binary data to the `dataArray` field inside the Union, after that all parameters are available.
+Since datatypes are C language based. You can take advantage of C Unions to pack and receive the data without doing any extra conversions. you just need to copy the binary data to the `dataArray` field inside the Union, after that all parameters are available. And the other way around also works; you set every parameter and `dataArray` is ready to be sent with all the data.
 ```c
 union GpsDataUnion{
     struct  GpsData{
@@ -208,68 +271,6 @@ class gps_data_union(Union):
     ("byteArray", uint8_array)
     )
 ```
-
-
-| Id  |                 name                   |  min   | max    |                                  Observations                          |
-|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
-| 1   | IMU_ROLL                               | -32768 |   32767| Current IMU angles (relative to motors themselves). Unit: 0.02197265625 degrees, which gives ±720 degree range |
-| 2   | IMU_PITCH                              | -32768 |   32767| //                                                                     |
-| 3   | IMU_YAW                                | -32768 |   32767| //                                                                     |
-| 4   | ROLL                                   | -32768 |   32767| Current relative angles (relative to the the gimbal frame) Unit: 0.02197265625 degrees, which gives ±720 degree range |
-| 5   | PITCH                                  | -32768 |   32767| //                                                                     |
-| 6   | YAW                                    | -32768 |   32767| //                                                                     |
-| 7   | TIMESTAMP                              |        |        | Timestamp of the received angles                                       |
-| 13  | ACCEL_ROLL                             | 0      | 1275   | Current acceleration value                                             |
-| 14  | ACCEL_PITCH                            | 0      | 1275   | //                                                                     |
-| 15  | ACCEL_YAW                              | 0      | 1275   | //                                                                     |
-| 18  | ANGLE_COMPLETED                        |        |        |  Notification to confirm that a new angle was set                      |
-| 19  | REQUEST_REAL_TIME_DATA                 | 0      | 65536  |  Last Real Time interval that was set                                  |
-| 21  | BOARD_VERSION                          |        |        |  Board version multiplied by 10                                        |
-| 22  | FIRMWARE_VERSION                       |        |        |  Split into decimal  digits X.XX.X, e.g. 2305 means 2.30b5            |
-
-
-
-
-## Gimbal Control Data
-
-
-| Id  |                 name                   |  min   | max    |                                  Observations                          |
-|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
-| 4   | ROLL                                   | -32768 | 32767  | Set this axis angle .Unit: 0.02197265625 degrees, which gives ±720 degree range  |
-| 5   | PITCH                                  | -32768 | 32767  | //                                                                     |
-| 6   | YAW                                    | -32768 | 32767  | //                                                                     |
-| 10  | SPEED_ROLL                             | -32768 | 32767  | Set this axis speed. Unit: 0.1220740379  degrees/sec. Note, when using angle mode (Control Mode=2), the minimum speed is 0 |
-| 11  | SPEED_PITCH                            | -32768 | 32767  | //                                                                     |
-| 12  | SPEED_YAW                              | -32768 | 32767  | //                                                                     |
-| 13  | ACCEL_ROLL                             | 0      | 1275   | Set this axis acceleration limit. Unit: 1 degree/sec^2. Note: optimal rate of sending is 1 Hz. So it should not sent which the same frequency than others. Note 2: 0 Acceleration will disable this axis movement altogether.  |
-| 14  | ACCEL_PITCH                            | 0      | 1275   | //                                                                     |
-| 15  | ACCEL_YAW                              | 0      | 1275   | //                                                                     |
-| 16  | CONTROL_MODE                           |        |        | values can be: 0 - Mode no control: gimbal ignores angle and speed data</br> 1 - Mode speed: gimbal moves to speed sent. Note: Optimal rate of sending speed is 50-100Hz</br> 2 - mode angle: gimbal goes to specified angle using specified speed (will slow down near target speed) |
-| 17  | LEVEL_ROLL                             |        |        |  Sets IMU_ROLL angle to 0                                              |
-| 18  | ANGLE_COMPLETED                        |        |        |  Notification to confirm that a new angle was set                      |
-| 19  | REQUEST_REAL_TIME_DATA                 | 0      | 65536  |  Sets the frequency which Real time data is received in milliseconds   |
-| 21  | BOARD_VERSION                          |        |        |  Request board information. Will return board and firmware version     |
-| 23  | ROLL_OFFSET                            | -32768 |  32767 | Offsets the specified amount to the the axis                           |
-| 24  | PITCH_OFFSET                           | -32768 |  32767 | //                                                                       |
-| 25  | YAW_OFFSET                             | -32768 |  32767 | //                                                                       |
-<!---| 60  | GIMBAL_LAT0                            | 0      | 65536  | See [Gimbal Geo Point control](#Gimbal-Geo-Point-control)              |
-| 61  | GIMBAL_LAT1                            | 0      | 65536  | //                                                                     |
-| 62  | GIMBAL_LON0                            | 0      | 65536  | //                                                                     |
-| 63  | GIMBAL_LON1                            | 0      | 65536  | //                                                                     |
-| 64  | GIMBAL_ALT0                            | 0      | 65536  | //                                                                     |
-| 65  | GIMBAL_ALT1                            | 0      | 65536  | //                                                                     |
-| 66  | TARGET_LAT0                            | 0      | 65536  | //                                                                     |
-| 67  | TARGET_LAT1                            | 0      | 65536  | //                                                                     |
-| 68  | TARGET_LON0                            | 0      | 65536  | //                                                                     |
-| 69  | TARGET_LON1                            | 0      | 65536  | //                                                                     |
-| 70  | TARGET_ALT0                            | 0      | 65536  | //                                                                     |
-| 71  | TARGET_ALT1                            | 0      | 65536  | //                                                                     |
--->
-Notes:
-When controling the gimbal on speed mode you should send CONTROL_MODE=1 + speed axis. Also use a high rate send in the range of 50-100 Hz.
-
-When controling the gimbal on angle mode you should send CONTROL_MODE=2 + speed axis + angle axis. On this case the speed will use to reach the target angle.
-
 <!---
 #### Gimbal Geo Point control
 One way of controling the gimbal is by pointing to a target geo coordinate (lat, lon, alt) relative to the own gimbal geo coordinate. It will move the gimbal yaw and pitch.
