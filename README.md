@@ -437,8 +437,14 @@ Camera parameters must be send at rates below 24 Hz. If they are sent at higher 
 | 20  | BUTTON3                                |0       |1       | will send 1 when press and 0 when released                             |
 | 21  | BUTTON4                                |0       |1       | will send 1 when press and 0 when released                             |
 
- 
+### Bluetooth commands
+#### Connect to Camera (Bluetooth Mac address)
 
+Send This (Binary) command to a device that has a bluetooth module or it's bluetooth ready.
+
+| Binary Id  |  byte size  |             name          |                  Observations                          |
+|:----------:|:-----------:|:-------------------------:|:------------------------------------------------------ |
+|   501      |     6       | MAC_ADDR_BLE              |  6-byte mac address                                    |
 
 # Examples
 The following python 2.7 script moves the gimbal several times on the yaw axis, sending the control messages trough UDP using the following gimbal parameters:
