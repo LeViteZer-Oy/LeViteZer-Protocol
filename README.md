@@ -45,9 +45,9 @@ int16 n = (data[0] | data[1] << 8);
 
 
  #### Message Example
-|   starting bytes   | device | type |    counter   | mode |               Data                    |   Checksum     |
-|:------------------:|:------:|:----:|:------------:|:----:|:-------------------------------------:|:---------------:|
-|0xFF 0xFF 0xFF      | 0x07   | 0x02 |  0x71        | 0x00 | 0x02 0xAA 0x92 0x33 0x41 0x00         |   0x00 0x2C 0x02  |
+|   starting bytes   | device id | device type |    counter   | mode |               Data                    |   Checksum     |
+|:------------------:|:---------:|:-----------:|:------------:|:----:|:-------------------------------------:|:---------------:|
+|0xFF 0xFF 0xFF      |    0x07   |    0x02     |  0x71        | 0x00 | 0x02 0xAA 0x92 0x33 0x41 0x00         |   0x00 0x2C 0x02  |
 
 This message is in standard mode, is meant for Camera id 7 and contains 2 parameters in the data payload
 
@@ -304,6 +304,9 @@ Longitude range is From -180 to 180 degrees
 Camera parameters can be set but there is no feedback of what are the current values.
 Camera parameters must be send at rates below 24 Hz. If they are sent at higher frequency for short period, they will be enqueued and eventually sent to camera, but if the queue gets full then new data will be dropped. This is because a limitation on the SDI interface.
 
+#### Camera Ids
+Usually a BMD camera can be given an Id in the 1-99 range. This is the id that must be used on the Header "device id" field. A special case is a Bluetooth camera. Messages sent to bluetooth cameras use id 100.
+
 ### Lens
 | Id  |                 name                   |  min   | max    |                                  Observations                          |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
@@ -462,6 +465,9 @@ UDP_PORT = 50505
 global counter
 counter = 0
 
+#to send to a bluetooth camera we use id 100
+CAMERA_ID = 100
+
 # parameter id
 TRANSPORT_MODE = 142
 
@@ -473,10 +479,9 @@ def createRecordMsg(value):
     global counter
 
 
-    cameraId = 1
     deviceType = 2
     endOfMessage = 0
-    message = array.array('B', [0xff, 0xff, 0xff, cameraId, deviceType, counter,
+    message = array.array('B', [0xff, 0xff, 0xff, CAMERA_ID, deviceType, counter,
             TRANSPORT_MODE, value, 0,
             endOfMessage, 0, 0])
 
