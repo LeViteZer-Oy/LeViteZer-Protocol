@@ -451,8 +451,65 @@ Send This (Binary) command to a device that has a bluetooth module or it's bluet
 
 # Examples
 
-## Camera
-## Gimbal Control
+## Trigger Camera Recording
+``` python
+import socket
+import array
+import time
+UDP_IP = "192.168.137.222"
+UDP_PORT = 50505
+
+global counter
+counter = 0
+
+# parameter id
+TRANSPORT_MODE = 142
+
+# values
+START_RECORDING = 2
+STOP_RECORDING = 0
+
+def createRecordMsg(value):
+    global counter
+
+
+    cameraId = 1
+    deviceType = 2
+    endOfMessage = 0
+    message = array.array('B', [0xff, 0xff, 0xff, cameraId, deviceType, counter,
+            TRANSPORT_MODE, value, 0,
+            endOfMessage, 0, 0])
+
+    #calculate checksum starting in 3rd index
+    checksum = 0
+    for i in range(3, len(message)):
+        checksum = (checksum + message[i]) & 0xFFFF # 16 bit overflow 
+   
+   #set the 16bit checksum at the end of the array
+    message[-2] = checksum & 0xff
+    message[-1] = checksum >> 8
+
+    # add to the counter
+    counter = (counter+1) & 127  # counter overflows after 127 (7 bit counter)
+
+    return message.tostring()
+
+
+# create socket
+print "UDP target IP:", UDP_IP
+print "UDP target port:", UDP_PORT
+sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+
+# Record for 5 seconds
+print "Recording..."
+sock.sendto(createRecordMsg(START_RECORDING), (UDP_IP, UDP_PORT))
+time.sleep(5)
+print "stopping..."
+sock.sendto(createRecordMsg(STOP_RECORDING), (UDP_IP, UDP_PORT))
+
+```
+
+## Gimbal Angle Control
 The following python 2.7 script moves the gimbal several times on the yaw axis, sending the control messages trough UDP using the following gimbal parameters:
  * ROLL
  * PICH
