@@ -458,6 +458,7 @@ Send This (Binary) command to a device that has a bluetooth module or it's bluet
 # Examples
 
 ## Trigger Camera Recording
+Simple camera record trigger. will record for 5 seconds
 ``` python
 import socket
 import array
@@ -517,6 +518,7 @@ sock.sendto(createRecordMsg(STOP_RECORDING), (UDP_IP, UDP_PORT))
 
 ```
 ## Gimbal Joystick Control
+This example can be used to build a joytick control, feeding x and y axis values in a 50Hz - 100Hz rate
 ```python
 import socket
 import array
