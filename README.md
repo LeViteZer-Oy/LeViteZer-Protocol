@@ -17,6 +17,9 @@ Levitezer Protocol
     + [Black Magic Camera Data](#black-magic-camera-data)
     + [Controller Data](#controller-data)  
   * [Examples](#examples)
+    + [Trigger Camera Recording](#Trigger-Camera-Recording)
+    + [Gimbal Joystick Control](#Gimbal-Joystick-Control)    
+    + [Gimbal Angle Control](#Gimbal-Angle-Control)
 
 # Message Structure
 Any message between two systems is compound of 
@@ -513,7 +516,90 @@ print "stopping..."
 sock.sendto(createRecordMsg(STOP_RECORDING), (UDP_IP, UDP_PORT))
 
 ```
+## Gimbal Joystick Control
+```python
+import socket
+import array
+import time
+from math import sin
+UDP_IP = "192.168.137.222"
+UDP_PORT = 50505
+#ids
+JOYSTICK_TYPE = 1
+SPEED_X = 2
+SPEED_Y = 3
+GIMBAL_MODE = 32
+# values
+JOYSTICK_WII_TYPE = 1
+MODE_FIX_FRAME = 0
+MODE_GEOPOINT = 1
+MODE_NONE = 2
 
+SPEED_UNIT = 0.1220740379 #degree/sec
+
+global counter
+counter = 0
+
+def calc_checksum(arr):
+        global counter
+
+        #calculate checksum starting in 3rd index
+        checksum = 0
+        aSum = 0
+        for i in range(3, len(arr)):
+                aSum += arr[i]
+        #set the 16bit checksum at the end of the array
+        checksum = aSum & 0xffff  # simulate 16bit overflow
+        arr[-2] = checksum & 0xff
+        arr[-1] = checksum >> 8
+
+        # add to the counter
+        counter += 1
+        counter &= 0x7f # simulate 7bit overflow (counter is 7bits)
+
+def send_mode(mode):
+        """Gimbal message: configure mode"""
+        global counter
+        message = array.array('B', [0xff, 0xff, 0xff, 101, 1, counter,
+                        GIMBAL_MODE, mode, 0,
+                        0, 0, 0])
+        calc_checksum(message)
+
+
+        return message.tostring()
+
+def send_speed(x, y):
+        """ Joystick message: """
+        global counter
+        x = int(x)
+        y = int(y)        
+        message = array.array('B', [0xff, 0xff, 0xff, 1, 3, counter,
+                        JOYSTICK_TYPE, JOYSTICK_WII_TYPE, 0,
+                        SPEED_X, x & 0xff, x >> 8 & 0xff,
+                        SPEED_Y, y & 0xff, y >> 8 & 0xff,
+                        0, 0, 0]) 
+
+        calc_checksum(message)
+
+        return message.tostring()
+
+
+# create socket
+print "UDP target IP:", UDP_IP
+print "UDP target port:", UDP_PORT
+sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+
+# set mode
+sock.sendto(send_mode(MODE_FIX_FRAME), (UDP_IP, UDP_PORT))
+
+# move continuously to same speed
+print "Moving gimbal yaw to 5deg/s and pitch to -1 deg/s"
+for i in range(1000):
+        x = round(5.0/SPEED_UNIT)  #   5 deg/s
+        y = round(1.0/SPEED_UNIT) #  -1 deg/s
+        sock.sendto(send_speed(x, y), (UDP_IP, UDP_PORT))
+        time.sleep(0.02) # speed messages should be sent 50Hz-100Hz
+```
 ## Gimbal Angle Control
 The following python 2.7 script moves the gimbal several times on the yaw axis, sending the control messages trough UDP using the following gimbal parameters:
  * ROLL
