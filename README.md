@@ -411,7 +411,10 @@ Camera parameters must be send at rates below 24 Hz. If they are sent at higher 
 | 121  | Tilt                                  | -2047      | 2047   |   Tilt speed                                                                     |
 | 121  | Operation                             | 0          | 2   |  0=reset, 1=save position, 2=recall position                                  |
 | 123  | Memory slot                           | 0          | 5   |    memory slot to use a operation                                   |
-
+### Media
+| Id  |                 name                   |  min   | max    |                                  Observations                          |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
+| 142  | Transport Mode (Record)               | 0      | 2   |   0=stop, 2=record                                                       |
 ## Controller Data
 | Id  |                 name                   |  min   | max    |                                  Observations                          |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
@@ -447,6 +450,9 @@ Send This (Binary) command to a device that has a bluetooth module or it's bluet
 |   501      |     6       | MAC_ADDR_BLE              |  6-byte mac address                                    |
 
 # Examples
+
+## Camera
+## Gimbal Control
 The following python 2.7 script moves the gimbal several times on the yaw axis, sending the control messages trough UDP using the following gimbal parameters:
  * ROLL
  * PICH
