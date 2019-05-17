@@ -469,7 +469,8 @@ UDP_PORT = 50505
 global counter
 counter = 0
 
-#to send to a bluetooth camera we use id 100
+#To send to a bluetooth camera we use id 100.
+#To use SDI camera id must be 1-99 and it has to be set on the camera menu.
 CAMERA_ID = 100
 
 # parameter id
