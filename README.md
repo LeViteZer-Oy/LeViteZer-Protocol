@@ -449,7 +449,7 @@ FPS values are from first bit to the 3rd, M-rate is the 4th bit, resolution from
 | 75  | Input Levels ch1                       | 0      | 2047   |                                                                        | 2.5    |
 
 ### Display
-| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id 
+| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
 | 89  | Brightness                             | 0      | 2047   |                                                                        | 4.0    |
 | 90  | Display Overlays                       | -      | -      |   0=disable, 4=zebra, 8=peaking, 61=both                               | 4.1    |
@@ -457,28 +457,50 @@ FPS values are from first bit to the 3rd, M-rate is the 4th bit, resolution from
 | 92  | Peaking Level                          | 0      | 2047   |                                                                        | 4.3    |
 | 93  | Colour Bars Display Time (seconds)     | 0      | 30     |   0=disable bars, -30=enable bars with timeout (s)                     | 4.4    |
 #### Focus Assist (Grouped)
-| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id 
+| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
-| 89  | Brightness                             | 0      | 2047   |                                                                        | 4.0    |
-| 90  | Display Overlays                       | -      | -      |   0=disable, 4=zebra, 8=peaking, 61=both                               | 4.1    |
+| 94  | Focus Assist Method                    | 0      | 1      |   0=Peak, 1=Colored lines                                              | 4.5    |
+| 95  | Focus Assist Color                     | 0      | 4      |   0=Red, 1=Green, 2=Blue, 3=White, 4=Black                             | 4.5    |
 
-### Configuration
-| Id  |                 name                   |  min   | max    |                                  Observations                          |
-|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
-| 109  | Tally Brightness                      | 0      | 2047   |                                                                        |
-| 110  | Tally Front Brightness                | 0      | 2047   |                                                                        |
-| 111  | Tally Rear Brightness                 | 0      | 2047   |                                                                        |
+### Tally        
+| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
+| 109  | Tally Brightness                      | 0      | 2047   |  Sets both rear and front tally                                        | 5.0    |
+| 110  | Tally Front Brightness                | 0      | 2047   |                                                                        | 5.1    |
+| 111  | Tally Rear Brightness                 | 0      | 2047   |                                                                        | 5.2    |
+| 200  | Tally Light Mode                      | 0      | 3      | 1=record, 2=preview, 3=white                                           | None   |
+
 ### PTZ control
-| Id  |                 name                   |  min   | max    |                                  Observations                          |
-|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
-| 120  | Pan                                   | -2047      | 2047   |   Pan speed                                                                     |
-| 121  | Tilt                                  | -2047      | 2047   |   Tilt speed                                                                     |
-| 121  | Operation                             | 0          | 2   |  0=reset, 1=save position, 2=recall position                                  |
-| 123  | Memory slot                           | 0          | 5   |    memory slot to use a operation                                   |
+| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
+#### Pan/Tilt (Grouped)
+| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
+| 120  | Pan                                   | -2047      | 2047   |   Pan speed                                                        | 11.0   |
+| 121  | Tilt                                  | -2047      | 2047   |   Tilt speed                                                       | 11.0   |
+#### Memory Preset (Grouped)
+| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
+| 122  | Operation                             | 0      | 2      |  0=reset, 1=save position, 2=recall position                           | 11.1   |
+| 123  | Memory slot                           | 0      | 5      |    memory slot to use a operation                                      | 11.1   |
+
 ### Media
-| Id  |                 name                   |  min   | max    |                                  Observations                          |
-|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
-| 142  | Transport Mode (Record)               | 0      | 2   |   0=stop, 2=record                                                       |
+#### Codec (Grouped)
+| Id   |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
+|:----:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
+| 140  | Basic Codec                            | 0      | 2      |  0=reset, 1=save position, 2=recall position                           | 10.0   |
+| 141  | Codec Variant                          | 0      | 2      |  0=reset, 1=save position, 2=recall position                           | 10.0   |
+
+
+#### Transport (Grouped)
+| Id   |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
+|:----:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
+| 142  | Transport Mode (Record)                | 0      | 2      |   0=previw (stop recording), 1=play,  2=record                         |  10.1  |
+| 143  | Transport Speed                        | -127   | 128    |   0=pause, +values=forward, -values=backwards                          |  10.1  |
+| 144  | Transport Flags                        | -      | -      |  1<<0 = loop, 1<<1 = play all, 1<<5 = disk1 active, 1<<6 = disk2 active, 1<<7 = time-lapse recording          |  10.1  |
+| 145  | Transport Storage 1                    | 0      | 2      |  0 = CFast card, 1 = SD, 2 = SSD Recorder                              |  10.1  |
+| 146  | Transport Storage 2                    | 0      | 2      |  0 = CFast card, 1 = SD, 2 = SSD Recorder                              |  10.1  |
+ 
 ## Controller Data
 | Id  |                 name                   |  min   | max    |                                  Observations                          |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
