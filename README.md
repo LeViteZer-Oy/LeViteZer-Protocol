@@ -310,6 +310,8 @@ Camera parameters must be send at rates below 24 Hz. If they are sent at higher 
 #### Camera Ids
 Usually a BMD camera can be given an Id in the 1-99 range. This is the id that must be used on the Header "device id" field. A special case is a Bluetooth camera. Messages sent to bluetooth cameras use id 100.
 
+Some parameters should be sent grouped in the same message always, these are indicatd by the hint `(grouped)`
+
 ### Lens
 | Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
@@ -333,59 +335,75 @@ Usually a BMD camera can be given an Id in the 1-99 range. This is the id that m
 | 41  | Correction Reset Default               | 0      | 0      |   void command                                                         | 8.7    |
 
 The following parameters must be send on groups
-#### Lift Color Adjustment
-| Id  |                 name                   |  min   | max    |                                  Observations                          |
-|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
-| 20  | Lift Adjust Red                        | -4096  | 4095   |   Default value: 0                                                     | 
-| 21  | Lift Adjust Green                      | -4096  | 4095   |   Default value: 0                                                     |
-| 22  | Lift Adjust Blue                       | -4096  | 4095   |   Default value: 0                                                     |
-| 23  | Lift Adjust Luma                       | -4096  | 4095   |   Default value: 0                                                     |
-#### Gamma Color Adjustment
-| Id  |                 name                   |  min   | max    |                                  Observations                          |
-|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
-| 24  | Gamma Adjust Red                       | -4096  | 4095   |   Default value: 0                                                     |
-| 25  | Gamma Adjust Green                     | -8192  | 8101   |   Default value: 0                                                     |
-| 26  | Gamma Adjust Blue                      | -8192  | 8101   |   Default value: 0                                                     |
-| 27  | Gamma Adjust Luma                      | -8192  | 8101   |   Default value: 0                                                     |
+#### Lift Color Adjustment (grouped)
+| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
+| 20  | Lift Adjust Red                        | -4096  | 4095   |   Default value: 0                                                     | 8.0    |
+| 21  | Lift Adjust Green                      | -4096  | 4095   |   Default value: 0                                                     | 8.0    |
+| 22  | Lift Adjust Blue                       | -4096  | 4095   |   Default value: 0                                                     | 8.0    |
+| 23  | Lift Adjust Luma                       | -4096  | 4095   |   Default value: 0                                                     | 8.0    |
+#### Gamma Color Adjustment (grouped)
+| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
+| 24  | Gamma Adjust Red                       | -4096  | 4095   |   Default value: 0                                                     | 8.1    |
+| 25  | Gamma Adjust Green                     | -8192  | 8101   |   Default value: 0                                                     | 8.1    |
+| 26  | Gamma Adjust Blue                      | -8192  | 8101   |   Default value: 0                                                     | 8.1    |
+| 27  | Gamma Adjust Luma                      | -8192  | 8101   |   Default value: 0                                                     | 8.1    |
 
-#### Gain Color Adjustment
-| Id  |                 name                   |  min   | max    |                                  Observations                          |
-|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
-| 28  | Gain Adjust Red                        |  0     | 32767  |   Default value: 2047                                                  | 
-| 29  | Gain Adjust Green                      |  0     | 32767  |   Default value: 2047                                                  |
-| 30  | Gain Adjust Blue                       |  0     | 32767  |   Default value: 2047                                                  |
-| 31  | Gain Adjust Luma                       |  0     | 32767  |   Default value: 2047                                                  |
-#### Offset Color Adjustment
-| Id  |                 name                   |  min   | max    |                                  Observations                          |
-|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
-| 32  | Offset Adjust Red                      | -10240 | 10240  |   Default value: 0                                                     |
-| 33  | Offset Adjust Green                    | -10240 | 10240  |   Default value: 0                                                     |
-| 34  | Offset Adjust Blue                     | -10240 | 10240  |   Default value: 0                                                     |
-| 35  | Offset Adjust Luma                     | -10240 | 10240  |   Default value: 0                                                     |
-#### Contrast
-| Id  |                 name                   |  min   | max    |                                  Observations                          |
-|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
-| 36  | Contrast Adjust pivot                  | 0      | 2047   |   Default value: 0                                                     |
-| 37  | Contrast Adjust adj                    | 0      | 4095   |   Default value: 2047                                                  |
-#### Hue / Saturation
-| Id  |                 name                   |  min   | max    |                                  Observations                          |
-|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
-| 39  | Colour Adjust Hue                      | -2047  | 2047   |   Default value: 0                                                     |
-| 40  | Colour Adjust Sat                      | 0      | 4095   |   Default value: 2047                                                  |
+#### Gain Color Adjustment (grouped)
+| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
+| 28  | Gain Adjust Red                        |  0     | 32767  |   Default value: 2047                                                  | 8.2    | 
+| 29  | Gain Adjust Green                      |  0     | 32767  |   Default value: 2047                                                  | 8.2    |
+| 30  | Gain Adjust Blue                       |  0     | 32767  |   Default value: 2047                                                  | 8.2    |
+| 31  | Gain Adjust Luma                       |  0     | 32767  |   Default value: 2047                                                  | 8.2    |
+#### Offset Color Adjustment (grouped)
+| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
+| 32  | Offset Adjust Red                      | -10240 | 10240  |   Default value: 0                                                     | 8.3    |
+| 33  | Offset Adjust Green                    | -10240 | 10240  |   Default value: 0                                                     | 8.3    |
+| 34  | Offset Adjust Blue                     | -10240 | 10240  |   Default value: 0                                                     | 8.3    |
+| 35  | Offset Adjust Luma                     | -10240 | 10240  |   Default value: 0                                                     | 8.3    |
+#### Contrast (grouped)
+| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
+| 36  | Contrast Adjust pivot                  | 0      | 2047   |   Default value: 0                                                     | 8.4    |
+| 37  | Contrast Adjust adj                    | 0      | 4095   |   Default value: 2047                                                  | 8.4    |
+#### Hue / Saturation (grouped)
+| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
+| 39  | Colour Adjust Hue                      | -2047  | 2047   |   Default value: 0                                                     | 8.6    |
+| 40  | Colour Adjust Sat                      | 0      | 4095   |   Default value: 2047                                                  | 8.6    |
 
 
 ### Video
-| Id  |                 name                   |  min   | max    |                                  Observations                          |
-|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
-| 50  | Video Mode                             | -      | -      |   See video mode explanation                                           |
-| 51  | Sensor Gain                            | 1      | 16     |   values: 1(12dB), 2(-6dB), 4(0dB), 8(6dB), 16(12dB)                   |
-| 52  | Manual White Balance                   | 2500   | 8000   |   Corresponds to color temperature in kelvins                          |
-| 53  | Exposure (us)                          | 1      | 42000  |   time in us                                                           |
-| 54  | Exposure (ordinal)                     | 0      | n      |   Steps through available exposure values from 0 to the maximum of the camera | 
-| 55  | Dynamic Range Mode                     | 0      | 1      |   0 = film, 1 = video                                                  |
-| 56  | Video Sharpening Level                 | 0      | 3      |   0=Off, 1=Low, 2=Medium, 3=High                                       |
+| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
+| 50  | Video Mode                             | -      | -      |   See video mode explanation below                                     | 1.0    |
+| 51  | Sensor Gain                            | 1      | 16     |   values: 1(12dB), 2(-6dB), 4(0dB), 8(6dB), 16(12dB)                   | 1.1    |
+| 53  | Exposure (us)                          | 1      | 42000  |   time in us                                                           | 1.5    |
+| 54  | Exposure (ordinal)                     | 0      | n      |   Steps through available exposure values from 0 to the maximum of the camera | 1.6 |
+| 55  | Dynamic Range Mode                     | 0      | 1      |   0 = film, 1 = video                                                  | 1.7    |
+| 56  | Video Sharpening Level                 | 0      | 3      |   0=Off, 1=Low, 2=Medium, 3=High                                       | 1.8    |
+| 57  | Auto White Balance                     | -      | -      |   Calculate and set White Balance                                      | 1.3    |
+| 58  | Auto White Balance                     | -      | -      |   Use latest auto white balance setting                                | 1.4    |
 
- ### Video mode
+#### Manual White Balance (grouped)
+| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
+| 49  | Manual White Balance Tint              | -50    | 50     |   See video mode explanation                                           | 1.2    |
+| 52  | Manual White Balance                   | 2500   | 8000   |   Corresponds to color temperature in kelvins                          | 1.2    |
+#### Recording Format     (grouped)
+| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
+| 60  | Recording Format File FPS              | -      | -      |   fps as integer (eg 24, 25, 30, 50, 60, 120)                          | 1.9    |
+| 61  | Recording Format Sensor FPS            | -      | -      |   fps as integer, valid when sensor-off-speed set (eg 24, 25, 30, 33, 48, 50, 60, 120) | 1.9    |
+| 62  | Recording Format Width                 | -      | -      |   in pixels                                                            | 1.9    |
+| 63  | Recording Format Height                | -      | -      |   in pixels                                                            | 1.9    |
+| 64  | Recording Format Flags                 | -      | -      |   -                                                                    | 1.9    |
+
+
+### Video mode
  sets resolution and framerate. all the settings are in groups of bits as show from the smallest bit:
   - 3 bits -> FPS: 0=24, 1=25, 2=30, 3=50, 4=60
   - 1 bit  -> M-Rate: 0=regular, 1=M-rate
