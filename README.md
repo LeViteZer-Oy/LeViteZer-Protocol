@@ -386,12 +386,17 @@ The following parameters must be send on groups
 | 55  | Dynamic Range Mode                     | 0      | 1      |   0 = film, 1 = video                                                  | 1.7    |
 | 56  | Video Sharpening Level                 | 0      | 3      |   0=Off, 1=Low, 2=Medium, 3=High                                       | 1.8    |
 | 57  | Auto White Balance                     | -      | -      |   Calculate and set White Balance                                      | 1.3    |
-| 58  | Auto White Balance                     | -      | -      |   Use latest auto white balance setting                                | 1.4    |
+| 58  | Auto White Balance Restore             | -      | -      |   Use latest auto white balance setting                                | 1.4    |
+| 64  | Auto Exposure                          | 0      | 3      |   0 = off, 1 = low, 2 = medium                                        | 1.10   |
+| 65  | Shutter Angle                          | 100    | 36000  |  Shutter angle in degrees, multiplied by 100                          | 1.11   |
+| 66  | Shutter Speed                          | 24     | 2000   |  Shutter speed value as a fraction of 1, so 50 for 1/50th of a second | 1.12   |
+| 67  | Sensor Gain 2                          | -128   | 127    |  Gain in decibel (dB)                                                 | 1.13   |
+| 68  | ISO                                    | 0      | 25600  |   ISO value                                                           | 1.14   |
 
 #### Manual White Balance (grouped)
 | Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
-| 49  | Manual White Balance Tint              | -50    | 50     |   See video mode explanation                                           | 1.2    |
+| 49  | Manual White Balance Tint              | -50    | 50     |                                                                        | 1.2    |
 | 52  | Manual White Balance                   | 2500   | 8000   |   Corresponds to color temperature in kelvins                          | 1.2    |
 #### Recording Format     (grouped)
 | Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
@@ -403,14 +408,14 @@ The following parameters must be send on groups
 | 64  | Recording Format Flags                 | -      | -      |   -                                                                    | 1.9    |
 
 
-### Video mode
+#### Video mode
  sets resolution and framerate. all the settings are in groups of bits as show from the smallest bit:
   - 3 bits -> FPS: 0=24, 1=25, 2=30, 3=50, 4=60
   - 1 bit  -> M-Rate: 0=regular, 1=M-rate
   - 3 bits -> Dimension:  0=NTSC, 1=PAL, 2=720, 3=1080, 4=2k, 5=2k DCI, 6=4k, 7=4k DCI
   - 1 bit  -> interlaced: 0=progressive, 1=interlaced
   - 4 bits -> colourspace: 0=YUV
-```python
+```python 
      # if videomode is a variable that represents the parameter
      videomode
      
@@ -424,29 +429,38 @@ The following parameters must be send on groups
      # to set the values to videomode parameter
      videomode = (fps | (mrate << 3) | (resolution << 4) | (interlased << 7) | (colorspace << 8)
      
- ```
- FPS values are from first bit to the 3rd, M-rate is the 4th bit, resolution from the 5 fifth to the 7th and so.
+```
+FPS values are from first bit to the 3rd, M-rate is the 4th bit, resolution from the 5 fifth to the 7th and so.
 
 ### Audio
-| Id  |                 name                   |  min   | max    |                                  Observations                          |
-|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
-| 69  | Mic Level                              | 0      | 2047   |                                                                        |
-| 70  | Headphone Level                        | 0      | 2047   |                                                                        |
-| 71  | Headphone Program Mix                  | 0      | 2047   |                                                                        |
-| 72  | Speaker Level                          | 0      | 2047   |                                                                        |
-| 73  | Input Type                             | 0      | 3      |   0=internal mic, 1=line level input,  2=low mic level input,  3=high mic level input |
-| 74  | Input Levels ch0                       | 0      | 2047   |                                                                        |
-| 75  | Input Levels ch1                       | 0      | 2047   |                                                                        |
-| 76  | Phantom Power                          | 0      | 1      |   Boolean value                                                        |
+| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
+| 69  | Mic Level                              | 0      | 2047   |                                                                        | 2.0    |
+| 70  | Headphone Level                        | 0      | 2047   |                                                                        | 2.1    |
+| 71  | Headphone Program Mix                  | 0      | 2047   |                                                                        | 2.2    |
+| 72  | Speaker Level                          | 0      | 2047   |                                                                        | 2.3    |
+| 73  | Input Type                             | 0      | 3      |   0=internal mic, 1=line level input,  2=low mic level input,  3=high mic level input | 2.4    |
+| 76  | Phantom Power                          | 0      | 1      |   Boolean value                                                        | 2.6    |
+
+#### Input Levels (Grouped)
+| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
+| 74  | Input Levels ch0                       | 0      | 2047   |                                                                        | 2.5    |
+| 75  | Input Levels ch1                       | 0      | 2047   |                                                                        | 2.5    |
 
 ### Display
-| Id  |                 name                   |  min   | max    |                                  Observations                          |
-|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
-| 89  | Brightness                             | 0      | 2047   |                                                                        |
-| 90  | Overlays                               | -      | -      |   0=disable, 4=zebra, 8=peaking, 61=both                               |
-| 91  | Zebra Level                            | 0      | 2047   |                                                                        |
-| 92  | Peaking Level                          | 0      | 2047   |                                                                        |
-| 93  | Colour Bars Display Time (seconds)     | 0      | 30     |   0=disable bars, -30=enable bars with timeout (s)                     |
+| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id 
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
+| 89  | Brightness                             | 0      | 2047   |                                                                        | 4.0    |
+| 90  | Display Overlays                       | -      | -      |   0=disable, 4=zebra, 8=peaking, 61=both                               | 4.1    |
+| 91  | Zebra Level                            | 0      | 2047   |                                                                        | 4.2    |
+| 92  | Peaking Level                          | 0      | 2047   |                                                                        | 4.3    |
+| 93  | Colour Bars Display Time (seconds)     | 0      | 30     |   0=disable bars, -30=enable bars with timeout (s)                     | 4.4    |
+#### Focus Assist (Grouped)
+| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id 
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
+| 89  | Brightness                             | 0      | 2047   |                                                                        | 4.0    |
+| 90  | Display Overlays                       | -      | -      |   0=disable, 4=zebra, 8=peaking, 61=both                               | 4.1    |
 
 ### Configuration
 | Id  |                 name                   |  min   | max    |                                  Observations                          |
