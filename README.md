@@ -71,13 +71,13 @@ Header is the firs 6 bytes of the message and it tells "who" sent this message (
 
  * Device_Type: it can be one of the following:
  
-|            Type Name               | Type|
-|:----------------------------------:|:---:| 
-| Gimbals                            |  1  |
-| Cameras  (BMD)                     |  2  |
-| Controllers (i.g. Joysticks)       |  3  |
-| Levitezer Lens Control             |  4  |
-| Box                                | 254 |
+|            Type Name                                                 | Type|
+|:--------------------------------------------------------------------:|:---:| 
+| Gimbal - BaseCam Serial API v2                                       |  1  |
+| Camera - Blackmagic SDI and Bluetooth Camera Control Protocol v1.3   |  2  |
+| Controller  (i.g. Joysticks)                                         |  3  |
+| Levitezer Lens Control                                               |  4  |
+| Box (like eeprom varialbes)                                          | 254 |
  
 Every device has its own set of parameters which is up to 254 parameters.
 
@@ -311,42 +311,68 @@ Camera parameters must be send at rates below 24 Hz. If they are sent at higher 
 Usually a BMD camera can be given an Id in the 1-99 range. This is the id that must be used on the Header "device id" field. A special case is a Bluetooth camera. Messages sent to bluetooth cameras use id 100.
 
 ### Lens
-| Id  |                 name                   |  min   | max    |                                  Observations                          |
-|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
-| 2   | Focus                                  | 0      | 2047   | 0=near, 2047=far                                                       |
-| 3   | Autofocus                              |        |        |                                                                        |
-| 5   | Aperture (Normalised)                  | 0      | 2047   | 0=smallest, 2047=largest                                               |
-| 7   | Autoaperture                           |        |        |                                                                        |
-| 8   | Optical image Stabilization            | 0      | 1      | 0=disabled, 1 or greater=enabled                                       |
-| 9   | Absolute Zoom (mm)                     | 0      | 2047   | Move to specified focal in mm, from 0mm to maximum of the lens         |   
-| 10  | Absolute Zoom (Normalized)             | 0      | 2047   | Move to specified normalised focal lenght: 0=wide, 2047=tele           |
-| 11  | Continous Zoom (Speed)                 | -2048  | 2047   | Start/stop zooming at specified rate: -2047=zoom wider fast, 0.0=stop, +2047=zoom tele fast|
+| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
+| 2   | Focus                                  | 0      | 2047   | 0=near, 2047=far                                                       | 0.0    |
+| 3   | Autofocus                              |        |        |                                                                        | 0.1    |
+| 4   | Aperture (F-Stop    )                  | -2047  | 32767  | Aperture value where fnumber = sqrt(2^AV)                              | 0.3    |
+| 5   | Aperture (Normalised)                  | 0      | 2047   | 0=smallest, 2047=largest                                               | 0.3    |
+| 6   | Aperture (Ordinal   )                  | 0      | n      | Steps through available aperture values from minimum (0) to maximum (n)| 0.4    |
+| 7   | Autoaperture                           |        |        |       void command                                                     | 0.5    |
+| 8   | Optical image Stabilization            | 0      | 1      | 0=disabled, 1 or greater=enabled                                       | 0.6    |
+| 9   | Absolute Zoom (mm)                     | 0      | 2047   | Move to specified focal in mm, from 0mm to maximum of the lens         | 0.7    |
+| 10  | Absolute Zoom (Normalized)             | 0      | 2047   | Move to specified normalised focal lenght: 0=wide, 2047=tele           | 0.8    |
+| 11  | Continous Zoom (Speed)                 | -2048  | 2047   | Start/stop zooming at specified rate: -2047=zoom wider fast, 0.0=stop, +2047=zoom tele fast| 0.9 |
+| 12  | Relative Focus                         | 0      | 2047   | Same as foucs but values are added. (Operation=1 in BMD protocol)      | 0.1    |
+
 
 ### Color Correction
+| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
+| 38  | Luma Mix                               | 0      | 2047   |   Default value: 0                                                     | 8.5    |
+| 41  | Correction Reset Default               | 0      | 0      |   void command                                                         | 8.7    |
+
+The following parameters must be send on groups
+#### Lift Color Adjustment
 | Id  |                 name                   |  min   | max    |                                  Observations                          |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
 | 20  | Lift Adjust Red                        | -4096  | 4095   |   Default value: 0                                                     | 
-| 21  | Lift Adjust Green                      | -4096  | 4095   |   Default value: 0                                                     |                                                                      |
-| 22  | Lift Adjust Blue                       | -4096  | 4095   |   Default value: 0                                                     |                                                                      |
-| 23  | Lift Adjust Luma                       | -4096  | 4095   |   Default value: 0                                                     |                                                                      |
-| 24  | Gamma Adjust Red                       | -4096  | 4095   |   Default value: 0                                                     |                                                                      |
-| 25  | Gamma Adjust Green                     | -8192  | 8101   |   Default value: 0                                                     |                                                                      |
-| 26  | Gamma Adjust Blue                      | -8192  | 8101   |   Default value: 0                                                     |                                                                      |
-| 27  | Gamma Adjust Luma                      | -8192  | 8101   |   Default value: 0                                                     |                                                                      |
+| 21  | Lift Adjust Green                      | -4096  | 4095   |   Default value: 0                                                     |
+| 22  | Lift Adjust Blue                       | -4096  | 4095   |   Default value: 0                                                     |
+| 23  | Lift Adjust Luma                       | -4096  | 4095   |   Default value: 0                                                     |
+#### Gamma Color Adjustment
+| Id  |                 name                   |  min   | max    |                                  Observations                          |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
+| 24  | Gamma Adjust Red                       | -4096  | 4095   |   Default value: 0                                                     |
+| 25  | Gamma Adjust Green                     | -8192  | 8101   |   Default value: 0                                                     |
+| 26  | Gamma Adjust Blue                      | -8192  | 8101   |   Default value: 0                                                     |
+| 27  | Gamma Adjust Luma                      | -8192  | 8101   |   Default value: 0                                                     |
+
+#### Gain Color Adjustment
+| Id  |                 name                   |  min   | max    |                                  Observations                          |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
 | 28  | Gain Adjust Red                        |  0     | 32767  |   Default value: 2047                                                  | 
 | 29  | Gain Adjust Green                      |  0     | 32767  |   Default value: 2047                                                  |
 | 30  | Gain Adjust Blue                       |  0     | 32767  |   Default value: 2047                                                  |
 | 31  | Gain Adjust Luma                       |  0     | 32767  |   Default value: 2047                                                  |
+#### Offset Color Adjustment
+| Id  |                 name                   |  min   | max    |                                  Observations                          |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
 | 32  | Offset Adjust Red                      | -10240 | 10240  |   Default value: 0                                                     |
 | 33  | Offset Adjust Green                    | -10240 | 10240  |   Default value: 0                                                     |
 | 34  | Offset Adjust Blue                     | -10240 | 10240  |   Default value: 0                                                     |
 | 35  | Offset Adjust Luma                     | -10240 | 10240  |   Default value: 0                                                     |
+#### Contrast
+| Id  |                 name                   |  min   | max    |                                  Observations                          |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
 | 36  | Contrast Adjust pivot                  | 0      | 2047   |   Default value: 0                                                     |
 | 37  | Contrast Adjust adj                    | 0      | 4095   |   Default value: 2047                                                  |
-| 38  | Luma Mix                               | 0      | 2047   |   Default value: 0                                                     |
+#### Hue / Saturation
+| Id  |                 name                   |  min   | max    |                                  Observations                          |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
 | 39  | Colour Adjust Hue                      | -2047  | 2047   |   Default value: 0                                                     |
 | 40  | Colour Adjust Sat                      | 0      | 4095   |   Default value: 2047                                                  |
-| 41  | Correction Reset Default               | 0      | 0      |   void command                                                         |
+
 
 ### Video
 | Id  |                 name                   |  min   | max    |                                  Observations                          |
