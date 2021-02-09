@@ -332,7 +332,7 @@ Some parameters should be sent grouped in the same message always, these are ind
 | Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
 | 50  | Video Mode                             | -      | -      |   See video mode explanation below                                     | 1.0    |
-| 51  | Sensor Gain                            | 1      | 16     |   values: 1(12dB), 2(-6dB), 4(0dB), 8(6dB), 16(12dB)                   | 1.1    |
+| 51  | Sensor Gain 1                          | 1      | 16     |   values: 1(12dB), 2(-6dB), 4(0dB), 8(6dB), 16(12dB)                   | 1.1    |
 | 53  | Exposure (us)                          | 1      | 42000  |   time in us                                                           | 1.5    |
 | 54  | Exposure (ordinal)                     | 0      | n      |   Steps through available exposure values from 0 to the maximum of the camera | 1.6 |
 | 55  | Dynamic Range Mode                     | 0      | 1      |   0 = film, 1 = video                                                  | 1.7    |
