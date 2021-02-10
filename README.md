@@ -540,17 +540,17 @@ These parameters handle recording and playback control
 | 180  | Bluetooth Scan                         | 0      | 1      |  0=Start scanning, 1=Stop Scaning                                      | 
 | 181  | Bluetooth Connection Status            | 0      | 1      |  0=Ble connected, 1=Ble disconnected                                   | 
 
-#### Binary Ids
+#### Bluetooth Binary Ids
 Send This (Binary) command to a device that has a bluetooth module or it's bluetooth ready.
 
 | Binary Id  |  byte size  |             name          |                  Observations                          |
 |:----------:|:-----------:|:-------------------------:|:------------------------------------------------------ |
 |   500      |     -       | Passkey BLE               |  String containing the passkey to pair the camera      |
 |   501      |     6       | Mac Address Ble           |  6-byte mac address                                    |
-|   502      |     62      | Scan Result               |  Structure containing data of each device found from the scaner|
+|   502      |     62      | Scan Result               |  Structure containing data of each device found from the scaner. See "Scan Result Details"|
 
 #### Scan Result Details
-The Structure goes like this: 40 bytes for the name +
+Each scan resut contains a name, a service UUID and a mac address. The Structure goes like this: 40 bytes for the camera name +
 16 bytes for the bluetooth service + 6 bytes for the bluetooth mac address.
 
 The C representation of the structure:
@@ -568,10 +568,10 @@ struct scanned_device {
 | Id   |                 name                   |  min   | max    |                                  Observations                          |
 |:----:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
 | 239  | Operation Mode                         | 1      | 4      | modes 1,2,3,4 and 255, see 'Modes' below for more info                 |
-| 240  | Camera Id Mapping 1                    | -      | -      | camera 1 and 5 Id to Map. first byte and                               |
-| 241  | Camera Id Mapping 2                    | -      | -      | camera 2 and 6 Id to Map                                               |
-| 242  | Camera Id Mapping 3                    | -      | -      | camera 3 and 7 Id to Map                                               |
-| 243  | Camera Id Mapping 4                    | -      | -      | camera 4 and 8 Id to Map                                               |
+| 240  | Camera Id Mapping 1                    | -      | -      | camera 1 and 5 Id to Map. First byte for camera 1, second byte for camera 5|
+| 241  | Camera Id Mapping 2                    | -      | -      | camera 2 and 6 Id to Map. First byte for camera 2, second byte for camera 6 |
+| 242  | Camera Id Mapping 3                    | -      | -      | camera 3 and 7 Id to Map. First byte for camera 3, second byte for camera 7 |
+| 243  | Camera Id Mapping 4                    | -      | -      | camera 4 and 8 Id to Map. First byte for camera 4, second byte for camera 8 |
 
 #### Modes
 
