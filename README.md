@@ -328,6 +328,54 @@ Some parameters should be sent grouped in the same message always, these are ind
 | 12  | Relative Focus                         | 0      | 2047   | Same as foucs but values are added. (Operation=1 in BMD protocol)      | 0.1    |
 
 
+### Color Correction
+| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
+| 38  | Luma Mix                               | 0      | 2047   |   Default value: 0                                                     | 8.5    |
+| 41  | Correction Reset Default               | 0      | 0      |   void command                                                         | 8.7    |
+
+The following parameters must be send on groups
+#### Lift Color Adjustment (grouped)
+| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
+| 20  | Lift Adjust Red                        | -4096  | 4095   |   Default value: 0                                                     | 8.0    |
+| 21  | Lift Adjust Green                      | -4096  | 4095   |   Default value: 0                                                     | 8.0    |
+| 22  | Lift Adjust Blue                       | -4096  | 4095   |   Default value: 0                                                     | 8.0    |
+| 23  | Lift Adjust Luma                       | -4096  | 4095   |   Default value: 0                                                     | 8.0    |
+#### Gamma Color Adjustment (grouped)
+| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
+| 24  | Gamma Adjust Red                       | -4096  | 4095   |   Default value: 0                                                     | 8.1    |
+| 25  | Gamma Adjust Green                     | -8192  | 8101   |   Default value: 0                                                     | 8.1    |
+| 26  | Gamma Adjust Blue                      | -8192  | 8101   |   Default value: 0                                                     | 8.1    |
+| 27  | Gamma Adjust Luma                      | -8192  | 8101   |   Default value: 0                                                     | 8.1    |
+
+#### Gain Color Adjustment (grouped)
+| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
+| 28  | Gain Adjust Red                        |  0     | 32767  |   Default value: 2047                                                  | 8.2    | 
+| 29  | Gain Adjust Green                      |  0     | 32767  |   Default value: 2047                                                  | 8.2    |
+| 30  | Gain Adjust Blue                       |  0     | 32767  |   Default value: 2047                                                  | 8.2    |
+| 31  | Gain Adjust Luma                       |  0     | 32767  |   Default value: 2047                                                  | 8.2    |
+#### Offset Color Adjustment (grouped)
+| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
+| 32  | Offset Adjust Red                      | -10240 | 10240  |   Default value: 0                                                     | 8.3    |
+| 33  | Offset Adjust Green                    | -10240 | 10240  |   Default value: 0                                                     | 8.3    |
+| 34  | Offset Adjust Blue                     | -10240 | 10240  |   Default value: 0                                                     | 8.3    |
+| 35  | Offset Adjust Luma                     | -10240 | 10240  |   Default value: 0                                                     | 8.3    |
+#### Contrast (grouped)
+| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
+| 36  | Contrast Adjust pivot                  | 0      | 2047   |   Default value: 0                                                     | 8.4    |
+| 37  | Contrast Adjust adj                    | 0      | 4095   |   Default value: 2047                                                  | 8.4    |
+#### Hue / Saturation (grouped)
+| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
+| 39  | Colour Adjust Hue                      | -2047  | 2047   |   Default value: 0                                                     | 8.6    |
+| 40  | Colour Adjust Sat                      | 0      | 4095   |   Default value: 2047                                                  | 8.6    |
+
+
 ### Video
 | Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
@@ -443,53 +491,17 @@ FPS values are from first bit to the 3rd, M-rate is the 4th bit, resolution from
 | 111  | Tally Rear Brightness                 | 0      | 2047   |                                                                        | 5.2    |
 | 200  | Tally Light Mode                      | 0      | 3      | 1=record, 2=preview, 3=white                                           | None   |
 
+### Reference
+| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
+| 113 | Reference Source                       | 0      | 2      |  0=Internal, 1=program, 2=external                                     | 6.0    |
+#### Reference Offset (Grouped)
+This is a signed integer 32 bit value separated on the two folowings IDs. It sets the offset in pixels
+| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
+| 113 | Reference Offset 1                     | -      | -      |                                                                        | 6.1    |
+| 114 | Reference Offset 2                     | -      | -      |                                                                        | 6.1    |
 
-### Color Correction
-| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
-|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
-| 38  | Luma Mix                               | 0      | 2047   |   Default value: 0                                                     | 8.5    |
-| 41  | Correction Reset Default               | 0      | 0      |   void command                                                         | 8.7    |
-
-The following parameters must be send on groups
-#### Lift Color Adjustment (grouped)
-| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
-|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
-| 20  | Lift Adjust Red                        | -4096  | 4095   |   Default value: 0                                                     | 8.0    |
-| 21  | Lift Adjust Green                      | -4096  | 4095   |   Default value: 0                                                     | 8.0    |
-| 22  | Lift Adjust Blue                       | -4096  | 4095   |   Default value: 0                                                     | 8.0    |
-| 23  | Lift Adjust Luma                       | -4096  | 4095   |   Default value: 0                                                     | 8.0    |
-#### Gamma Color Adjustment (grouped)
-| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
-|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
-| 24  | Gamma Adjust Red                       | -4096  | 4095   |   Default value: 0                                                     | 8.1    |
-| 25  | Gamma Adjust Green                     | -8192  | 8101   |   Default value: 0                                                     | 8.1    |
-| 26  | Gamma Adjust Blue                      | -8192  | 8101   |   Default value: 0                                                     | 8.1    |
-| 27  | Gamma Adjust Luma                      | -8192  | 8101   |   Default value: 0                                                     | 8.1    |
-
-#### Gain Color Adjustment (grouped)
-| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
-|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
-| 28  | Gain Adjust Red                        |  0     | 32767  |   Default value: 2047                                                  | 8.2    | 
-| 29  | Gain Adjust Green                      |  0     | 32767  |   Default value: 2047                                                  | 8.2    |
-| 30  | Gain Adjust Blue                       |  0     | 32767  |   Default value: 2047                                                  | 8.2    |
-| 31  | Gain Adjust Luma                       |  0     | 32767  |   Default value: 2047                                                  | 8.2    |
-#### Offset Color Adjustment (grouped)
-| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
-|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
-| 32  | Offset Adjust Red                      | -10240 | 10240  |   Default value: 0                                                     | 8.3    |
-| 33  | Offset Adjust Green                    | -10240 | 10240  |   Default value: 0                                                     | 8.3    |
-| 34  | Offset Adjust Blue                     | -10240 | 10240  |   Default value: 0                                                     | 8.3    |
-| 35  | Offset Adjust Luma                     | -10240 | 10240  |   Default value: 0                                                     | 8.3    |
-#### Contrast (grouped)
-| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
-|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
-| 36  | Contrast Adjust pivot                  | 0      | 2047   |   Default value: 0                                                     | 8.4    |
-| 37  | Contrast Adjust adj                    | 0      | 4095   |   Default value: 2047                                                  | 8.4    |
-#### Hue / Saturation (grouped)
-| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
-|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
-| 39  | Colour Adjust Hue                      | -2047  | 2047   |   Default value: 0                                                     | 8.6    |
-| 40  | Colour Adjust Sat                      | 0      | 4095   |   Default value: 2047                                                  | 8.6    |
 
 ### PTZ control
 #### Pan/Tilt (Grouped)
@@ -522,7 +534,58 @@ These parameters handle recording and playback control
 | 145  | Transport Storage 1                    | 0      | 2      |  0 = CFast card, 1 = SD, 2 = SSD Recorder                              |  10.1  |
 | 146  | Transport Storage 2                    | 0      | 2      |  0 = CFast card, 1 = SD, 2 = SSD Recorder                              |  10.1  |
 
- 
+### Bluetooth configuration
+| Id   |                 name                   |  min   | max    |                                  Observations                          |
+|:----:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
+| 180  | Bluetooth Scan                         | 0      | 1      |  0=Start scanning, 1=Stop Scaning                                      | 
+| 181  | Bluetooth Connection Status            | 0      | 1      |  0=Ble connected, 1=Ble disconnected                                   | 
+
+#### Binary Ids
+Send This (Binary) command to a device that has a bluetooth module or it's bluetooth ready.
+
+| Binary Id  |  byte size  |             name          |                  Observations                          |
+|:----------:|:-----------:|:-------------------------:|:------------------------------------------------------ |
+|   500      |     -       | Passkey BLE               |  String containing the passkey to pair the camera      |
+|   501      |     6       | Mac Address Ble           |  6-byte mac address                                    |
+|   502      |     62      | Scan Result               |  Structure containing data of each device found from the scaner|
+
+#### Scan Result Details
+The Structure goes like this: 40 bytes for the name +
+16 bytes for the bluetooth service + 6 bytes for the bluetooth mac address.
+
+The C representation of the structure:
+```c
+struct scanned_device {
+    char short_name[40];
+    uint8_t service[16];
+    uint8_t mac[6];
+} __attribute__((packed));
+```
+
+### Operation Mode
+
+#### Operation Mode and Mapping (Grouped)
+| Id   |                 name                   |  min   | max    |                                  Observations                          |
+|:----:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
+| 239  | Operation Mode                         | 1      | 4      | modes 1,2,3,4 and 255, see 'Modes' below for more info                 |
+| 240  | Camera Id Mapping 1                    | -      | -      | camera 1 and 5 Id to Map. first byte and                               |
+| 241  | Camera Id Mapping 2                    | -      | -      | camera 2 and 6 Id to Map                                               |
+| 242  | Camera Id Mapping 3                    | -      | -      | camera 3 and 7 Id to Map                                               |
+| 243  | Camera Id Mapping 4                    | -      | -      | camera 4 and 8 Id to Map                                               |
+
+#### Modes
+
+1. Default. LVZ messages are formarded difrectly to SDI, no limitation on available camera numbers, no automatic resending
+of the parameters, the last sent parameters cannot be requested.
+2. Camera numbers 1 to 8 will be supported. Last send parameters will be maintained on memory,
+they will be periodically send and they can be requested.
+3. Same as 2. But the user defines the supported 8 camera numbers
+4. same as 2. But camera numbers are allocated automatically as the commands arrive.
+255. Disables the camera communication and switches off the SDI shield 
+
+
+
+
 ## Controller Data
 | Id  |                 name                   |  min   | max    |                                  Observations                          |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
@@ -548,14 +611,6 @@ These parameters handle recording and playback control
 | 20  | BUTTON3                                |0       |1       | will send 1 when press and 0 when released                             |
 | 21  | BUTTON4                                |0       |1       | will send 1 when press and 0 when released                             |
 
-### Bluetooth commands
-#### Connect to Camera (Bluetooth Mac address)
-
-Send This (Binary) command to a device that has a bluetooth module or it's bluetooth ready.
-
-| Binary Id  |  byte size  |             name          |                  Observations                          |
-|:----------:|:-----------:|:-------------------------:|:------------------------------------------------------ |
-|   501      |     6       | MAC_ADDR_BLE              |  6-byte mac address                                    |
 
 # Examples
 
