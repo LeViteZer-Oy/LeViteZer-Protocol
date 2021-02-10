@@ -367,7 +367,7 @@ Some parameters should be sent grouped in the same message always, these are ind
   - 3 bits -> Dimension:  0=NTSC, 1=PAL, 2=720, 3=1080, 4=2k, 5=2k DCI, 6=4k, 7=4k DCI
   - 1 bit  -> interlaced: 0=progressive, 1=interlaced
   - 4 bits -> colourspace: 0=YUV
-```python 
+```c++ 
      # if videomode is a variable that represents the parameter
      videomode
      
@@ -407,8 +407,18 @@ FPS values are from first bit to the 3rd, M-rate is the 4th bit, resolution from
 ### Output
 | Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
-| 79  | Output Overlay Enables                 | 0      | 2047   |                                                                        | 3.0    |
+| 79  | Output Overlay Enables                 | -      | -      |   bit flags: [0] = display status, [1] = display frame guides          | 3.0    |
+| 80  | Frame Style Camera V3                  | 0      | 8      |   0=HDTV, 1=4:3, 2=2.4:1, 3=2.39:1, 4=2.35:1, 5=1.85:1, 6=third        | 3.1    |
+| 81  | Frame Opacity Camera V3                | 0      | 2047   |   0.0=transparent, 2047=opaque                                         | 3.2    |
 
+#### Overlays V4 (Grouped)
+| Id  |                 name                   |  min   | max    |                                  Observations                                       |BMD Id |
+|:---:|----------------------------------------|:------:|:------:|-------------------------------------------------------------------------------------|:-----:|
+| 82  | Frame Style Camera   V4                | 0      | 8      | 0=off, 1=2.4:1, 2=2.39:1, 3=2.35:1, 4=1.85:1, 5=16:9, 6=14:9, 7=4:3, 8=2:1          | 3.3   |
+| 83  | Frame Opacity Camera V4                | 0      | 100    | 0=transparent, 100=opaque                                                           | 3.3   |
+| 84  | Safe Area Percentage V4                | 0      | 100    | percentage of full frame used by safe area guide (0 means off)                      | 3.3   |
+| 85  | Grid Style           V4                | -      | -      | bit flags: [0] = display thirds,[1] = display cross hairs,[2] = display center dot  | 3.3   |
+#### 
 
 
 ### Display
@@ -482,8 +492,6 @@ The following parameters must be send on groups
 | 40  | Colour Adjust Sat                      | 0      | 4095   |   Default value: 2047                                                  | 8.6    |
 
 ### PTZ control
-| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
-|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
 #### Pan/Tilt (Grouped)
 | Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
@@ -497,7 +505,7 @@ The following parameters must be send on groups
 
 ### Media
 
-Recording and playback control
+These parameters handle recording and playback control
 #### Codec (Grouped)
 | Id   |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
 |:----:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
