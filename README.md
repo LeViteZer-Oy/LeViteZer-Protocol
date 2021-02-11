@@ -574,7 +574,7 @@ struct scanned_device {
 | 242  | Camera Id Mapping 3                    | -      | -      | camera 3 and 7 to Map. First byte for camera 3, second byte for camera 7 |
 | 243  | Camera Id Mapping 4                    | -      | -      | camera 4 and 8 to Map. First byte for camera 4, second byte for camera 8 |
 
-Sending this message will reset all previouly send, The message must contain the complete mapping for all cameras to be mapped when using mode 2 or mode 3.
+Sending this message will reset all previouly send, The message must contain the complete mapping for all cameras to be mapped when using mode 3.
 
 #### Mode 1
 The default Mode. The messages are forwarded difrectly to SDI, no limitation on available camera numbers, no automatic resending
@@ -582,8 +582,8 @@ of the parameters, the last sent parameters cannot be requested.
 Only send `Operation Mode` set to `1`. No Camera mapping is necessary.
 
 #### Mode 2
-Camera numbers 1 to 8 will be supported. Last sent parameters will be maintained on memory,
-they will be periodically send and they can be requested. Mapping of the cameras is required
+Camera with Id numbers 1 to 8 will be supported. Last sent parameters will be maintained on memory,
+they will be periodically send and they can be requested. No Camera mapping is necessary.
 
 #### Mode 3
 Same as `Mode 2`. But the user defines the supported 8 camera numbers. Mapping of the cameras is required
