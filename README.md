@@ -318,7 +318,7 @@ Some parameters should be sent grouped in the same message always, these are ind
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
 | 2   | Focus                                  | 0      | 2047   | 0=near, 2047=far                                                       | 0.0    |
 | 3   | Autofocus                              |        |        |                                                                        | 0.1    |
-| 4   | Aperture (F-Stop    )                  | -2047  | 32767  | Aperture value where fnumber = sqrt(2^AV)                              | 0.3    |
+| 4   | Aperture (F-Stop    )                  | -2047  | 32767  | Aperture value where fnumber = sqrt(2^AV)                              | 0.2    |
 | 5   | Aperture (Normalised)                  | 0      | 2047   | 0=smallest, 2047=largest                                               | 0.3    |
 | 6   | Aperture (Ordinal   )                  | 0      | n      | Steps through available aperture values from minimum (0) to maximum (n)| 0.4    |
 | 7   | Autoaperture                           |        |        |       void command                                                     | 0.5    |
@@ -326,7 +326,7 @@ Some parameters should be sent grouped in the same message always, these are ind
 | 9   | Absolute Zoom (mm)                     | 0      | 2047   | Move to specified focal in mm, from 0mm to maximum of the lens         | 0.7    |
 | 10  | Absolute Zoom (Normalized)             | 0      | 2047   | Move to specified normalised focal lenght: 0=wide, 2047=tele           | 0.8    |
 | 11  | Continous Zoom (Speed)                 | -2048  | 2047   | Start/stop zooming at specified rate: -2047=zoom wider fast, 0.0=stop, +2047=zoom tele fast| 0.9 |
-| 12  | Relative Focus                         | 0      | 2047   | Same as foucs but values are added. (Operation=1 in BMD protocol)      | 0.1    |
+| 12  | Relative Focus                         | 0      | 2047   | Same as foucs but values are added/subsctracted (Operation=1 in BMD protocol) | 0.1    |
 
 
 ### Color Correction
@@ -370,7 +370,7 @@ The following parameters must be send on groups
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
 | 36  | Contrast Adjust pivot                  | 0      | 2047   |   Default value: 0                                                     | 8.4    |
 | 37  | Contrast Adjust adj                    | 0      | 4095   |   Default value: 2047                                                  | 8.4    |
-#### Hue / Saturation (grouped)
+#### Color Adjust (grouped)
 | Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
 | 39  | Colour Adjust Hue                      | -2047  | 2047   |   Default value: 0                                                     | 8.6    |
@@ -406,7 +406,7 @@ The following parameters must be send on groups
 | 61  | Recording Format Sensor FPS            | -      | -      |   fps as integer, valid when sensor-off-speed set (eg 24, 25, 30, 33, 48, 50, 60, 120) | 1.9    |
 | 62  | Recording Format Width                 | -      | -      |   in pixels                                                            | 1.9    |
 | 63  | Recording Format Height                | -      | -      |   in pixels                                                            | 1.9    |
-| 64  | Recording Format Flags                 | -      | -      |   [0] = file-M-rate, [1] = sensor-M-rate, [2] = sensor-off-speed, [3] = interlaced, [4] = windowed mode  | 1.9    |
+| 64  | Recording Format Flags                 | -      | -      |   bit flags: [0] = file-M-rate, [1] = sensor-M-rate, [2] = sensor-off-speed, [3] = interlaced, [4] = windowed mode  | 1.9    |
 
 
 #### Video mode
@@ -467,14 +467,12 @@ FPS values are from first bit to the 3rd, M-rate is the 4th bit, resolution from
 | 83  | Frame Opacity Camera V4                | 0      | 100    | 0=transparent, 100=opaque                                                           | 3.3   |
 | 84  | Safe Area Percentage V4                | 0      | 100    | percentage of full frame used by safe area guide (0 means off)                      | 3.3   |
 | 85  | Grid Style           V4                | -      | -      | bit flags: [0] = display thirds,[1] = display cross hairs,[2] = display center dot  | 3.3   |
-#### 
-
 
 ### Display
 | Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
 | 89  | Brightness                             | 0      | 2047   |                                                                        | 4.0    |
-| 90  | Display Overlays                       | -      | -      |   0=disable, 4=zebra, 8=peaking, 61=both                               | 4.1    |
+| 90  | Display Overlay enables                | -      | -      |   0=disable, 4=zebra, 8=peaking, 61=both                               | 4.1    |
 | 91  | Zebra Level                            | 0      | 2047   |                                                                        | 4.2    |
 | 92  | Peaking Level                          | 0      | 2047   |                                                                        | 4.3    |
 | 93  | Colour Bars Display Time (seconds)     | 0      | 30     |   0=disable bars, -30=enable bars with timeout (s)                     | 4.4    |
@@ -508,8 +506,8 @@ This is a signed integer 32 bit value separated on the two folowings IDs. It set
 #### Pan/Tilt (Grouped)
 | Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
-| 120  | Pan                                   | -2047      | 2047   |   Pan speed                                                        | 11.0   |
-| 121  | Tilt                                  | -2047      | 2047   |   Tilt speed                                                       | 11.0   |
+| 120  | Pan                                   | -2047  | 2047   |   Pan speed                                                            | 11.0   |
+| 121  | Tilt                                  | -2047  | 2047   |   Tilt speed                                                           | 11.0   |
 #### Memory Preset (Grouped)
 | Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
@@ -522,8 +520,8 @@ These parameters handle recording and playback control
 #### Codec (Grouped)
 | Id   |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
 |:----:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
-| 140  | Basic Codec                            | 0      | 2      |  0=reset, 1=save position, 2=recall position                           | 10.0   |
-| 141  | Codec Variant                          | 0      | 2      |  0=reset, 1=save position, 2=recall position                           | 10.0   |
+| 140  | Basic Codec                            | 0      | 2      |  1 = DNxHD, 2 = ProRes, 3 = Blackmagic RAW                             | 10.0   |
+| 141  | Codec Variant                          | 0      | 2      |  ProRes:0 = HQ, 1 = 422, 2 = LT, 3 = Proxy, 4 = 444, 5 = 444XQ <br>  Blackmagic RAW: 0 = Q0, 1 = Q5, 2 = 3:1, 3 = 5:1, 4 = 8:1, 5 = 12:1 | 10.0   |
 
 
 #### Transport (Grouped)
@@ -565,16 +563,16 @@ struct scanned_device {
 
 ### Operation Mode
 
-#### Operation Mode and Mapping (Grouped)
+#### Operation Mode and Mapping message (Grouped)
 | Id   |                 name                   |  min   | max    |                                  Observations                          |
 |:----:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
-| 239  | Operation Mode                         | 1      | 4      | modes 1,2,3,4 and 255, see 'Modes' below for more info                 |
+| 239  | Operation Mode                         | -      | -      | modes 1,2,3,4 and 255, see the different modes below for more info     |
 | 240  | Camera Id Mapping 1                    | -      | -      | camera 1 and 5 to Map. First byte for camera 1, second byte for camera 5|
 | 241  | Camera Id Mapping 2                    | -      | -      | camera 2 and 6 to Map. First byte for camera 2, second byte for camera 6 |
 | 242  | Camera Id Mapping 3                    | -      | -      | camera 3 and 7 to Map. First byte for camera 3, second byte for camera 7 |
 | 243  | Camera Id Mapping 4                    | -      | -      | camera 4 and 8 to Map. First byte for camera 4, second byte for camera 8 |
 
-Sending this message will reset all previouly send, The message must contain the complete mapping for all cameras to be mapped when using mode 3.
+Sending this message will reset all previouly send, The message must contain the complete mapping for all 8 cameras when using mode 3.
 
 #### Mode 1
 The default Mode. The messages are forwarded difrectly to SDI, no limitation on available camera numbers, no automatic resending
@@ -590,7 +588,7 @@ Same as `Mode 2`. But the user defines the supported 8 camera numbers. Mapping o
 
 #### Mode 255 (0xFF)
 Disables the camera communication and switches off the SDI shield.
-Only send `Operation Mode` set to `255` No Camera mapping is necessary.
+Only send `Operation Mode` set to `255`. No Camera mapping is necessary.
 
 #### Mapping example
 8 cameras
