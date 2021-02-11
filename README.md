@@ -401,11 +401,11 @@ The following parameters must be send on groups
 #### Recording Format     (grouped)
 | Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
-| 60  | Recording Format File FPS              | -      | -      |   fps as integer (eg 24, 25, 30, 50, 60, 120)                          | 1.9    |
-| 61  | Recording Format Sensor FPS            | -      | -      |   fps as integer, valid when sensor-off-speed set (eg 24, 25, 30, 33, 48, 50, 60, 120) | 1.9    |
-| 62  | Recording Format Width                 | -      | -      |   in pixels                                                            | 1.9    |
-| 63  | Recording Format Height                | -      | -      |   in pixels                                                            | 1.9    |
-| 64  | Recording Format Flags                 | -      | -      |   bit flags: [0] = file-M-rate, [1] = sensor-M-rate, [2] = sensor-off-speed, [3] = interlaced, [4] = windowed mode  | 1.9    |
+| 59  | Recording Format File FPS              | -      | -      |   fps as integer (eg 24, 25, 30, 50, 60, 120)                          | 1.9    |
+| 60  | Recording Format Sensor FPS            | -      | -      |   fps as integer, valid when sensor-off-speed set (eg 24, 25, 30, 33, 48, 50, 60, 120) | 1.9    |
+| 61  | Recording Format Width                 | -      | -      |   in pixels                                                            | 1.9    |
+| 62  | Recording Format Height                | -      | -      |   in pixels                                                            | 1.9    |
+| 63  | Recording Format Flags                 | -      | -      |   bit flags: [0] = file-M-rate, [1] = sensor-M-rate, [2] = sensor-off-speed, [3] = interlaced, [4] = windowed mode  | 1.9    |
 
 
 #### Video mode
@@ -497,8 +497,8 @@ FPS values are from first bit to the 3rd, M-rate is the 4th bit, resolution from
 This is a signed integer 32 bit value separated on the two folowings IDs. It sets the offset in pixels
 | Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
-| 113 | Reference Offset 1                     | -      | -      |                                                                        | 6.1    |
-| 114 | Reference Offset 2                     | -      | -      |                                                                        | 6.1    |
+| 114 | Reference Offset 1                     | -      | -      |                                                                        | 6.1    |
+| 115 | Reference Offset 2                     | -      | -      |                                                                        | 6.1    |
 
 
 ### PTZ control
