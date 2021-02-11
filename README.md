@@ -577,13 +577,13 @@ struct scanned_device {
 
 #### Mode Values
 
-- 1. Default. LVZ messages are formarded difrectly to SDI, no limitation on available camera numbers, no automatic resending
+- 1 Default. LVZ messages are formarded difrectly to SDI, no limitation on available camera numbers, no automatic resending
 of the parameters, the last sent parameters cannot be requested.
-- 2. Camera numbers 1 to 8 will be supported. Last send parameters will be maintained on memory,
+- 2 Camera numbers 1 to 8 will be supported. Last send parameters will be maintained on memory,
 they will be periodically send and they can be requested.
-- 3. Same as 2. But the user defines the supported 8 camera numbers
+- 3 Same as 2. But the user defines the supported 8 camera numbers
 <!-- - 4. Same as 2. But camera numbers are allocated automatically as the commands arrive. -->
-- 255. Disables the camera communication and switches off the SDI shield 
+- 255 Disables the camera communication and switches off the SDI shield 
 
 
 
