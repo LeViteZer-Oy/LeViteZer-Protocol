@@ -417,17 +417,17 @@ The following parameters must be send on groups
   - 1 bit  -> interlaced: 0=progressive, 1=interlaced
   - 4 bits -> colourspace: 0=YUV
 ```c++ 
-     # if videomode is a variable that represents the parameter
+     // if videomode is a variable that represents the parameter
      videomode
      
-     # to get the values from videomode parameter
+     // to get the values from videomode parameter
      fps =            videomode & 0b0000000000000111
      mrate =         (videomode & 0b0000000000001000) >> 3
      resolution =    (videomode & 0b0000000001110000) >> 4
      interlased =    (videomode & 0b0000000010000000) >> 7
      colorspace =    (videomode & 0b0000111100000000) >> 8
      
-     # to set the values to videomode parameter
+     // to set the values to videomode parameter
      videomode = (fps | (mrate << 3) | (resolution << 4) | (interlased << 7) | (colorspace << 8)
      
 ```
@@ -575,17 +575,41 @@ struct scanned_device {
 | 242  | Camera Id Mapping 3                    | -      | -      | camera 3 and 7 Id to Map. First byte for camera 3, second byte for camera 7 |
 | 243  | Camera Id Mapping 4                    | -      | -      | camera 4 and 8 Id to Map. First byte for camera 4, second byte for camera 8 |
 
-#### Mode Values
-
-- 1 Default. LVZ messages are formarded difrectly to SDI, no limitation on available camera numbers, no automatic resending
+#### Mode 1
+The default Mode. The messages are forwarded difrectly to SDI, no limitation on available camera numbers, no automatic resending
 of the parameters, the last sent parameters cannot be requested.
-- 2 Camera numbers 1 to 8 will be supported. Last send parameters will be maintained on memory,
-they will be periodically send and they can be requested.
-- 3 Same as 2. But the user defines the supported 8 camera numbers
-<!-- - 4. Same as 2. But camera numbers are allocated automatically as the commands arrive. -->
-- 255 Disables the camera communication and switches off the SDI shield 
+Only send Id 239 `Operation Mode` set to `1`. No Camera mapping is necessary.
 
+#### Mode 2
+Camera numbers 1 to 8 will be supported. Last sent parameters will be maintained on memory,
+they will be periodically send and they can be requested. Mapping of the cameras is required
 
+#### Mode 3
+Same as `Mode 2`. But the user defines the supported 8 camera numbers. Mapping of the cameras is required
+
+#### Mode 255 (0xFF)
+Disables the camera communication and switches off the SDI shield.
+Only send Id 239 `Operation Mode` set to `255` No Camera mapping is necessary.
+
+#### Mapping example
+8 cameras
+```C++
+//camera number    1   2   3   4   5   6   7   8
+//camera ids       10, 22, 54, 34, 67, 70, 55, 45 
+uint16_t mapping1 = 10 | (67 << 8) // camera 1 and 5
+uint16_t mapping2 = 22 | (70 << 8) // camera 2 and 6
+uint16_t mapping3 = 54 | (55 << 8) // camera 3 and 7
+uint16_t mapping4 = 34 | (45 << 8) // camera 4 and 8
+```
+3 cameras
+```C++
+//camera number    1   2   3 
+//camera ids       10, 22, 54
+uint16_t mapping1 = 10 
+uint16_t mapping2 = 22 
+uint16_t mapping3 = 54 
+uint16_t mapping4 = 0 
+```
 
 
 ## Controller Data
