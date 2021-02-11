@@ -310,6 +310,7 @@ Camera parameters must be send at rates below 24 Hz. If they are sent at higher 
 #### Camera Ids
 Usually a BMD camera can be given an Id in the 1-99 range. This is the id that must be used on the Header "device id" field. A special case is a Bluetooth camera. Messages sent to bluetooth cameras use id 100.
 
+#### Grouped parameters
 Some parameters should be sent grouped in the same message always, these are indicatd by the hint `(grouped)`
 
 ### Lens
@@ -380,14 +381,14 @@ The following parameters must be send on groups
 | Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
 | 50  | Video Mode                             | -      | -      |   See video mode explanation below                                     | 1.0    |
-| 51  | Sensor Gain 1                          | 1      | 16     |   values: 1(12dB), 2(-6dB), 4(0dB), 8(6dB), 16(12dB)                   | 1.1    |
+| 51  | Sensor Gain 1                          | 1      | 16     |   values: 1(-12dB), 2(-6dB), 4(0dB), 8(6dB), 16(12dB)                  | 1.1    |
 | 53  | Exposure (us)                          | 1      | 42000  |   time in us                                                           | 1.5    |
 | 54  | Exposure (ordinal)                     | 0      | n      |   Steps through available exposure values from 0 to the maximum of the camera | 1.6 |
-| 55  | Dynamic Range Mode                     | 0      | 1      |   0 = film, 1 = video                                                  | 1.7    |
+| 55  | Dynamic Range Mode                     | 0      | 1      |   0=film, 1=video                                                      | 1.7    |
 | 56  | Video Sharpening Level                 | 0      | 3      |   0=Off, 1=Low, 2=Medium, 3=High                                       | 1.8    |
 | 57  | Auto White Balance                     | -      | -      |   Calculate and set White Balance                                      | 1.3    |
 | 58  | Auto White Balance Restore             | -      | -      |   Use latest auto white balance setting                                | 1.4    |
-| 64  | Auto Exposure                          | 0      | 3      |   0 = off, 1 = low, 2 = medium                                        | 1.10   |
+| 64  | Auto Exposure                          | 0      | 3      |   0=Manual Trigger, 1=Iris, 2=Shutter, 3=Iris + Shutter, 4=Shutter + Iris | 1.10   |
 | 65  | Shutter Angle                          | 100    | 36000  |  Shutter angle in degrees, multiplied by 100                          | 1.11   |
 | 66  | Shutter Speed                          | 24     | 2000   |  Shutter speed value as a fraction of 1, so 50 for 1/50th of a second | 1.12   |
 | 67  | Sensor Gain 2                          | -128   | 127    |  Gain in decibel (dB)                                                 | 1.13   |
@@ -405,7 +406,7 @@ The following parameters must be send on groups
 | 61  | Recording Format Sensor FPS            | -      | -      |   fps as integer, valid when sensor-off-speed set (eg 24, 25, 30, 33, 48, 50, 60, 120) | 1.9    |
 | 62  | Recording Format Width                 | -      | -      |   in pixels                                                            | 1.9    |
 | 63  | Recording Format Height                | -      | -      |   in pixels                                                            | 1.9    |
-| 64  | Recording Format Flags                 | -      | -      |   -                                                                    | 1.9    |
+| 64  | Recording Format Flags                 | -      | -      |   [0] = file-M-rate, [1] = sensor-M-rate, [2] = sensor-off-speed, [3] = interlaced, [4] = windowed mode  | 1.9    |
 
 
 #### Video mode
@@ -564,6 +565,7 @@ struct scanned_device {
 
 ### Operation Mode
 
+
 #### Operation Mode and Mapping (Grouped)
 | Id   |                 name                   |  min   | max    |                                  Observations                          |
 |:----:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
@@ -573,15 +575,15 @@ struct scanned_device {
 | 242  | Camera Id Mapping 3                    | -      | -      | camera 3 and 7 Id to Map. First byte for camera 3, second byte for camera 7 |
 | 243  | Camera Id Mapping 4                    | -      | -      | camera 4 and 8 Id to Map. First byte for camera 4, second byte for camera 8 |
 
-#### Modes
+#### Mode Values
 
-1. Default. LVZ messages are formarded difrectly to SDI, no limitation on available camera numbers, no automatic resending
+- 1. Default. LVZ messages are formarded difrectly to SDI, no limitation on available camera numbers, no automatic resending
 of the parameters, the last sent parameters cannot be requested.
-2. Camera numbers 1 to 8 will be supported. Last send parameters will be maintained on memory,
+- 2. Camera numbers 1 to 8 will be supported. Last send parameters will be maintained on memory,
 they will be periodically send and they can be requested.
-3. Same as 2. But the user defines the supported 8 camera numbers
-4. same as 2. But camera numbers are allocated automatically as the commands arrive.
-255. Disables the camera communication and switches off the SDI shield 
+- 3. Same as 2. But the user defines the supported 8 camera numbers
+<!-- - 4. Same as 2. But camera numbers are allocated automatically as the commands arrive. -->
+- 255. Disables the camera communication and switches off the SDI shield 
 
 
 
