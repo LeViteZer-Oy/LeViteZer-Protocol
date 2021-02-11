@@ -326,7 +326,7 @@ Some parameters should be sent grouped in the same message always, these are ind
 | 9   | Absolute Zoom (mm)                     | 0      | 2047   | Move to specified focal in mm, from 0mm to maximum of the lens         | 0.7    |
 | 10  | Absolute Zoom (Normalized)             | 0      | 2047   | Move to specified normalised focal lenght: 0=wide, 2047=tele           | 0.8    |
 | 11  | Continous Zoom (Speed)                 | -2048  | 2047   | Start/stop zooming at specified rate: -2047=zoom wider fast, 0.0=stop, +2047=zoom tele fast| 0.9 |
-| 12  | Relative Focus                         | 0      | 2047   | Same as foucs but values are added/subsctracted (Operation=1 in BMD protocol) | 0.1    |
+| 12  | Relative Focus                         | 0      | 2047   | Same as foucs but values are added/substracted (Operation=1 in BMD protocol) | 0.1    |
 
 
 ### Color Correction
