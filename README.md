@@ -565,20 +565,21 @@ struct scanned_device {
 
 ### Operation Mode
 
-
 #### Operation Mode and Mapping (Grouped)
 | Id   |                 name                   |  min   | max    |                                  Observations                          |
 |:----:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
 | 239  | Operation Mode                         | 1      | 4      | modes 1,2,3,4 and 255, see 'Modes' below for more info                 |
-| 240  | Camera Id Mapping 1                    | -      | -      | camera 1 and 5 Id to Map. First byte for camera 1, second byte for camera 5|
-| 241  | Camera Id Mapping 2                    | -      | -      | camera 2 and 6 Id to Map. First byte for camera 2, second byte for camera 6 |
-| 242  | Camera Id Mapping 3                    | -      | -      | camera 3 and 7 Id to Map. First byte for camera 3, second byte for camera 7 |
-| 243  | Camera Id Mapping 4                    | -      | -      | camera 4 and 8 Id to Map. First byte for camera 4, second byte for camera 8 |
+| 240  | Camera Id Mapping 1                    | -      | -      | camera 1 and 5 to Map. First byte for camera 1, second byte for camera 5|
+| 241  | Camera Id Mapping 2                    | -      | -      | camera 2 and 6 to Map. First byte for camera 2, second byte for camera 6 |
+| 242  | Camera Id Mapping 3                    | -      | -      | camera 3 and 7 to Map. First byte for camera 3, second byte for camera 7 |
+| 243  | Camera Id Mapping 4                    | -      | -      | camera 4 and 8 to Map. First byte for camera 4, second byte for camera 8 |
+
+Sending this message will reset all previouly send, The message must contain the complete mapping for all cameras to be mapped when using mode 2 or mode 3.
 
 #### Mode 1
 The default Mode. The messages are forwarded difrectly to SDI, no limitation on available camera numbers, no automatic resending
 of the parameters, the last sent parameters cannot be requested.
-Only send Id 239 `Operation Mode` set to `1`. No Camera mapping is necessary.
+Only send `Operation Mode` set to `1`. No Camera mapping is necessary.
 
 #### Mode 2
 Camera numbers 1 to 8 will be supported. Last sent parameters will be maintained on memory,
@@ -589,13 +590,13 @@ Same as `Mode 2`. But the user defines the supported 8 camera numbers. Mapping o
 
 #### Mode 255 (0xFF)
 Disables the camera communication and switches off the SDI shield.
-Only send Id 239 `Operation Mode` set to `255` No Camera mapping is necessary.
+Only send `Operation Mode` set to `255` No Camera mapping is necessary.
 
 #### Mapping example
 8 cameras
 ```C++
 //camera number    1   2   3   4   5   6   7   8
-//camera ids       10, 22, 54, 34, 67, 70, 55, 45 
+//camera id        10, 22, 54, 34, 67, 70, 55, 45 
 uint16_t mapping1 = 10 | (67 << 8) // camera 1 and 5
 uint16_t mapping2 = 22 | (70 << 8) // camera 2 and 6
 uint16_t mapping3 = 54 | (55 << 8) // camera 3 and 7
@@ -604,7 +605,7 @@ uint16_t mapping4 = 34 | (45 << 8) // camera 4 and 8
 3 cameras
 ```C++
 //camera number    1   2   3 
-//camera ids       10, 22, 54
+//camera id        10, 22, 54
 uint16_t mapping1 = 10 
 uint16_t mapping2 = 22 
 uint16_t mapping3 = 54 
