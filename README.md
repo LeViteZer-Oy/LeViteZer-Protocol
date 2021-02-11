@@ -13,9 +13,9 @@ Levitezer Protocol
     + [Checksum](#checksum)
   * [Parameter Descriptions](#parameter-descriptions)
     + [Data Provided by Gimbal](#data-provided-by-gimbal)
-    + [Gimbal Control Data](#gimbal-control-data)
-    + [Black Magic Camera Data](#black-magic-camera-data)
-    + [Controller Data](#controller-data)  
+    + [Gimbal Control Parameters](#gimbal-control-parameters)
+    + [Black Magic Camera Parameters](#black-magic-camera-parameters)
+    + [Controller Parameters](#controller-parameters)  
   * [Examples](#examples)
     + [Trigger Camera Recording](#Trigger-Camera-Recording)
     + [Gimbal Joystick Control](#Gimbal-Joystick-Control)    
@@ -158,7 +158,7 @@ Sum of all bytes on the message but the `<Starting_Bytes>` using modulo 65536 op
 
 
 
-## Gimbal Control Data
+## Gimbal Control Parameters
 
 
 | Id  |                 name                   |  min   | max    |                                  Observations                          |
@@ -302,10 +302,9 @@ Longitude range is From -180 to 180 degrees
 
 -->
 
-## Black Magic Camera Data
+## Black Magic Camera Parameters
 
-Camera parameters can be set but there is no feedback of what are the current values.
-Camera parameters must be send at rates below 24 Hz. If they are sent at higher frequency for short period, they will be enqueued and eventually sent to camera, but if the queue gets full then new data will be dropped. This is because a limitation on the SDI interface.
+The following parameters controls cameras using the Blackmagic SDI and Bluetooth Camera Control Protocol. Camera parameters must be send at rates below 24 Hz. If they are sent at higher frequency for short period, they will be enqueued and eventually sent to camera, but if the queue gets full then new data will be dropped.
 
 #### Camera Ids
 Usually a BMD camera can be given an Id in the 1-99 range. This is the id that must be used on the Header "device id" field. A special case is a Bluetooth camera. Messages sent to bluetooth cameras use id 100.
@@ -611,7 +610,7 @@ uint16_t mapping4 = 0
 ```
 
 
-## Controller Data
+## Controller Parameters
 | Id  |                 name                   |  min   | max    |                                  Observations                          |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
 | 1   | CONTROL_TYPE                           |        |        |                                                                        |
