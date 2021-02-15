@@ -487,7 +487,7 @@ FPS values are from first bit to the 3rd, M-rate is the 4th bit, resolution from
 | 109  | Tally Brightness                      | 0      | 2047   |  Sets both rear and front tally                                        | 5.0    |
 | 110  | Tally Front Brightness                | 0      | 2047   |                                                                        | 5.1    |
 | 111  | Tally Rear Brightness                 | 0      | 2047   |                                                                        | 5.2    |
-| 200  | Tally Light Mode                      | 0      | 3      | 1=record, 2=preview, 3=white                                           | None   |
+| 200  | Tally Light Mode                      | 1      | 3      | 1=record, 2=preview, 3=white                                           | None   |
 
 ### Reference
 | Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
