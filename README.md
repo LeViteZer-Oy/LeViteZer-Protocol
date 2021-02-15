@@ -500,6 +500,23 @@ This is a signed integer 32 bit value separated on the two folowings IDs. It set
 | 114 | Reference Offset 1                     | -      | -      |                                                                        | 6.1    |
 | 115 | Reference Offset 2                     | -      | -      |                                                                        | 6.1    |
 
+### Configuration
+#### Real Time Clock (Grouped)
+Real Time Clock Time, it is divided between 2 Ids. Format: BCD - HHMMSSFF (UCT). <br>
+Real Time Clock Date, it is divided between 2 Ids. Format: BCD - YYYYMMDD.
+
+| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
+| 158 | Real Time Clock Time 1                 | -      | -      |                                                                        | 6.1    |
+| 159 | Real Time Clock Time 2                 | -      | -      |                                                                        | 6.1    |
+| 158 | Real Time Clock Date 1                 | -      | -      |                                                                        | 6.1    |
+| 159 | Real Time Clock Date 2                 | -      | -      |                                                                        | 6.1    |
+#### Timezone (Grouped)
+This is a signed integer 32 bit value separated on the two folowings IDs. It sets the time offset in minutes
+| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
+| 114 | Timezone 1                             | -      | -      |                                                                        | 6.1    |
+| 115 | Timezone 2                             | -      | -      |                                                                        | 6.1    |
 
 ### PTZ control
 #### Pan/Tilt (Grouped)
@@ -519,8 +536,8 @@ These parameters handle recording and playback control
 #### Codec (Grouped)
 | Id   |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
 |:----:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
-| 140  | Basic Codec                            | 0      | 2      |  1 = DNxHD, 2 = ProRes, 3 = Blackmagic RAW                             | 10.0   |
-| 141  | Codec Variant                          | 0      | 2      |  ProRes:0 = HQ, 1 = 422, 2 = LT, 3 = Proxy, 4 = 444, 5 = 444XQ <br>  Blackmagic RAW: 0 = Q0, 1 = Q5, 2 = 3:1, 3 = 5:1, 4 = 8:1, 5 = 12:1 | 10.0   |
+| 140  | Basic Codec                            | 0      | 3      |  0 = RAW, 1 = DNxHD, 2 = ProRes, 3 = Blackmagic RAW                    | 10.0   |
+| 141  | Codec Variant                          | 0      | 5      |  RAW: 0 = Uncompressed, 1 = lossy 3:1, 2 = lossy 4:1 <br> ProRes:0 = HQ, 1 = 422, 2 = LT, 3 = Proxy, 4 = 444, 5 = 444XQ <br>  Blackmagic RAW: 0 = Q0, 1 = Q5, 2 = 3:1, 3 = 5:1, 4 = 8:1, 5 = 12:1 | 10.0   |
 
 
 #### Transport (Grouped)
