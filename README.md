@@ -507,16 +507,16 @@ Real Time Clock Date, it is divided between 2 Ids. Format: BCD - YYYYMMDD.
 
 | Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
-| 158 | Real Time Clock Time 1                 | -      | -      |                                                                        | 6.1    |
-| 159 | Real Time Clock Time 2                 | -      | -      |                                                                        | 6.1    |
-| 158 | Real Time Clock Date 1                 | -      | -      |                                                                        | 6.1    |
-| 159 | Real Time Clock Date 2                 | -      | -      |                                                                        | 6.1    |
+| 158 | Real Time Clock Time 1                 | -      | -      |                                                                        | 7.0    |
+| 159 | Real Time Clock Time 2                 | -      | -      |                                                                        | 7.0    |
+| 160 | Real Time Clock Date 1                 | -      | -      |                                                                        | 7.0    |
+| 161 | Real Time Clock Date 2                 | -      | -      |                                                                        | 7.0    |
 #### Timezone (Grouped)
 This is a signed integer 32 bit value separated on the two folowings IDs. It sets the time offset in minutes
 | Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
-| 114 | Timezone 1                             | -      | -      |                                                                        | 6.1    |
-| 115 | Timezone 2                             | -      | -      |                                                                        | 6.1    |
+| 163 | Timezone 1                             | -      | -      |                                                                        | 7.2    |
+| 164 | Timezone 2                             | -      | -      |                                                                        | 7.2    |
 
 ### PTZ control
 #### Pan/Tilt (Grouped)
