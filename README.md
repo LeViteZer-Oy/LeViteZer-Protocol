@@ -109,16 +109,17 @@ Then the data field are the three bytes following bytes (note the low byte is fi
 
 ### Binary Mode
 This mode is meant to transmit data that is not convenient on the standard 16 bit parameter mode. Such as big, grouped parameters and the ones that required conversion.
-The binary Mode uses the following structure (after the header):
+The binary Mode uses the following structure after the header (every number is a byte):
 ```
 01 MM MM 02 DD DD 03 DD DD 04 DD DD 05 DD DD .... 00 CS CS
 ```
+
 each 'DD' is a byte of data. The data bytes are between a sequence of numbers as shown above. The first two bytes of data `MM MM` after `01` is a 16 bit integer Id that identifies the data like how long is it and how to interpre it. Note that the first byte of data is after `02`
 
 Note that data starts after `02` sequence number. The sequence numbers can get up to `254`. Which makes the maximum data size `2*254 = 508 bytes` 
 
 ### Checksum
-The last part of the message is the checksum, which is a 16 bit number after `00` sequence number. The checksum is calculated as a sum of all bytes on the message but the `<Starting_Bytes>` using modulo 65536 operation (0x10000).
+The last part of the message is the checksum, which is a 16 bit `CS CS` number after `00` sequence number. The checksum is calculated as a sum of all bytes on the message but the `<Starting_Bytes>` using modulo 65536 operation (0x10000).
 
 
 
