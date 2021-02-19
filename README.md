@@ -373,7 +373,7 @@ The following parameters must be send on groups
 ### Video
 | Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
-| 50  | Video Mode                             | -      | -      |   See video mode explanation below                                     | 1.0    |
+| 50  | Video Mode (Old method, deprecated)    | -      | -      |   See video mode explanation below                                     | 1.0    |
 | 51  | Sensor Gain 1                          | 1      | 16     |   values: 1(-12dB), 2(-6dB), 4(0dB), 8(6dB), 16(12dB)                  | 1.1    |
 | 53  | Exposure (us)                          | 1      | 42000  |   time in us                                                           | 1.5    |
 | 54  | Exposure (ordinal)                     | 0      | n      |   Steps through available exposure values from 0 to the maximum of the camera | 1.6 |
@@ -401,8 +401,17 @@ The following parameters must be send on groups
 | 62  | Recording Format Height                | -      | -      |   in pixels                                                            | 1.9    |
 | 63  | Recording Format Flags                 | -      | -      |   bit flags: [0] = file-M-rate, [1] = sensor-M-rate, [2] = sensor-off-speed, [3] = interlaced, [4] = windowed mode  | 1.9    |
 
+#### Video mode (Grouped)
+This is the recomended way to set the Video Mode using (130-134 Ids) as opposed to Id 50. 
+| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
+| 130 | Video Mode FPS                         |  24    | 60     |   24, 25, 30, 50, 60                                                   | 1.0    |
+| 131 | Video Mode M-Rate                      |  0     | 1      |   0 = regular, 1 = M-rate                                              | 1.0    |
+| 132 | Video Mode Dimensions                  |  0     | 6      |   0 = NTSC, 1 = PAL, 2 = 720, 3 = 1080, 4 = 2k, 5 = 2k DCI, 6 = UHD    | 1.0    |
+| 133 | Video Mode Interlaced                  |  0     | 1      |   0 = progressive, 1 = interlaced                                      | 1.0    |
+| 134 | Video Mode Color Space                 |  0     | 0      |   0 = YUV                                                              | 1.0    |
 
-#### Video mode
+#### Video mode (Old method, deprecated)
  sets resolution and framerate. all the settings are in groups of bits as show from the smallest bit:
   - 3 bits -> FPS: 0=24, 1=25, 2=30, 3=50, 4=60
   - 1 bit  -> M-Rate: 0=regular, 1=M-rate
