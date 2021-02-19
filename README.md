@@ -495,6 +495,10 @@ This is a signed integer 32 bit value separated on the two folowings IDs. It set
 | 115 | Reference Offset 2                     | -      | -      |                                                                        | 6.1    |
 
 ### Configuration
+| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
+| 162 | System Language                        | -      | -      |     ISO-639-1 two character language code                              | 7.1    |
+
 #### Real Time Clock (Grouped)
 Real Time Clock Time, it is divided between 2 Ids. Format: BCD - HHMMSSFF (UCT). <br>
 Real Time Clock Date, it is divided between 2 Ids. Format: BCD - YYYYMMDD.
@@ -511,6 +515,7 @@ This is a signed integer 32 bit value separated on the two folowings IDs. It set
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
 | 163 | Timezone 1                             | -      | -      |                                                                        | 7.2    |
 | 164 | Timezone 2                             | -      | -      |                                                                        | 7.2    |
+
 
 ### PTZ control
 #### Pan/Tilt (Grouped)
