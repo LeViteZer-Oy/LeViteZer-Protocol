@@ -386,11 +386,9 @@ The following parameters must be send on groups
 
 
 #### Exposure (us) (grouped)
-Exposure time in microseconds. 32 bit parameter divided in 2 ids
-
-Min value 1.
-
-Max value 42000.
+Exposure time in microseconds. 32 bit parameter divided in 2 ids. <br>
+Min value 1. <br>
+Max value 42000. <br>
 
 | Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
@@ -398,27 +396,27 @@ Max value 42000.
 | 136 | Exposure (us) 2                        | -      | -      |   Remaining 16 bits. Always 0                                          | 1.5    |
 
 #### Shutter Angle (grouped)
-Shutter angle in degrees, multiplied by 100. 32 bit parameter divided in 2 Ids.
-Min value 100.
-Max value 36000.
+Shutter angle in degrees, multiplied by 100. 32 bit parameter divided in 2 Ids. <br>
+Min value 100. <br>
+Max value 36000. <br>
 | Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
 | 65  | Shutter Angle 1                        | -      | -      |  First 16 bits                                                         | 1.11   |
 | 137 | Shutter Angle 2                        | -      | -      |  Remaining 16 bits. Always 0                                           | 1.11   |
 
 #### Shutter Speed (grouped)
-Value as a fraction of 1, i.g 50 for 1/50th of a second . 32 bit parameter divided in 2 ids.
-Min value 24.
-Max value 2000.
+Value as a fraction of 1, i.g 50 for 1/50th of a second . 32 bit parameter divided in 2 ids. <br>
+Min value 24. <br>
+Max value 2000. <br>
 | Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
 | 66  | Shutter Speed 1                        | -      | -      |  First 16 bits                                                         | 1.12   |
 | 138 | Shutter Speed 2                        | -      | -      |  Remaining 16 bits. Always 0                                           | 1.12   |
 
 #### ISO (grouped)
-ISO value. 32 bit parameter divided in 2 ids.
-Min value 0.
-Max value 2147483647.
+ISO value. 32 bit parameter divided in 2 ids. <br>
+Min value 0. <br>
+Max value 2147483647. <br>
 | Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
 | 68  | ISO 1                                  | -      | -      |   First 16 bits                                                        | 1.14   |
