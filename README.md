@@ -387,8 +387,11 @@ The following parameters must be send on groups
 
 #### Exposure (us) (grouped)
 Exposure time in microseconds. 32 bit parameter divided in 2 ids
+
 Min value 1.
+
 Max value 42000.
+
 | Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
 | 53  | Exposure (us) 1                        | -      | -      |   First 16 bits                                                        | 1.5    |
