@@ -375,17 +375,52 @@ The following parameters must be send on groups
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
 | 50  | Video Mode (Old method, deprecated)    | -      | -      |   See video mode explanation below                                     | 1.0    |
 | 51  | Sensor Gain 1                          | 1      | 16     |   values: 1(-12dB), 2(-6dB), 4(0dB), 8(6dB), 16(12dB)                  | 1.1    |
-| 53  | Exposure (us)                          | 1      | 42000  |   time in us                                                           | 1.5    |
 | 54  | Exposure (ordinal)                     | 0      | n      |   Steps through available exposure values from 0 to the maximum of the camera | 1.6 |
 | 55  | Dynamic Range Mode                     | 0      | 1      |   0=film, 1=video                                                      | 1.7    |
 | 56  | Video Sharpening Level                 | 0      | 3      |   0=Off, 1=Low, 2=Medium, 3=High                                       | 1.8    |
 | 57  | Auto White Balance                     | -      | -      |   Calculate and set White Balance                                      | 1.3    |
 | 58  | Auto White Balance Restore             | -      | -      |   Use latest auto white balance setting                                | 1.4    |
 | 64  | Auto Exposure                          | 0      | 3      |   0=Manual Trigger, 1=Iris, 2=Shutter, 3=Iris + Shutter, 4=Shutter + Iris | 1.10   |
-| 65  | Shutter Angle                          | 100    | 36000  |  Shutter angle in degrees, multiplied by 100                          | 1.11   |
-| 66  | Shutter Speed                          | 24     | 2000   |  Shutter speed value as a fraction of 1, so 50 for 1/50th of a second | 1.12   |
 | 67  | Sensor Gain 2                          | -128   | 127    |  Gain in decibel (dB)                                                 | 1.13   |
-| 68  | ISO                                    | 0      | 25600  |   ISO value                                                           | 1.14   |
+| 135 | ND Filter                              | 0      | 32768  |   f-stop of ND filter to use                                          | 1.16   |
+
+
+#### Exposure (us) (grouped)
+Exposure time in microseconds. 32 bit parameter divided in 2 ids
+Min value 1.
+Max value 42000.
+| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
+| 53  | Exposure (us) 1                        | -      | -      |   First 16 bits                                                        | 1.5    |
+| 136 | Exposure (us) 2                        | -      | -      |   Remaining 16 bits. Always 0                                          | 1.5    |
+
+#### Shutter Angle (grouped)
+Shutter angle in degrees, multiplied by 100. 32 bit parameter divided in 2 Ids.
+Min value 100.
+Max value 36000.
+| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
+| 65  | Shutter Angle 1                        | -      | -      |  First 16 bits                                                         | 1.11   |
+| 137 | Shutter Angle 2                        | -      | -      |  Remaining 16 bits. Always 0                                           | 1.11   |
+
+#### Shutter Speed (grouped)
+Value as a fraction of 1, i.g 50 for 1/50th of a second . 32 bit parameter divided in 2 ids.
+Min value 24.
+Max value 2000.
+| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
+| 66  | Shutter Speed 1                        | -      | -      |  First 16 bits                                                         | 1.12   |
+| 138 | Shutter Speed 2                        | -      | -      |  Remaining 16 bits. Always 0                                           | 1.12   |
+
+#### ISO (grouped)
+ISO value. 32 bit parameter divided in 2 ids.
+Min value 0.
+Max value 2147483647.
+| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
+| 68  | ISO 1                                  | -      | -      |   First 16 bits                                                        | 1.14   |
+| 139 | ISO 2                                  | -      | -      |   Remaining 16 bits                                                    | 1.14   |
+
 
 #### Manual White Balance (grouped)
 | Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
@@ -400,6 +435,13 @@ The following parameters must be send on groups
 | 61  | Recording Format Width                 | -      | -      |   in pixels                                                            | 1.9    |
 | 62  | Recording Format Height                | -      | -      |   in pixels                                                            | 1.9    |
 | 63  | Recording Format Flags                 | -      | -      |   bit flags: [0] = file-M-rate, [1] = sensor-M-rate, [2] = sensor-off-speed, [3] = interlaced, [4] = windowed mode  | 1.9    |
+
+#### Display LUT (grouped)
+Exposure time in microseconds. 32 bit parameter divided in 2 ids
+| Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
+|:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
+| 128 | Display LUT selected                   | 0      | 3      |   0 = None, 1 = Custom, 2 = film to video, 3 = fiml to extend video    | 1.15   |
+| 129 | Display LUT enabled                    | 0      | 1      |   0 = Not enabled, 1 = Enabled                                         | 1.15   |
 
 #### Video mode (Grouped)
 This is the recomended way to set the Video Mode using (130-134 Ids) as opposed to Id 50. 
@@ -477,7 +519,9 @@ FPS values are from first bit to the 3rd, M-rate is the 4th bit, resolution from
 | 90  | Display Overlay enables                | -      | -      |   0=disable, 4=zebra, 8=peaking, 61=both                               | 4.1    |
 | 91  | Zebra Level                            | 0      | 2047   |                                                                        | 4.2    |
 | 92  | Peaking Level                          | 0      | 2047   |                                                                        | 4.3    |
-| 93  | Colour Bars Display Time (seconds)     | 0      | 30     |   0=disable bars, -30=enable bars with timeout (s)                     | 4.4    |
+| 93  | Colour Bars Display Time (seconds)     | 0      | 30     |   0=disable bars, -30=enable bars with timeout (seconds)               | 4.4    |
+| 96  | Program Return Feed Enable             | 0      | 30     |   0=disable bars, -30=enable with timeout (seconds)                    | 4.6    |
+
 #### Focus Assist (Grouped)
 | Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
@@ -541,11 +585,16 @@ This is a signed integer 32 bit value separated on the two folowings IDs. It set
 ### Media
 
 These parameters handle recording and playback control
+| Id   |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
+|:----:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
+| 147  | Playback Control                       | 0      | 1      |  0 = Previous, 1 = Next                                                | 10.2   |
+| 148  | Still Capture                          | 0      | 0      |  Capture                                                               | 10.3   |
+
 #### Codec (Grouped)
 | Id   |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
 |:----:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
-| 140  | Basic Codec                            | 0      | 3      |  0 = RAW, 1 = DNxHD, 2 = ProRes, 3 = Blackmagic RAW                    | 10.0   |
-| 141  | Codec Variant                          | 0      | 5      |  RAW: 0 = Uncompressed, 1 = lossy 3:1, 2 = lossy 4:1 <br> ProRes:0 = HQ, 1 = 422, 2 = LT, 3 = Proxy, 4 = 444, 5 = 444XQ <br>  Blackmagic RAW: 0 = Q0, 1 = Q5, 2 = 3:1, 3 = 5:1, 4 = 8:1, 5 = 12:1 | 10.0   |
+| 140  | Basic Codec                            | 0      | 3      |  0 = CinemaDNG, 1 = DNxHD, 2 = ProRes, 3 = Blackmagic RAW                    | 10.0   |
+| 141  | Codec Variant                          | 0      | 5      |  CinemaDNG: 0 = Uncompressed, 1 = lossy 3:1, 2 = lossy 4:1 <br> ProRes:0 = HQ, 1 = 422, 2 = LT, 3 = Proxy, 4 = 444, 5 = 444XQ <br>  Blackmagic RAW: 0 = Q0, 1 = Q5, 2 = 3:1, 3 = 5:1, 4 = 8:1, 5 = 12:1 | 10.0   |
 
 
 #### Transport (Grouped)
