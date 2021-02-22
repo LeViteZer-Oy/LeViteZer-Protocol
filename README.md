@@ -438,7 +438,6 @@ Max value 2147483647. <br>
 | 63  | Recording Format Flags                 | -      | -      |   bit flags: [0] = file-M-rate, [1] = sensor-M-rate, [2] = sensor-off-speed, [3] = interlaced, [4] = windowed mode  | 1.9    |
 
 #### Display LUT (grouped)
-Exposure time in microseconds. 32 bit parameter divided in 2 ids
 | Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
 | 128 | Display LUT selected                   | 0      | 3      |   0 = None, 1 = Custom, 2 = film to video, 3 = fiml to extend video    | 1.15   |
@@ -545,8 +544,8 @@ FPS values are from first bit to the 3rd, M-rate is the 4th bit, resolution from
 This is a signed integer 32 bit value separated on the two folowings IDs. It sets the offset in pixels
 | Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
-| 114 | Reference Offset 1                     | -      | -      |                                                                        | 6.1    |
-| 115 | Reference Offset 2                     | -      | -      |                                                                        | 6.1    |
+| 114 | Reference Offset 1                     | -      | -      |   First 16 bits                                                        | 6.1    |
+| 115 | Reference Offset 2                     | -      | -      |   Remaining 16 bits                                                    | 6.1    |
 
 ### Configuration
 | Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
@@ -567,8 +566,8 @@ Real Time Clock Date, it is divided between 2 Ids. Format: BCD - YYYYMMDD.
 This is a signed integer 32 bit value separated on the two folowings IDs. It sets the time offset in minutes
 | Id  |                 name                   |  min   | max    |                                  Observations                          | BMD Id |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|:------:|
-| 163 | Timezone 1                             | -      | -      |                                                                        | 7.2    |
-| 164 | Timezone 2                             | -      | -      |                                                                        | 7.2    |
+| 163 | Timezone 1                             | -      | -      |   First 16 bits                                                        | 7.2    |
+| 164 | Timezone 2                             | -      | -      |   Remaining 16 bits                                                    | 7.2    |
 
 
 ### PTZ control
