@@ -72,7 +72,7 @@ Header is the firs 6 bytes of the message and it tells "who" sent this message (
  * Device_Type: it can be one of the following:
  
 |            Type Name                                                         | Type  |
-|------------------------------------------------------------------------------|-------| 
+|------------------------------------------------------------------------------|:-----:| 
 | Gimbal - BaseCam Serial API v2                                               |   1   |
 | Camera - Blackmagic SDI and Bluetooth Camera Control Protocol v1.3           |   2   |
 | Controller  (i.g. Joysticks)                                                 |   3   |
