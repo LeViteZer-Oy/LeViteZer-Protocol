@@ -15,6 +15,7 @@ Levitezer Protocol
     + [Data Provided by Gimbal](#data-provided-by-gimbal)
     + [Gimbal Control Parameters](#gimbal-control-parameters)
     + [Black Magic Camera Parameters](#black-magic-camera-parameters)
+    + [Black Magic Camera Parameters New](#black-magic-camera-parameters-new)
     + [Controller Parameters](#controller-parameters)  
   * [Examples](#examples)
     + [Trigger Camera Recording](#Trigger-Camera-Recording)
@@ -682,6 +683,111 @@ uint16_t mapping2 = 22
 uint16_t mapping3 = 54 
 uint16_t mapping4 = 0 
 ```
+
+
+## Black Magic Camera Parameters New
+The following parameters controls cameras using the Blackmagic SDI and Bluetooth Camera Control Protocol.
+Most parameters are sent as 16 bits. bigger than 16 bits parameters use a byte delimiter '254' (0xFE) between every 16 bits of data. For example, consider each 'XX' is a byte of arbitrary data.
+```
+   ID       ID                                  ID       ID
+...11 XX XX 0A XX XX FE XX XX FE XX XX FE XX XX 10 XX XX A3 XX XX ...
+```
+#### 16 bit parameter example
+```C
+int16_t focus = 1000; 
+uint8_t msg[100];
+int i = 0;
+// header here
+msg[5] = 2 // focus ID
+msg[6] = focus & 0xff;
+msg[7] = focus >> 8;
+// end of message here
+```
+
+#### 32 bit parameter example
+```C
+int32_t iso = 25600; 
+uint8_t msg[100];
+
+// header here
+msg[5 ] = 64 // ID
+msg[6 ] = (iso >> 0) & 0xff;
+msg[7 ] = (iso >> 8) & 0xff;
+msg[8 ] = 254;
+msg[9 ] = (iso >> 16) & 0xff;
+msg[10] = (iso >> 24) & 0xff;
+// end of message here
+```
+
+#### 64 bit parameter example
+```C
+int32_t latitude = 6012839123383242; 
+uint8_t msg[];
+
+// header here
+msg[5 ] = 64 // ID
+msg[6 ] = (latitude >> 0) & 0xff;
+msg[7 ] = (latitude >> 8) & 0xff;
+msg[8 ] = 254;
+msg[9 ] = (latitude >> 16) & 0xff;
+msg[10] = (latitude >> 24) & 0xff;
+msg[11] = 254;
+msg[12] = (latitude >> 32) & 0xff;
+msg[13] = (latitude >> 40) & 0xff;
+msg[14] = 254;
+msg[15] = (latitude >> 48) & 0xff;
+msg[16] = (latitude >> 56) & 0xff;
+// end of message here
+```
+
+#### group parameter example
+```C
+int16_t red = 1000; 
+int16_t grn = 1000; 
+int16_t blu = 1000; 
+int16_t lum = 1000; 
+uint8_t msg[100];
+
+// header here
+msg[5 ] = 64 // ID
+msg[6 ] = (red >> 0) & 0xff;
+msg[7 ] = (red >> 8) & 0xff;
+msg[8 ] = 254;
+msg[9 ] = (grn >> 0) & 0xff;
+msg[10] = (grn >> 8) & 0xff;
+msg[11] = 254;
+msg[12] = (blu >> 0) & 0xff;
+msg[13] = (blu >> 8) & 0xff;
+msg[14] = 254;
+msg[15] = (lum >> 0) & 0xff;
+msg[16] = (lum >> 8) & 0xff;
+// end of message here
+```
+
+
+#### UTF-8 string example
+```C
+uint8_t msg[100];
+// header here
+msg[5 ] = 122 // ID
+msg[6 ] = 'h';
+msg[7 ] = 'e';
+msg[7 ] = 254; 
+msg[8 ] = 'l';
+msg[9 ] = 'l';
+msg[7 ] = 254; 
+msg[10] = 'o';
+msg[11] = 0;
+// add zeros until you reach the maximum string size for this parameter
+// end of message here
+
+```
+
+#### Camera Ids
+Usually a BMD camera can be given an Id in the 1-99 range. This is the id that must be used on the Header "device id" field. A special case is a Bluetooth camera. Messages sent to bluetooth cameras use id 100.
+
+
+
 
 
 ## Controller Parameters
