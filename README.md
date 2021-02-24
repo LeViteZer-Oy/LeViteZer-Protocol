@@ -695,15 +695,15 @@ Most parameters are sent as 16 bits. bigger than 16 bits parameters use a byte d
    ID       ID                                  ID       ID
 ...11 XX XX 0A XX XX FE XX XX FE XX XX FE XX XX 10 XX XX A3 XX XX ...
 ```
-#### 16 bit parameter example
+#### 16 bit or smaller parameter example
 ```C
 int16_t focus = 1000; 
 uint8_t msg[100];
 int i = 0;
 // header here
 msg[5] = 2 // focus ID
-msg[6] = focus & 0xff;
-msg[7] = focus >> 8;
+msg[6] = (focus >> 0) & 0xff;
+msg[7] = (focus >> 8) & 0xff;
 // end of message here
 ```
 
@@ -743,7 +743,7 @@ msg[16] = (latitude >> 56) & 0xff;
 // end of message here
 ```
 
-#### group parameter example
+#### group parameter example: Lift Ajust
 ```C
 int16_t red = 1000; 
 int16_t grn = 1000; 
@@ -764,6 +764,33 @@ msg[13] = (blu >> 8) & 0xff;
 msg[14] = 254;
 msg[15] = (lum >> 0) & 0xff;
 msg[16] = (lum >> 8) & 0xff;
+// end of message here
+```
+#### group parameter example: Video Mode
+```C
+int16_t fps = 60; 
+int16_t mRate = 1; 
+int16_t dimensions = 3; 
+int16_t inter = 0; 
+int16_t colorspace = 0; 
+uint8_t msg[100];
+
+// header here
+msg[5 ] = 64 // ID
+msg[6 ] = (fps        >> 0) & 0xff;
+msg[7 ] = (fps        >> 8) & 0xff;
+msg[8 ] = 254;
+msg[9 ] = (mRate      >> 0) & 0xff;
+msg[10] = (mRate      >> 8) & 0xff;
+msg[11] = 254;
+msg[12] = (dimensions >> 0) & 0xff;
+msg[13] = (dimensions >> 8) & 0xff;
+msg[14] = 254;
+msg[15] = (inter      >> 0) & 0xff;
+msg[17] = (inter      >> 8) & 0xff;
+msg[18] = 254;
+msg[19] = (colorspace >> 0) & 0xff;
+msg[20] = (colorspace >> 8) & 0xff;
 // end of message here
 ```
 
