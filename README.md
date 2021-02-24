@@ -721,8 +721,66 @@ msg[9 ] = (iso >> 16) & 0xff;
 msg[10] = (iso >> 24) & 0xff; //Highest byte
 // end of message here
 ```
+#### 16 bit Group Parameter Example: Video Mode
+Video Mode has 5 parameters that must be sent at once: fps, m-rate, dimensions, interlaced and colorspace
+```C
+int16_t fps = 60; 
+int16_t mRate = 1; 
+int16_t dimensions = 3; 
+int16_t inter = 0; 
+int16_t colorspace = 0; 
+uint8_t msg[100];
 
-#### 64 bit parameter example: Location
+// header here
+msg[5 ] = 30 // ID
+msg[6 ] = (fps        >> 0) & 0xff; //Lowest byte
+msg[7 ] = (fps        >> 8) & 0xff; //Highest byte
+msg[8 ] = 254;
+msg[9 ] = (mRate      >> 0) & 0xff; //Lowest byte
+msg[10] = (mRate      >> 8) & 0xff; //Highest byte
+msg[11] = 254;
+msg[12] = (dimensions >> 0) & 0xff; //Lowest byte
+msg[13] = (dimensions >> 8) & 0xff; //Highest byte
+msg[14] = 254;
+msg[15] = (inter      >> 0) & 0xff; //Lowest byte
+msg[17] = (inter      >> 8) & 0xff; //Highest byte
+msg[18] = 254;
+msg[19] = (colorspace >> 0) & 0xff; //Lowest byte
+msg[20] = (colorspace >> 8) & 0xff; //Highest byte
+// end of message here
+```
+#### 16 bit Group Parameter Example: Lift Ajust
+Lift Adjust has 4 subparameters that must be sent at once: red, green, blue and luma
+```C
+const int fix16_unit = 2048;
+float f_red = 0.5; 
+float f_grn = -0.5; 
+float f_blu = 1.0; 
+float f_lum = 0;
+// convert from float to int16
+int16_t red = round(f_red * fix16_unit); 
+int16_t grn = round(f_grn * fix16_unit); 
+int16_t blu = round(f_blu * fix16_unit); 
+int16_t lum = round(f_lum * fix16_unit); 
+uint8_t msg[100];
+
+// header here
+msg[5 ] = 140 // ID
+msg[6 ] = (red >> 0) & 0xff; //Lowest byte
+msg[7 ] = (red >> 8) & 0xff; //Highest byte
+msg[8 ] = 254;
+msg[9 ] = (grn >> 0) & 0xff; //Lowest byte
+msg[10] = (grn >> 8) & 0xff; //Highest byte
+msg[11] = 254;
+msg[12] = (blu >> 0) & 0xff; //Lowest byte
+msg[13] = (blu >> 8) & 0xff; //Highest byte
+msg[14] = 254;
+msg[15] = (lum >> 0) & 0xff; //Lowest byte
+msg[16] = (lum >> 8) & 0xff; //Highest byte
+// end of message here
+```
+
+#### 64 bit Group Parameter Example: Location
 Location has 2 subparameters that must be sent at once: latitude and longitude
 ```C
 int64_t latitude = 6012839123383242; 
@@ -757,72 +815,14 @@ msg[28] = (longitude >> 56) & 0xff; //Highest byte
 // end of message here
 ```
 
-#### group parameter example: Lift Ajust
-Lift Adjust has 4 subparameters that must be sent at once: red, green, blue and luma
-```C
-const int fix16_unit = 2048;
-float f_red = 0.5; 
-float f_grn = -0.5; 
-float f_blu = 1.0; 
-float f_lum = 0;
-// convert from float to int16
-int16_t red = round(f_red * fix16_unit); 
-int16_t grn = round(f_grn * fix16_unit); 
-int16_t blu = round(f_blu * fix16_unit); 
-int16_t lum = round(f_lum * fix16_unit); 
-uint8_t msg[100];
 
-// header here
-msg[5 ] = 140 // ID
-msg[6 ] = (red >> 0) & 0xff; //Lowest byte
-msg[7 ] = (red >> 8) & 0xff; //Highest byte
-msg[8 ] = 254;
-msg[9 ] = (grn >> 0) & 0xff; //Lowest byte
-msg[10] = (grn >> 8) & 0xff; //Highest byte
-msg[11] = 254;
-msg[12] = (blu >> 0) & 0xff; //Lowest byte
-msg[13] = (blu >> 8) & 0xff; //Highest byte
-msg[14] = 254;
-msg[15] = (lum >> 0) & 0xff; //Lowest byte
-msg[16] = (lum >> 8) & 0xff; //Highest byte
-// end of message here
-```
-#### group parameter example: Video Mode
-Video Mode has 5 parameters that must be sent at once: fps, m-rate, dimensions, interlaced and colorspace
-```C
-int16_t fps = 60; 
-int16_t mRate = 1; 
-int16_t dimensions = 3; 
-int16_t inter = 0; 
-int16_t colorspace = 0; 
-uint8_t msg[100];
-
-// header here
-msg[5 ] = 30 // ID
-msg[6 ] = (fps        >> 0) & 0xff; //Lowest byte
-msg[7 ] = (fps        >> 8) & 0xff; //Highest byte
-msg[8 ] = 254;
-msg[9 ] = (mRate      >> 0) & 0xff; //Lowest byte
-msg[10] = (mRate      >> 8) & 0xff; //Highest byte
-msg[11] = 254;
-msg[12] = (dimensions >> 0) & 0xff; //Lowest byte
-msg[13] = (dimensions >> 8) & 0xff; //Highest byte
-msg[14] = 254;
-msg[15] = (inter      >> 0) & 0xff; //Lowest byte
-msg[17] = (inter      >> 8) & 0xff; //Highest byte
-msg[18] = 254;
-msg[19] = (colorspace >> 0) & 0xff; //Lowest byte
-msg[20] = (colorspace >> 8) & 0xff; //Highest byte
-// end of message here
-```
-
-
-#### UTF-8 string example: Project Name
+#### UTF-8 String Example: Project Name
+This message will set Project Name to "Hello".
 ```C
 uint8_t msg[100];
 // header here
 msg[5 ] = 208 // ID
-msg[6 ] = 'h';
+msg[6 ] = 'H';
 msg[7 ] = 'e';
 msg[7 ] = 254; 
 msg[8 ] = 'l';
