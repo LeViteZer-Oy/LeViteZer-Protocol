@@ -758,10 +758,16 @@ msg[28] = (longitude >> 56) & 0xff;
 
 #### group parameter example: Lift Ajust
 ```C
-int16_t red = 1000; 
-int16_t grn = 1000; 
-int16_t blu = 1000; 
-int16_t lum = 1000; 
+const int fix16_unit = 2048;
+float f_red = 0.5; 
+float f_grn = -0.5; 
+float f_blu = 1.0; 
+float f_lum = 0;
+// convert from float to int16
+int16_t red = round(f_red * fix16_unit); 
+int16_t grn = round(f_grn * fix16_unit); 
+int16_t blu = round(f_blu * fix16_unit); 
+int16_t lum = round(f_lum * fix16_unit); 
 uint8_t msg[100];
 
 // header here
