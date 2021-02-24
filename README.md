@@ -695,34 +695,35 @@ Most parameters are sent as 16 bits. bigger than 16 bits parameters use a byte d
    ID       ID                                  ID       ID
 ...11 XX XX 0A XX XX FE XX XX FE XX XX FE XX XX 10 XX XX A3 XX XX ...
 ```
-#### 16 bit or smaller parameter example
+#### 16 bit (or smaller) parameter example: Focus
 ```C
 int16_t focus = 1000; 
 uint8_t msg[100];
 int i = 0;
 // header here
-msg[5] = 1 // focus ID
-msg[6] = (focus >> 0) & 0xff;
-msg[7] = (focus >> 8) & 0xff;
+msg[5] = 1 // ID
+msg[6] = (focus >> 0) & 0xff; //Lowest byte
+msg[7] = (focus >> 8) & 0xff; //Highest byte
 // end of message here
 ```
 
-#### 32 bit parameter example
+#### 32 bit parameter example: ISO
 ```C
 int32_t iso = 25600; 
 uint8_t msg[100];
 
 // header here
 msg[5 ] = 44 // ID
-msg[6 ] = (iso >> 0) & 0xff;
-msg[7 ] = (iso >> 8) & 0xff;
+msg[6 ] = (iso >> 0) & 0xff; //Lowest byte
+msg[7 ] = (iso >> 8) & 0xff; 
 msg[8 ] = 254;
 msg[9 ] = (iso >> 16) & 0xff;
-msg[10] = (iso >> 24) & 0xff;
+msg[10] = (iso >> 24) & 0xff; //Highest byte
 // end of message here
 ```
 
 #### 64 bit parameter example: Location
+Location has 2 subparameters that must be sent at once: latitude and longitude
 ```C
 int64_t latitude = 6012839123383242; 
 int64_t longitude = 5012839123383242; 
@@ -730,19 +731,19 @@ uint8_t msg[];
 
 // header here
 msg[5 ] = 133 // ID
-msg[6 ] = (latitude >> 0) & 0xff;
-msg[7 ] = (latitude >> 8) & 0xff;
+msg[6 ] = (latitude  >> 0) & 0xff; //Lowest byte
+msg[7 ] = (latitude  >> 8) & 0xff;
 msg[8 ] = 254;
-msg[9 ] = (latitude >> 16) & 0xff;
-msg[10] = (latitude >> 24) & 0xff;
+msg[9 ] = (latitude  >> 16) & 0xff;
+msg[10] = (latitude  >> 24) & 0xff;
 msg[11] = 254;
-msg[12] = (latitude >> 32) & 0xff;
-msg[13] = (latitude >> 40) & 0xff;
+msg[12] = (latitude  >> 32) & 0xff;
+msg[13] = (latitude  >> 40) & 0xff;
 msg[14] = 254;
-msg[15] = (latitude >> 48) & 0xff;
-msg[16] = (latitude >> 56) & 0xff;
+msg[15] = (latitude  >> 48) & 0xff;
+msg[16] = (latitude  >> 56) & 0xff; //Highest byte
 msg[17] = 254;
-msg[18] = (longitude >> 0) & 0xff;
+msg[18] = (longitude >> 0) & 0xff;  //Lowest byte
 msg[19] = (longitude >> 8) & 0xff;
 msg[20] = 254;
 msg[21] = (longitude >> 16) & 0xff;
@@ -752,11 +753,12 @@ msg[24] = (longitude >> 32) & 0xff;
 msg[25] = (longitude >> 40) & 0xff;
 msg[26] = 254;
 msg[27] = (longitude >> 48) & 0xff;
-msg[28] = (longitude >> 56) & 0xff;
+msg[28] = (longitude >> 56) & 0xff; //Highest byte
 // end of message here
 ```
 
 #### group parameter example: Lift Ajust
+Lift Adjust has 4 subparameters that must be sent at once: red, green, blue and luma
 ```C
 const int fix16_unit = 2048;
 float f_red = 0.5; 
@@ -772,20 +774,21 @@ uint8_t msg[100];
 
 // header here
 msg[5 ] = 140 // ID
-msg[6 ] = (red >> 0) & 0xff;
-msg[7 ] = (red >> 8) & 0xff;
+msg[6 ] = (red >> 0) & 0xff; //Lowest byte
+msg[7 ] = (red >> 8) & 0xff; //Highest byte
 msg[8 ] = 254;
-msg[9 ] = (grn >> 0) & 0xff;
-msg[10] = (grn >> 8) & 0xff;
+msg[9 ] = (grn >> 0) & 0xff; //Lowest byte
+msg[10] = (grn >> 8) & 0xff; //Highest byte
 msg[11] = 254;
-msg[12] = (blu >> 0) & 0xff;
-msg[13] = (blu >> 8) & 0xff;
+msg[12] = (blu >> 0) & 0xff; //Lowest byte
+msg[13] = (blu >> 8) & 0xff; //Highest byte
 msg[14] = 254;
-msg[15] = (lum >> 0) & 0xff;
-msg[16] = (lum >> 8) & 0xff;
+msg[15] = (lum >> 0) & 0xff; //Lowest byte
+msg[16] = (lum >> 8) & 0xff; //Highest byte
 // end of message here
 ```
 #### group parameter example: Video Mode
+Video Mode has 5 parameters that must be sent at once: fps, m-rate, dimensions, interlaced and colorspace
 ```C
 int16_t fps = 60; 
 int16_t mRate = 1; 
@@ -796,25 +799,25 @@ uint8_t msg[100];
 
 // header here
 msg[5 ] = 30 // ID
-msg[6 ] = (fps        >> 0) & 0xff;
-msg[7 ] = (fps        >> 8) & 0xff;
+msg[6 ] = (fps        >> 0) & 0xff; //Lowest byte
+msg[7 ] = (fps        >> 8) & 0xff; //Highest byte
 msg[8 ] = 254;
-msg[9 ] = (mRate      >> 0) & 0xff;
-msg[10] = (mRate      >> 8) & 0xff;
+msg[9 ] = (mRate      >> 0) & 0xff; //Lowest byte
+msg[10] = (mRate      >> 8) & 0xff; //Highest byte
 msg[11] = 254;
-msg[12] = (dimensions >> 0) & 0xff;
-msg[13] = (dimensions >> 8) & 0xff;
+msg[12] = (dimensions >> 0) & 0xff; //Lowest byte
+msg[13] = (dimensions >> 8) & 0xff; //Highest byte
 msg[14] = 254;
-msg[15] = (inter      >> 0) & 0xff;
-msg[17] = (inter      >> 8) & 0xff;
+msg[15] = (inter      >> 0) & 0xff; //Lowest byte
+msg[17] = (inter      >> 8) & 0xff; //Highest byte
 msg[18] = 254;
-msg[19] = (colorspace >> 0) & 0xff;
-msg[20] = (colorspace >> 8) & 0xff;
+msg[19] = (colorspace >> 0) & 0xff; //Lowest byte
+msg[20] = (colorspace >> 8) & 0xff; //Highest byte
 // end of message here
 ```
 
 
-#### UTF-8 string example, Project Name
+#### UTF-8 string example: Project Name
 ```C
 uint8_t msg[100];
 // header here
