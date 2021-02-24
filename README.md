@@ -722,7 +722,7 @@ msg[10] = (iso >> 24) & 0xff; //Highest byte
 // end of message here
 ```
 #### 16 bit Group Parameter Example: Video Mode
-Video Mode has 5 parameters that must be sent at once: fps, m-rate, dimensions, interlaced and colorspace
+Video Mode has 5 subparameters that must be sent at once: fps, m-rate, dimensions, interlaced and colorspace
 ```C
 int16_t fps = 60; 
 int16_t mRate = 1; 
