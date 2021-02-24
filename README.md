@@ -701,7 +701,7 @@ int16_t focus = 1000;
 uint8_t msg[100];
 int i = 0;
 // header here
-msg[5] = 2 // focus ID
+msg[5] = 1 // focus ID
 msg[6] = (focus >> 0) & 0xff;
 msg[7] = (focus >> 8) & 0xff;
 // end of message here
@@ -713,7 +713,7 @@ int32_t iso = 25600;
 uint8_t msg[100];
 
 // header here
-msg[5 ] = 64 // ID
+msg[5 ] = 44 // ID
 msg[6 ] = (iso >> 0) & 0xff;
 msg[7 ] = (iso >> 8) & 0xff;
 msg[8 ] = 254;
@@ -722,13 +722,14 @@ msg[10] = (iso >> 24) & 0xff;
 // end of message here
 ```
 
-#### 64 bit parameter example
+#### 64 bit parameter example: Location
 ```C
-int32_t latitude = 6012839123383242; 
+int64_t latitude = 6012839123383242; 
+int64_t longitude = 5012839123383242; 
 uint8_t msg[];
 
 // header here
-msg[5 ] = 64 // ID
+msg[5 ] = 133 // ID
 msg[6 ] = (latitude >> 0) & 0xff;
 msg[7 ] = (latitude >> 8) & 0xff;
 msg[8 ] = 254;
@@ -740,6 +741,18 @@ msg[13] = (latitude >> 40) & 0xff;
 msg[14] = 254;
 msg[15] = (latitude >> 48) & 0xff;
 msg[16] = (latitude >> 56) & 0xff;
+msg[17] = 254;
+msg[18] = (longitude >> 0) & 0xff;
+msg[19] = (longitude >> 8) & 0xff;
+msg[20] = 254;
+msg[21] = (longitude >> 16) & 0xff;
+msg[22] = (longitude >> 24) & 0xff;
+msg[23] = 254;
+msg[24] = (longitude >> 32) & 0xff;
+msg[25] = (longitude >> 40) & 0xff;
+msg[26] = 254;
+msg[27] = (longitude >> 48) & 0xff;
+msg[28] = (longitude >> 56) & 0xff;
 // end of message here
 ```
 
@@ -752,7 +765,7 @@ int16_t lum = 1000;
 uint8_t msg[100];
 
 // header here
-msg[5 ] = 64 // ID
+msg[5 ] = 140 // ID
 msg[6 ] = (red >> 0) & 0xff;
 msg[7 ] = (red >> 8) & 0xff;
 msg[8 ] = 254;
@@ -776,7 +789,7 @@ int16_t colorspace = 0;
 uint8_t msg[100];
 
 // header here
-msg[5 ] = 64 // ID
+msg[5 ] = 30 // ID
 msg[6 ] = (fps        >> 0) & 0xff;
 msg[7 ] = (fps        >> 8) & 0xff;
 msg[8 ] = 254;
@@ -795,11 +808,11 @@ msg[20] = (colorspace >> 8) & 0xff;
 ```
 
 
-#### UTF-8 string example
+#### UTF-8 string example, Project Name
 ```C
 uint8_t msg[100];
 // header here
-msg[5 ] = 122 // ID
+msg[5 ] = 208 // ID
 msg[6 ] = 'h';
 msg[7 ] = 'e';
 msg[7 ] = 254; 
