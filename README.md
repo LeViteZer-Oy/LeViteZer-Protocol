@@ -72,13 +72,16 @@ Header is the firs 6 bytes of the message and it tells "who" sent this message (
 
  * Device_Type: it can be one of the following:
  
-|            Type Name                                                 | Type|
-|:--------------------------------------------------------------------:|:---:| 
-| Gimbal - BaseCam Serial API v2                                       |  1  |
-| Camera - Blackmagic SDI and Bluetooth Camera Control Protocol v1.3   |  2  |
-| Controller  (i.g. Joysticks)                                         |  3  |
-| Levitezer Lens Control                                               |  4  |
-| Box (like eeprom varialbes)                                          | 254 |
+|            Type Name                                                         | Type  |
+|------------------------------------------------------------------------------|:-----:| 
+| Gimbal - BaseCam Serial API v2                                               |   1   |
+| Camera - Blackmagic SDI and Bluetooth Camera Control Protocol v1.3           |   2   |
+| Controller  (i.g. Joysticks)                                                 |   3   |
+| Levitezer Lens Control                                                       |   4   |
+| Reserverd                                                                    |  5-9  |
+| Camera - Blackmagic SDI and Bluetooth Camera Control Protocol v1.5 (new)     |  10   |
+| Reserved (Cameras)                                                           | 11-39 |
+| Box (like eeprom varialbes)                                                  |  254  |
  
 Every device has its own set of parameters which is up to 254 parameters.
 
