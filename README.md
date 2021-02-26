@@ -817,20 +817,55 @@ msg[28] = (longitude >> 56) & 0xff; //Highest byte
 
 
 #### UTF-8 String Example: Project Name
-This message will set Project Name to "Hello".
+This message will set Project Name to "LEVITEZER". Project Name can have up to 29 characters.
 ```C
 uint8_t msg[100];
 // header here
 msg[5 ] = 208 // ID
-msg[6 ] = 'H';
-msg[7 ] = 'e';
-msg[7 ] = 254; 
-msg[8 ] = 'l';
-msg[9 ] = 'l';
-msg[7 ] = 254; 
-msg[10] = 'o';
-msg[11] = 0;
-// add zeros until you reach the maximum string size for this parameter
+msg[6 ] = 'L'; // first char
+msg[7 ] = 'E';
+msg[8 ] = 254; 
+msg[9 ] = 'V';
+msg[10] = 'I';
+msg[11] = 254; 
+msg[12] = 'T';
+msg[13] = 'E';
+msg[14] = 254; 
+msg[15] = 'Z';
+msg[16] = 'E';
+msg[17] = 254; 
+msg[18] = 'R'; // last char of the new name, the rest should be zeros
+msg[19] = 0
+msg[20] = 254; 
+msg[21] = 0
+msg[22] = 0
+msg[23] = 254; 
+msg[24] = 0
+msg[25] = 0
+msg[26] = 254; 
+msg[27] = 0
+msg[28] = 0
+msg[29] = 254; 
+msg[30] = 0
+msg[31] = 0
+msg[32] = 254; 
+msg[33] = 0
+msg[34] = 0
+msg[35] = 254; 
+msg[36] = 0
+msg[37] = 0
+msg[38] = 254; 
+msg[39] = 0
+msg[40] = 0
+msg[41] = 254; 
+msg[42] = 0
+msg[43] = 0
+msg[44] = 254; 
+msg[45] = 0
+msg[46] = 0
+msg[47] = 254; 
+msg[48] = 0; // 29th char 
+msg[49] = 0; // extra char to keep the message structure even
 // end of message here
 
 ```
