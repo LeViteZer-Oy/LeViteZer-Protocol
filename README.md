@@ -178,7 +178,6 @@ The last part of the message is the checksum, which is a 16 bit `CS CS` number a
 | 23  | ROLL_OFFSET                            | -32768 |  32767 | Offsets the specified amount to the the axis                           |
 | 24  | PITCH_OFFSET                           | -32768 |  32767 | //                                                                       |
 | 25  | YAW_OFFSET                             | -32768 |  32767 | //                                                                       |
-
 | 26  | ROLL_JOY_OFFSET                        | -32768 |  32767 |  offset for joystick                                                   | 
 | 27  | PITCH_JOY_OFFSET                       | -32768 |  32767 |  offset for joystick                                                   | 
 | 28  | YAW_JOY_OFFSET                         | -32768 |  32767 |  offset for joystick                                                   | 
