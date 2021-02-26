@@ -178,6 +178,21 @@ The last part of the message is the checksum, which is a 16 bit `CS CS` number a
 | 23  | ROLL_OFFSET                            | -32768 |  32767 | Offsets the specified amount to the the axis                           |
 | 24  | PITCH_OFFSET                           | -32768 |  32767 | //                                                                       |
 | 25  | YAW_OFFSET                             | -32768 |  32767 | //                                                                       |
+
+| 26  | ROLL_JOY_OFFSET                        | -32768 |  32767 |  offset for joystick                                                   | 
+| 27  | PITCH_JOY_OFFSET                       | -32768 |  32767 |  offset for joystick                                                   | 
+| 28  | YAW_JOY_OFFSET                         | -32768 |  32767 |  offset for joystick                                                   | 
+| 29  | CALIBRATION OFFSET                     | 1      |  3     |  Calibrate offset on specific axis, 1=roll, 2=pitch, 3=yaw             | 
+| 32  | GIMBAL MODE                            | 0      | 2      |  0 = Fixed to frame, 1 = Geopoint, 2 = free                            |
+| 33  | FIX HEADING DRIFTING                   | -      | -      |                              |
+| 34  | UNTWIST CABLES                         | -      | -      |                           |
+| 40  | LOAD GIMBAL PROFILE                    | 1      | 5      |                             |
+| 41  | SAVE GIMBAL PROFILE                    | 1      | 5      |                            |
+| 42  | CLEAR GIMBAL PROFILE                   | 1      | 5      |                                |
+| 43  | RESET GIMBAL                           | -      | -      |                              |
+| 44  | SWITCH MOTORS OFF/ON  (TOGGLE)         | -      | -      |                              |
+| 38  | SAVE ADJUSTABLE VARIABLES              | -      | -      |                              |
+| 39  | REQUEST ADJUSTABLE VARIBLES            | -      | -      |                              |
 <!---| 60  | GIMBAL_LAT0                            | 0      | 65536  | See [Gimbal Geo Point control](#Gimbal-Geo-Point-control)              |
 | 61  | GIMBAL_LAT1                            | 0      | 65536  | //                                                                     |
 | 62  | GIMBAL_LON0                            | 0      | 65536  | //                                                                     |
