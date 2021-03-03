@@ -181,7 +181,7 @@ The last part of the message is the checksum, which is a 16 bit `CS CS` number a
 | 26  | ROLL_JOY_OFFSET                        | -32768 |  32767 |  offset for joystick                                                   | 
 | 27  | PITCH_JOY_OFFSET                       | -32768 |  32767 |  offset for joystick                                                   | 
 | 28  | YAW_JOY_OFFSET                         | -32768 |  32767 |  offset for joystick                                                   | 
-| 29  | CALIBRATION OFFSET                     | 1      |  3     |  Calibrate offset on specific axis, 1=roll, 2=pitch, 3=yaw             | 
+| 29  | CALIBRATION OFFSET                     | 1      |  3     |  Calibrate offset on specific axis, 0=all, 1=roll, 2=pitch, 3=yaw      | 
 | 32  | GIMBAL MODE                            | 0      | 2      |  0 = Fixed to frame, 1 = Geopoint, 2 = free                            |
 | 33  | FIX HEADING DRIFTING                   | -      | -      |                              |
 | 34  | UNTWIST CABLES                         | -      | -      |                           |
