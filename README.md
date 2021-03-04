@@ -21,6 +21,7 @@ Levitezer Protocol
     + [Trigger Camera Recording](#Trigger-Camera-Recording)
     + [Gimbal Joystick Control](#Gimbal-Joystick-Control)    
     + [Gimbal Angle Control](#Gimbal-Angle-Control)
+    + [Moving Gimbal on Geopoint mode (C/C++)](#Moving-Gimbal-on-Geopoint-mode)
 
 # Message Structure
 Any message between two systems is compound of 
