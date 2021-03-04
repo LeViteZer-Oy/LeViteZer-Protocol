@@ -1144,9 +1144,10 @@ sock.sendto(getAngleMessage(270), (UDP_IP, UDP_PORT))
 ```
 
 ## Moving Gimbal on Geopoint mode
-This is not a functional example. But just an example of how moving the gimbal on Geopoint mode is done.language is C.
+This is not a functional example. But just an example of how moving the gimbal on Geopoint mode is done. Language is C.
 
-There are 8 commands to be send, the device type is Controller (id 3) not Gimbal (id 1)
+There are 8 commands to be send defined below, the device type to use when sending the message is Controller (id 3) not Gimbal (id 1). The device id can be anything in (1-253)
+`joystic_x_input_here` and `joystic_y_input_here` are your inputs
 ```C
 // commands
 int JOYSTICK_TYPE          = 1;
@@ -1170,14 +1171,15 @@ uint8_t levitezer_counter;
 uint8_t messageOut[700];
 double delta_yaw = 0;
 double delta_pitch = 0;
+// Note:  micros() is function that returs time since boot in microseconds
 
 while(true){
 // the following happens every 10 ms
     if(micros() - mainTimer > 10000){
-        yawSpeed =   ((joystic_x_input_here));    // from -32767 to -32768
-        pitchSpeed = ((joystic_y_input_here));    // from -32767 to -32768
+        yawSpeed =   ((joystic_x_input_here));    // from -32767 to 32768
+        pitchSpeed = ((joystic_y_input_here));    // from -32767 to 32768
 
-        /* Angle calculation. micros() is function that returs time since boot in microseconds */
+        /* Angle and time calculation */
         sampleTime = micros() - startingSampleTime;
         //               speed         time(microsec)                speed unit
         delta_yaw =   yawSpeed * (sampleTime/1000000.0) * 0.1220740379 ;
