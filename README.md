@@ -1140,5 +1140,53 @@ sock.sendto(getAngleMessage(180), (UDP_IP, UDP_PORT))
 # move to 270
 time.sleep(2)
 sock.sendto(getAngleMessage(270), (UDP_IP, UDP_PORT))
+```
 
+## Moving Gimbal on Geopoint mode (C/C++)
+```C
+// variables
+int JOYSTICK_TYPE          = 1;
+int JOYSTICK0_X            = 2;
+int JOYSTICK0_Y            = 3;
+int JPITCH                 = 31;
+int JYAW                   = 32;
+int JDELTA_PITCH           = 34;
+int JDELTA_YAW             = 35;
+int JDELTA_TIME            = 36;
+int CONTROLLER_TYPE = 3
+double yaw = 0;
+double pitch = 0;
+double roll = 0;
+uint32_t sampleTime = 0;
+uint32_t startingSampleTime = 0;
+uint8_t levitezer_counter;
+uint8_t messageOut[700];
+double delta_yaw = 0;
+double delta_pitch = 0;
+
+// the following should happend about every 10 ms
+{
+yawSpeed =   ((joystic_x_input));    // from -32767 to -32768
+pitchSpeed = ((joystic_y_input));    // from -32767 to -32768
+
+/* Angle calculation. micros() is function that returs time since boot in microseconds */
+sampleTime = micros() - startingSampleTime;
+//               speed         time(microsec)                speed unit
+delta_yaw =   yawSpeed * (sampleTime/1000000.0) * 0.1220740379 ;
+delta_pitch = pitchSpeed * (sampleTime/1000000.0) * 0.1220740379 ;
+yaw   = yaw +     delta_yaw ;
+pitch = pitch +   delta_pitch;
+startingSampleTime = micros();
+int16_t yawSpeedInt = round(yawSpeed);
+int16_t pitchSpeedInt = round(pitchSpeed);
+int16_t yawInt = round((yaw/0.02197265625));
+int16_t pitchInt = round((pitch/0.02197265625));
+int16_t delta_yawInt = round(delta_yaw*5000.0);
+int16_t delta_pitchInt = round(delta_pitch*5000.0);
+
+/* Msg sending */
+uint8_t ids   [8] {JOYSTICK_TYPE, JOYSTICK0_X, JOYSTICK0_Y,  JPITCH, JYAW,     JDELTA_PITCH,       JDELTA_YAW,    JDELTA_TIME};
+int16_t values[8] {1,           yawSpeedInt, pitchSpeedInt,  pitchInt, yawInt, delta_pitchInt, delta_yawInt, (int16_t)sampleTime};
+sendLevitezerMessage16(2, CONTROLLER_TYPE, ids, ((uint16_t*)values), msize);
+}
 ```
