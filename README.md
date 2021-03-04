@@ -915,6 +915,13 @@ Usually a BMD camera can be given an Id in the 1-99 range. This is the id that m
 | 19  | BUTTON2                                |0       |1       | will send 1 when press and 0 when released                             |
 | 20  | BUTTON3                                |0       |1       | will send 1 when press and 0 when released                             |
 | 21  | BUTTON4                                |0       |1       | will send 1 when press and 0 when released                             |
+| 30  | ROLL ANGLE                             |-       |-       |                                                                        |
+| 31  | PITCH ANGLE                            |-       |-       |                                                                        |
+| 32  | YAW  ANGLE                             |-       |-       |                                                                        |
+| 33  | DELTA ROLL ANGLE                       |-       |-       |                                                                        |
+| 34  | DELTA PITCH ANGLE                      |-       |-       |                                                                        |
+| 35  | DELTA YAW  ANGLE                       |-       |-       |                                                                        |
+| 35  | DELTA TIME                             |-       |-       |                                                                        |
 
 
 # Examples
