@@ -889,20 +889,20 @@ Usually a BMD camera can be given an Id in the 1-99 range. This is the id that m
 
 
 
-
+-32768 | 32767
 
 ## Controller Parameters
 | Id  |                 name                   |  min   | max    |                                  Observations                          |
 |:---:|----------------------------------------|:------:|:------:|------------------------------------------------------------------------|
 | 1   | CONTROL_TYPE                           |        |        |                                                                        |
-| 2   | JOYSTICK0_X                            | 0      | 2048   | X coordinate of joystick 0. Central value is 1024                      |
-| 3   | JOYSTICK0_Y                            | 0      | 2048   | Y coordinate of joystick 0. Central value is 1024                      |
-| 4   | JOYSTICK1_X                            | 0      | 2048   | Same as 2 and 3 ids.                                                   |
-| 5   | JOYSTICK1_Y                            | 0      | 2048   | Same as 2 and 3 ids.                                                   |
-| 6   | JOYSTICK2_X                            | 0      | 2048   | Same as 2 and 3 ids.                                                   |
-| 7   | JOYSTICK2_Y                            | 0      | 2048   | Same as 2 and 3 ids.                                                   |
-| 8   | JOYSTICK3_X                            | 0      | 2048   | Same as 2 and 3 ids.                                                   |
-| 9   | JOYSTICK3_Y                            | 0      | 2048   | Same as 2 and 3 ids.                                                   |
+| 2   | JOYSTICK0_X                            |-32768  | 32767  | X coordinate of joystick 0. Central value is 0                         |
+| 3   | JOYSTICK0_Y                            |-32768  | 32767  | Y coordinate of joystick 0. Central value is 0                         |
+| 4   | JOYSTICK1_X                            |-32768  | 32767  | Same as 2 and 3 ids.                                                   |
+| 5   | JOYSTICK1_Y                            |-32768  | 32767  | Same as 2 and 3 ids.                                                   |
+| 6   | JOYSTICK2_X                            |-32768  | 32767  | Same as 2 and 3 ids.                                                   |
+| 7   | JOYSTICK2_Y                            |-32768  | 32767  | Same as 2 and 3 ids.                                                   |
+| 8   | JOYSTICK3_X                            |-32768  | 32767  | Same as 2 and 3 ids.                                                   |
+| 9   | JOYSTICK3_Y                            |-32768  | 32767  | Same as 2 and 3 ids.                                                   |
 | 10  | CENTRAL_POTENTIOMETER                  | 0      | 2048   |                                                                        |
 | 11  | RIGHT_POTENTIOMETER                    | 0      | 2048   |                                                                        |
 | 12  | LEFT_POTENTIOMETER                     | 0      | 2048   |                                                                        |
@@ -915,13 +915,13 @@ Usually a BMD camera can be given an Id in the 1-99 range. This is the id that m
 | 19  | BUTTON2                                |0       |1       | will send 1 when press and 0 when released                             |
 | 20  | BUTTON3                                |0       |1       | will send 1 when press and 0 when released                             |
 | 21  | BUTTON4                                |0       |1       | will send 1 when press and 0 when released                             |
-| 30  | ROLL ANGLE                             |-       |-       |                                                                        |
-| 31  | PITCH ANGLE                            |-       |-       |                                                                        |
-| 32  | YAW  ANGLE                             |-       |-       |                                                                        |
-| 33  | DELTA ROLL ANGLE                       |-       |-       |                                                                        |
-| 34  | DELTA PITCH ANGLE                      |-       |-       |                                                                        |
-| 35  | DELTA YAW  ANGLE                       |-       |-       |                                                                        |
-| 35  | DELTA TIME                             |-       |-       |                                                                        |
+| 30  | ROLL ANGLE                             |-32768  |32767   |                                                                        |
+| 31  | PITCH ANGLE                            |-32768  |32767   |                                                                        |
+| 32  | YAW  ANGLE                             |-32768  |32767   |                                                                        |
+| 33  | DELTA ROLL ANGLE                       |-32768  |32767   |                                                                        |
+| 34  | DELTA PITCH ANGLE                      |-32768  |32767   |                                                                        |
+| 35  | DELTA YAW  ANGLE                       |-32768  |32767   |                                                                        |
+| 35  | DELTA TIME                             |-32768  |32767   |                                                                        |
 
 
 # Examples
