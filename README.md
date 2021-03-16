@@ -9,7 +9,6 @@ Levitezer Protocol
   * [Message Structure](#message-overview)
     + [Header](#header)
     + [Data](#data)
-    + [End of Message](#end-of-message)
     + [Checksum](#checksum)
   * [Parameter Descriptions](#parameter-descriptions)
     + [Data Provided by Gimbal](#data-provided-by-gimbal)
@@ -123,8 +122,22 @@ each 'DD' is a byte of data. The data bytes are between a sequence of numbers as
 
 Note that data starts after `02` sequence number. The sequence numbers can get up to `254`. Which makes the maximum data size `2*254 = 508 bytes` 
 
-### Checksum
-The last part of the message is the checksum, which is a 16 bit `CS CS` number after `00` sequence number. The checksum is calculated as a sum of all bytes on the message but the `<Starting_Bytes>` using modulo 65536 operation (0x10000).
+## Checksum
+The last part of the message is the checksum, right after the data, there is the end of message byte which is a `00`, then the 16 bit checksum. The checksum is calculated as a sum of all bytes on the message but the `<Starting_Bytes>` using modulo 65536 operation (0x10000).
+
+Example
+```c++
+// msg contains already a levitezer message but the checksum
+uint8_t msg[100]
+uint16_t msg_size = 40;
+uint16_t checksum = 0; // a 16 bit variable overflows automaticaly
+
+for(int i = 3; i < msg_size-3; i++){
+    checksum += msg[i];
+}
+msg[msg_size-2] = checksum & 0xff;
+msg[msg_size-1] = checksum >> 8;
+```
 
 
 
